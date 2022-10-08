@@ -17,6 +17,5 @@ public class UpgradePanel : MonoBehaviour
     void Update()
     {
         
-        
     }
 }

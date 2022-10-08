@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4728283792328460168}
   - component: {fileID: 1298184709237337800}
   - component: {fileID: 4479777697523232272}
-  - component: {fileID: 2019999243929188629}
+  - component: {fileID: 347619802489588726}
   m_Layer: 0
   m_Name: Circle
   m_TagString: Untagged
@@ -74,7 +74,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 3
+  m_SortingOrder: 1
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -107,7 +107,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &2019999243929188629
+--- !u!114 &347619802489588726
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -116,7 +116,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4989194123613060986}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d9fa0c32fa64ce54cab55a5f032c755c, type: 3}
+  m_Script: {fileID: 11500000, guid: c8c26b9030ec25b41999908368b2ba18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 8
+  speed: 3

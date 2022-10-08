@@ -28,7 +28,7 @@ public class Trash : MonoBehaviour
          if(transform.position.y > 3.8f)
         {
             Destroy(this.gameObject);
-            //GameObject.Find("MainCamera").GetComponent<SpawnTrash1>().enabled = true;
+           // GameObject.Find("MainCamera").GetComponent<SpawnTrash1>().enabled = true;
         }
 
         
