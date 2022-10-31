@@ -1,0 +1,40 @@
+-- StartingScene -- 
+itt tudja a játékos elindítani a játékot, erre három lehetősége van
+play: egyszeri játék, nincs a haladás elmentve, kilépés
+log in: bejelentkezik és meglévő játékot tud folytatni a legutolsó mentéstől
+sign in: regisztrál és új játékot tud kezdeni a nulláról
+a scene komponensei, valamint azok használati funkciói:
+
+	-- Login --
+	a bejelentkezéshez szükséges komponensek találhatóak itt meg
+	részei:
+	- Btn_LogIn: lenyomásával megjelenik a LoginHolder és eltűnik a Btn_LogIn, Btn_SignIn és Play elemek
+	- Btn_LiStart: a beírt adatok ellenőrzése után, ha minden rendben, elindítja a játékot
+	- Btn_LCancel: visszalépp a bejelentkezéstől, eltűnik a LoginHolder 
+			és megjelennek a Btn_LogIn, Btn_SignIn és Play elemek
+	- Txf_UserName_L : ide vihető be a felhasználói név a bejelentkezéshez
+	- Txf_Password_L : ide vihető be a jelszó a bejelentkezéshez
+
+	-- Singin --
+	a regisztrációhoz szükséges komponensek találhatóak itt meg
+	részei:
+	- Btn_SignIn: lenyomásával megjelenik a SignInHolder és eltűnnek a Btn_LogIn, Btn_SignIn és Play elemek
+	- Btn_SiStart: a beírt adatok ellenőrzése után, ha minden rendben, elindítja a játékot
+	- Btn_SCancel: visszalépp a regisztrációbol, eltűnik a SignInHolder 
+			és megjelennek a Btn_LogIn, Btn_SignIn és Play elemek
+	- Txf_UserName_S : ide vihető be a felhasználói név a regisztrációhoz
+	- Txf_Password_S : ide vihető be a jelszó a regisztrációhoz
+
+	-- Warning_SL --
+	bármilyen hiba fellépésénél a bejelentkezési és regisztrációs folyamat közben, ezt használva
+	van lehetőség jelezni, elemei:
+	- WarningText : szöveg, tartalmának változtatásával lehet kiírni a szöveget
+	- Btn_Ok_W :  rányomva eltűnik a Warning_Sl ablak
+
+	-- Play --
+	tartalmazza a mentés nélküli játékhoz szolgáló komponenseket, elemei: 
+	- Btn_Play : rányomva megjelenik a Warning ablak, valamint eltűnnek a Btn_play, Btn_SignIn, Btn_LogIn komponensek
+	- Warning : tartalmaz egy üzenetet, mely felhívja a felhasználó figyelmét a mentés nélküli játékra
+	- Btn_Ok : a gombra nyomva a játékos elfogadja az üzenetet, ezáltal elindult a játék
+	- Btn_Cancel : bezárja a warning ablakot és nem indítja el a játékot
+			valamint megjelennek a Btn_play, Btn_SignIn, Btn_LogIn komponensek
