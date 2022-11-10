@@ -12,18 +12,22 @@ a scene komponensei, valamint azok használati funkciói:
 	- Btn_LiStart: a beírt adatok ellenőrzése után, ha minden rendben, elindítja a játékot
 	- Btn_LCancel: visszalépp a bejelentkezéstől, eltűnik a LoginHolder 
 			és megjelennek a Btn_LogIn, Btn_SignIn és Play elemek
+	- Btn_ForgotPsw : amennyiben a felhasználó elfejelti jelszavát ezen a gombon keresztül tud a regisztrációkor
+			megadott email-címre jelszót kérni
 	- Txf_UserName_L : ide vihető be a felhasználói név a bejelentkezéshez
 	- Txf_Password_L : ide vihető be a jelszó a bejelentkezéshez
 
-	-- Singin --
+	-- Register --
 	a regisztrációhoz szükséges komponensek találhatóak itt meg
 	részei:
-	- Btn_SignIn: lenyomásával megjelenik a SignInHolder és eltűnnek a Btn_LogIn, Btn_SignIn és Play elemek
-	- Btn_SiStart: a beírt adatok ellenőrzése után, ha minden rendben, elindítja a játékot
-	- Btn_SCancel: visszalépp a regisztrációbol, eltűnik a SignInHolder 
+	- Btn_Register: lenyomásával megjelenik a SignInHolder és eltűnnek a Btn_LogIn, Btn_SignIn és Play elemek
+	- Btn_RegStart: a beírt adatok ellenőrzése után, ha minden rendben, elindítja a játékot
+	- Btn_RCancel: visszalépp a regisztrációbol, eltűnik a SignInHolder 
 			és megjelennek a Btn_LogIn, Btn_SignIn és Play elemek
-	- Txf_UserName_S : ide vihető be a felhasználói név a regisztrációhoz
-	- Txf_Password_S : ide vihető be a jelszó a regisztrációhoz
+	- Txf_UserName_R : ide vihető be a felhasználói név a regisztrációhoz, ellenőrizendő az egyedisége
+	- Txf_Email_R : ide vihető be az email címe a játékosnak, később ezen keresztül kérhet új jelszót ha elfejeti
+	- Txf_Password_R : ide vihető be a jelszó a regisztrációhoz
+	- Txf_Password_R : ide vihető be újra a jelszó, ellenőrzéshez, hogy a kétszer bevitt jelszó egyezik-e
 
 	-- Warning_SL --
 	bármilyen hiba fellépésénél a bejelentkezési és regisztrációs folyamat közben, ezt használva
