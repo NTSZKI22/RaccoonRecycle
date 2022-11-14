@@ -1,0 +1,248 @@
+-- Guide to MainScene -- 
+
+ez a fő scene-je a játéknak és két fő komponense van:
+	- UIComponents
+	- Machinery
+ezek tartalmazzák az összes részét a játéknak
+
+a fő komponensek további komponenseket tartalmaznak, ezekhez a leírás:
+
+-- UIComponents -- 
+ez négy alkomponens tartalmaz, melyből az egész UI felépül
+
+	-- Prestige -- 
+	a gombra nyomva lehet pretige-elni, ekkor a nulláról kezdődik a játék és az addig szerzett currency alapján
+	kap prestige currency-t a haladáshoz
+
+	-- CurrencyHolders --
+	jelzi a játékosnak mennyivel rendelkezik bizonyos currency-kből
+	2db currencyholder frefab található benne, melyek tartalmazzák a keretet, a szöveget 
+	valamint a currencyk ikonját
+		A következő komponensek:
+		- Text_NormalCurrency
+		- Text_PrestigeCurrency
+		arra állnak rendelkezésre, hogy megjelenítsék a bizonyos currency-k mennyiségét
+		programkód megírásakor: ezen szövegek értékének változtatásával oldjuk meg
+		megj: mennyiség megjelenítése a következőképp // ez érvényes minden mennyiség megjelenítésnél //
+			9999 - ig normálisan, nincs szükség konvertálásra
+			10 000 - től: 10.00K formátumba alakítani (99 999ig)
+			100 000 - tól: 100.0K formátumba alakítani (999 999ig)
+			1 000 000 - tól: 1.00M (99.99M) formátumba alakítani (99 999 999ig)
+			100 000 000 - tól: 100.0M formátumba alakítani (999 999 999ig)
+			1 000 000 000 - tól: 1.00B (99.99B) formátumba alakítani (99 999 999 999ig)
+			a további értékek hasonló formát követnek
+			következő rövidítések: C, D, E, F, G, H, ...
+
+	-- Settings --
+	a gear kinézetű gombra kattintva megjelenik a settings panel, vmint ez az x-el bezárható (ez már működik)
+	a settings menü akkor is bezárul, ha a menún kívül valahova kattintunk
+	a settings menüben a következő beállítások és lehetőségek lesznek majd elérhetőek:
+		statisztika,  hangerő állítása, teljesképernyő, felbontás, number display, kilépés, mentés
+	ezek funkcionalitását a következő komponensekhez kell majd rendelni a ||SettingMenu|| alatt:
+		Buttons alatt:
+			- Statistics : erre nyomva a SettingsMenu elűnik és megjelenik a StatisticsMenu
+			- Save : erre nyomva a játék állása elmenthető
+			- Exit : erre nyomva a játék bezáródik egy mentés után
+		Other alatt:
+			- FullScreen toggle: be- és kikapcsolni lehet a teljesképernyős módot
+			- NumberDisplay: be- és kikapcsolni lehet a szemét eladásakor fellebegő pénzértéket
+			- Volume: a játék hangerejét lehet állítani
+			- Resolution: A felbontást lehet állítani !nem ajánlja fel azokat a lehetőségeket, melyekkel nem  
+					jelenik meg a játék rendesen -> tesztelést igényel
+
+	-- StatisticsMenu --
+	a settingmenu-ben a statistics gombra való nyomás után lesz elérhető és látható
+	segítségével látható különböző statisztikai mutatók a játékos haladásával kapcsolatban
+	két féleképpen zárható be: x-re vagy a menün kívülre nyomva
+	ezen mutatók: normal és prestige currency, teljes bevétel prestige óta, bizonyos szemetek értékei, bizonyosok 
+		szemetekkel keresett currency
+	főbb elemei: 
+		- Btn_ExitSettings: StatisticsMenu bezárására szolgál
+		- Statistics_NC : text, segítségével megjeleníti a Normal Currencyból jelenleg rendelkezésre álló mennyiséget
+		- Statistics_PC : text, segítségével megjeleníti a Prestige Currencyból jelenleg rendelkezésre álló mennyiséget
+		- Statistics_LTNC : text, segítségével megjeleníti a Normal Currencyból összesen gyűjtött mennyiséget
+			(megj: játék kezdése v utolsó prestige óta)
+		- Statistics_PBV : text, segítségével megjeleníti a petpalack értékét
+		- Statistics_PBE : text, segítségével megjeleníti a petpalackkal keresett normal currency-t
+			(megj: játék kezdése v utolsó prestige óta)
+		- Statistics_BoxV : text, segítségével megjeleníti a kartondoboz értékét
+		- Statistics_BoxE : text, segítségével megjeleníti a kartondobozzal keresett normal currency-t
+			(megj: játék kezdése v utolsó prestige óta)
+		- Statistics_GlassV : text, segítségével megjeleníti az üveg értékét
+		- Statistics_GlassE : text, segítségével megjeleníti az üveggel keresett normal currency-t
+			(megj: játék kezdése v utolsó prestige óta)
+		- Statistics_BtyV : text, segítségével megjeleníti az elem értékét
+		- Statistics_BtyE : text, segítségével megjeleníti az elemmel keresett normal currency-t
+			(megj: játék kezdése v utolsó prestige óta)
+
+	-- Windows --
+	ez alatt találhatóak a menüablakok, melyeknek láthatósága változik a játék haladásától függően
+	komponensei:
+		- lvl0_Win -
+			a játék kezdetekor ez látható alapértelmezetten, ennek segítségével oldható fel az első feldolgozó
+			egység (pet palack)
+			Unlock_PetBottle -> egyedüli komponens, főbb elemei:
+				- Unl_Cost_PB : szöveg, mely megjeleníti a feloldás árát
+				- UnB_PetBottle : lenyomásával feloldódik a petpalackot feldolgozó egység, valamint az
+					egész unlock ablak láthatósága megszűnik
+					mikor a fejlesztésre nincs elegendő currency-je a játékosnak 'Disabled'
+					állapotban van, ha van, akkor 'Normal'
+		- lvl1_WinPB -
+			a petpalack feldolgozó egységgel egyszerre változik elérhetővé, két része van:
+			Unlock_Box
+				- Unl_Cost_Box : szöveg, mely megjeleníti a feloldás árát
+				- UnB_Box : lenyomásával feloldódik a kartondoboz feldolgozó egység, valamint az
+					egész unlock ablak láthatósága megszűnik
+					mikor a feloldásra nincs elegendő currency-je a játékosnak 'Disabled'
+					állapotban van, ha van, akkor 'Normal'
+			Upgrades_PetBottle -> a petpalack feldolgozóegység fejlesztései ezen keresztül tehetőek meg
+			három tulajdonság fejleszthető: érték, gyorsaság, gyakoriság
+			főbb elemei
+				Buttons alatt:
+				- Buy_U1_PB : lenyomásával a petpalack értéke növelhető
+						mikor a fejlesztésre nincs elegendő currency-je a játékosnak 'Disabled'
+						állapotban van, ha van, akkor 'Normal'
+				- Buy_U2_PB : lenyomásával a petpalack mozgási gyorsasága növelhető
+						mikor a fejlesztésre nincs elegendő currency-je a játékosnak 'Disabled'
+						állapotban van, ha van, akkor 'Normal'
+				- Buy_U3_PB : lenyomásával a petpalack generálásának gyakorisága növelhető
+						mikor a fejlesztésre nincs elegendő currency-je a játékosnak 'Disabled'
+						állapotban van, ha van, akkor 'Normal'
+				Styles>Texts>Costs alatt:
+				- U1_PB_Cost : szöveg, mely megjeleníti a petpalack értéknövelési fejlesztésének árát
+				- U2_PB_Cost : szöveg, mely megjeleníti a petpalack gyorsaságnövelési fejlesztésének árát
+				- U3_PB_Cost : szöveg, mely megjeleníti a petpalack gyakoriságnövelési fejlesztésének árát
+				mindegyikre vonatkoznak a feljebb taglalt megjelenítési szabályok
+		- lvl2_WinBox -
+			a kartondoboz feldolgozó egységgel egyszerre változik elérhetővé, két része van:
+			Unlock_Glass
+				- Unl_Cost_Glass : szöveg, mely megjeleníti a feloldás árát
+				- UnB_Glass : lenyomásával feloldódik az üveg feldolgozó egység, valamint az
+					egész unlock ablak láthatósága megszűnik
+					mikor a feloldásra nincs elegendő currency-je a játékosnak 'Disabled'
+					állapotban van, ha van, akkor 'Normal'
+			Upgrades_Box -> a kartondoboz feldolgozóegység fejlesztései ezen keresztül tehetőek meg
+			három tulajdonság fejleszthető: érték, gyorsaság, gyakoriság
+			főbb elemei
+				Buttons alatt:
+				- Buy_U1_Box : lenyomásával a kartondoboz értéke növelhető
+						mikor a fejlesztésre nincs elegendő currency-je a játékosnak 'Disabled'
+						állapotban van, ha van, akkor 'Normal'
+				- Buy_U2_Box : lenyomásával a kartondoboz mozgási gyorsasága növelhető
+						mikor a fejlesztésre nincs elegendő currency-je a játékosnak 'Disabled'
+						állapotban van, ha van, akkor 'Normal'
+				- Buy_U3_Box : lenyomásával a kartondoboz generálásának gyakorisága növelhető
+						mikor a fejlesztésre nincs elegendő currency-je a játékosnak 'Disabled'
+						állapotban van, ha van, akkor 'Normal'
+				Styles>Texts>Costs alatt:
+				- U1_Box_Cost : szöveg, mely megjeleníti a kartondoboz értéknövelési fejlesztésének árát
+				- U2_Box_Cost : szöveg, mely megjeleníti a kartondoboz gyorsaságnövelési fejlesztésének árát
+				- U3_Box_Cost : szöveg, mely megjeleníti a kartondoboz gyakoriságnövelési fejlesztésének árát
+				mindegyikre vonatkoznak a feljebb taglalt megjelenítési szabályok
+		- lvl3_WinG -
+			az üveg feldolgozó egységgel egyszerre változik elérhetővé, két része van:
+			Unlock_Battery
+				- Unl_Cost_Bty : szöveg, mely megjeleníti a feloldás árát
+				- UnB_Bty : lenyomásával feloldódik az elem feldolgozó egység, valamint az
+					egész unlock ablak láthatósága megszűnik
+					mikor a feloldásra nincs elegendő currency-je a játékosnak 'Disabled'
+					állapotban van, ha van, akkor 'Normal'
+			Upgrades_Glass -> az üveg feldolgozóegység fejlesztései ezen keresztül tehetőek meg
+			három tulajdonság fejleszthető: érték, gyorsaság, gyakoriság
+			főbb elemei
+				Buttons alatt:
+				- Buy_U1_Glass : lenyomásával az üveg értéke növelhető
+						mikor a fejlesztésre nincs elegendő currency-je a játékosnak 'Disabled'
+						állapotban van, ha van, akkor 'Normal'
+				- Buy_U2_Glass : lenyomásával az üveg mozgási gyorsasága növelhető
+						mikor a fejlesztésre nincs elegendő currency-je a játékosnak 'Disabled'
+						állapotban van, ha van, akkor 'Normal'
+				- Buy_U3_Glass : lenyomásával az üveg generálásának gyakorisága növelhető
+						mikor a fejlesztésre nincs elegendő currency-je a játékosnak 'Disabled'
+						állapotban van, ha van, akkor 'Normal'
+				Styles>Texts>Costs alatt:
+				- U1_Glass_Cost : szöveg, mely megjeleníti a üveg értéknövelési fejlesztésének árát
+				- U2_Glass_Cost : szöveg, mely megjeleníti a üveg gyorsaságnövelési fejlesztésének árát
+				- U3_Glass_Cost : szöveg, mely megjeleníti a üveg gyakoriságnövelési fejlesztésének árát
+				mindegyikre vonatkoznak a feljebb taglalt megjelenítési szabályok
+		- lvl4_WinBty -
+			az elem feldolgozó egységgel egyszerre változik elérhetővé, egy része van:
+			Upgrades_Bty -> az elem feldolgozóegység fejlesztései ezen keresztül tehetőek meg
+			három tulajdonság fejleszthető: érték, gyorsaság, gyakoriság
+			főbb elemei
+				Buttons alatt:
+				- Buy_U1_Bty : lenyomásával az üveg értéke növelhető
+						mikor a fejlesztésre nincs elegendő currency-je a játékosnak 'Disabled'
+						állapotban van, ha van, akkor 'Normal'
+				- Buy_U2_Bty : lenyomásával az üveg mozgási gyorsasága növelhető
+						mikor a fejlesztésre nincs elegendő currency-je a játékosnak 'Disabled'
+						állapotban van, ha van, akkor 'Normal'
+				- Buy_U3_Bty : lenyomásával az üveg generálásának gyakorisága növelhető
+						mikor a fejlesztésre nincs elegendő currency-je a játékosnak 'Disabled'
+						állapotban van, ha van, akkor 'Normal'
+				Styles>Texts>Costs alatt:
+				- U1_Bty_Cost : szöveg, mely megjeleníti a elem értéknövelési fejlesztésének árát
+				- U2_Bty_Cost : szöveg, mely megjeleníti a elem gyorsaságnövelési fejlesztésének árát
+				- U3_Bty_Cost : szöveg, mely megjeleníti a elem gyakoriságnövelési fejlesztésének árát
+				mindegyikre vonatkoznak a feljebb taglalt megjelenítési szabályok
+
+
+-- Machinery -- 
+tartalmazza a gyártósor elemeit, ez nem tartalmazhat olyan elemet, amivel a játékos interakcióba tud lépni
+a gyártósor végleges méretében nagy eséllyel nem fog tudni kiférni a képernyőre, a játékos ezen objektum elemeit
+tudja majd 'lapozni' //lapozási mód később részletezve//
+elemei:
+
+	-- lvl0 --
+	mikor a játék elindul ez az első szint, amely elérhető
+	3 fő részt tartalmaz: a generátor képét, egyenes futószalag egység, vmint a 'kuka'
+	komponensei:
+		- TrashCan_Main : ide érve minden szemét eladásra kerül, de a kapott érték fele annyi, mintha 
+			az a neki szánt 'szemetesnél' történne
+			az ideérő szemetek objektumai megszűnnek
+			ez alá van rendelve a BeltEnding is
+		- ConveyorBelts : tartalmazza a futószalag elemeket, melyen végigfut a szemét
+		- Generator : mikor megy a játék és folyamatosan jön a szemét, úgy kell tűnnie, mintha 
+			ezen keresztül érkezne és viszi tovább a futószalag
+	
+	-- lvl1_PetBottle --
+	az első feloldható fejlesztés, mely a petpalackos szeméthez tartozik
+	ezzel a következő komponensek jelennek meg:
+		- WorkTable: ezzel látszik egy mosómedve animációja, aki egy irányítópultnál dolgozik
+		- TrashCan_PetBottle: ideérve a petpalack szemét kerül eladásra, vmint annak objektuma megszűnik
+		- ConveyorBelts: a felfelé haladó futószalag elemei, valamint annak lezáró eleme is itt található
+		- CBSwitch_PetBottle: a petpalackos szemét ideére utat vált és felfelé halad tovább
+			(ha az irányváltoztatás collider-el lesz megoldva, ehhez kell a collider-t rendelni)
+
+	-- lvl2_Box --
+	második feloldható fejlesztés, mikor már ez is megjelenítésre kerül a lvl0 alatt található TrashCan_Main
+	objektum láthatóságát meg kell szűntetni és funkcióját egy másik objektum veszi át
+		- WorkTable: ezzel látszik egy mosómedve animációja, aki egy irányítópultnál dolgozik
+		- TrashCan_Box: ideérve a box szemét kerül eladásra, vmint annak objektuma megszűnik
+		- ConveyorBelts: az összes futószalag elem ez alatt található
+		- CBSwitch_Box: a boxos szemét ideére utat vált és felfelé halad tovább
+			(ha az irányváltoztatás collider-el lesz megoldva, ehhez kell a collider-t rendelni)
+		- TrashCan_Main2: átveszi a TrashCan_Main funkcióját, tartalmaz egy futószalag végződést is
+
+	-- lvl3_Glass --
+	harmadik feloldható fejlesztés, mikor már ez is megjelenítésre kerül a lvl2 alatt található TrashCan_Main2
+	objektum láthatóságát meg kell szűntetni és funkcióját egy másik objektum veszi át
+		- WorkTable: ezzel látszik egy mosómedve animációja, aki egy irányítópultnál dolgozik
+		- TrashCan_Glass: ideérve a glass szemét kerül eladásra, vmint annak objektuma megszűnik
+		- ConveyorBelts: az összes futószalag elem ez alatt található
+		- CBSwitch_Glass: a boxos szemét ideére utat vált és felfelé halad tovább
+			(ha az irányváltoztatás collider-el lesz megoldva, ehhez kell a collider-t rendelni)
+		- TrashCan_Main3: átveszi a TrashCan_Main2 funkcióját, tartalmaz egy futószalag végződést is
+
+	-- lvl4_Battery --
+	az utolsó feloldható fejlesztés, mikor ez megjelenítésre kerül a lvl3 alatt található TrashCan_Main3
+	objektum láthatóságát meg kell szűntetni és funkcióját egy másik objektum veszi át
+		- WorkTable: ezzel látszik egy mosómedve animációja, aki egy irányítópultnál dolgozik
+		- TrashCan_Battery: ideérve a battery szemét kerül eladásra, vmint annak objektuma megszűnik
+		- ConveyorBelts: az összes futószalag elem ez alatt található
+		- CBSwitch_Battery: a batterys szemét ideére utat vált és felfelé halad tovább
+			(ha az irányváltoztatás collider-el lesz megoldva, ehhez kell a collider-t rendelni)
+		- TrashCan_Main4: átveszi a TrashCan_Main3 funkcióját, tartalmaz egy futószalag végződést is
+
+
+			
