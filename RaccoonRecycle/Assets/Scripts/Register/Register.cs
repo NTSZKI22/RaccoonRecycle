@@ -72,7 +72,7 @@ public class Register : MonoBehaviour
         form.AddField("aUsername", username);
 
 
-        var request = UnityWebRequest.Post(registerEndpoint, form);
+        var request = UnityWebRequest.Post("http://192.168.15.154:18102/api/register", form);
         var handler = request.SendWebRequest();
 
         float startTime = 0f;
