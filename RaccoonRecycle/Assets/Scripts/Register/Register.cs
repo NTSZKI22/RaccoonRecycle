@@ -14,8 +14,6 @@ public class Register : MonoBehaviour
     private GameObject warning_SL;
     [SerializeField]
     private Text warningText;
-    [SerializeField] 
-    private string registerEndpoint = "http://localhost:18102/api/register";
     [SerializeField]
     private TMP_InputField usernameField;
     [SerializeField]
@@ -72,7 +70,7 @@ public class Register : MonoBehaviour
         form.AddField("aUsername", username);
 
 
-        var request = UnityWebRequest.Post("http://192.168.15.154:18102/api/register", form);
+        var request = UnityWebRequest.Post("http://localhost:18102/api/register", form);
         var handler = request.SendWebRequest();
 
         float startTime = 0f;

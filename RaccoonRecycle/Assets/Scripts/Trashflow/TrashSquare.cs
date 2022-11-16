@@ -19,10 +19,11 @@ public class TrashSquare : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+         rbody = this.GetComponent<Rigidbody2D>();
+            rbody.velocity = new Vector2(0,speed);
         if(transform.position.x > 1)
         {
-            rbody = this.GetComponent<Rigidbody2D>();
-            rbody.velocity = new Vector2(0,speed);
+           
         }
          if(transform.position.y > 3.8f)
         {
