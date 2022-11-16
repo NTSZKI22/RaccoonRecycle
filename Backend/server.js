@@ -10,7 +10,9 @@ require('./models/account')
 
 require('./routes/RegisterRoute')(app)
 require('./routes/LoginRoute')(app)
+require('./routes/MailSender')(app)
+require('./routes/PasswordChange')(app)
 
 app.listen(process.env.PORT, () => {
     console.log("Server has started on port: "+process.env.PORT)
-})
+});

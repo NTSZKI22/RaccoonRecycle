@@ -5,7 +5,7 @@ var jsonParser = bodyParser.json()
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 module.exports = app => {
-    app.post("/api/login", urlencodedParser, async (req, res, next) => {  //post-et használunk, mivel szeretnénk adatot kérni a szervertől a /authorize aloldalon.
+    app.post("/api/login", urlencodedParser, async (req, res, next) => {  //post-ot használunk, mivel szeretnénk adatot kérni a szervertől a /authorize aloldalon.
         var userAccount = await Account.findOne({ username: req.body.aUsername })
         if (userAccount == null) {
             res.send('Error: Invalid credentials!')
