@@ -13,8 +13,6 @@ public class Login : MonoBehaviour
     private GameObject warning_SL; //warning ablak dekralálása.
     [SerializeField]
     private Text warningText; //warning üzenet dekralálása.
-    [SerializeField] 
-    private string loginEndpoint = "http://localhost:18102/api/login"; //az api útvonalának. dekralálása.
     [SerializeField]
     private TMP_InputField usernameField; //felhasználónév mező dekralálása.
     [SerializeField]
@@ -57,18 +55,18 @@ public class Login : MonoBehaviour
         {
             if(request.downloadHandler.text.Contains("Error:"))
             {
-                warning_SL.active = true;
+                warning_SL.SetActive(true);
                 warningText.text = request.downloadHandler.text;
             }
             else
             { 
-                SceneManager.LoadScene(sceneName);
+                SceneManager.LoadScene(1);
             }
             
         }
         else
         {
-            warning_SL.active = true;
+            warning_SL.SetActive(true);
             warningText.text = "The game was unable to connect to the server!";
         }
         yield return null;
