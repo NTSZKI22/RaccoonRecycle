@@ -55,18 +55,18 @@ public class Login : MonoBehaviour
         {
             if(request.downloadHandler.text.Contains("Error:"))
             {
-                warning_SL.active = true;
+                warning_SL.SetActive(true);
                 warningText.text = request.downloadHandler.text;
             }
             else
             { 
-                SceneManager.LoadScene(sceneName);
+                SceneManager.LoadScene(1);
             }
             
         }
         else
         {
-            warning_SL.active = true;
+            warning_SL.SetActive(true);
             warningText.text = "The game was unable to connect to the server!";
         }
         yield return null;

@@ -9,7 +9,7 @@ const {
 
 module.exports = app => {
     app.post("/api/passwordchange", urlencodedParser, async (req, res, next) => {  //post-ot használunk, mivel szeretnénk adatot kérni a szervertől a /authorize aloldalon.
-        var userAccount = await Account.findOne({ password: req.body.password })
+        var userAccount = await Account.findOne({ password: req.body.generatedCode })
         if (userAccount == null) {
             res.send(200);
             return
