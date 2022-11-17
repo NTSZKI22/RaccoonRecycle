@@ -16,6 +16,14 @@ a scene komponensei, valamint azok használati funkciói:
 			megadott email-címre jelszót kérni
 	- Txf_UserName_L : ide vihető be a felhasználói név a bejelentkezéshez
 	- Txf_Password_L : ide vihető be a jelszó a bejelentkezéshez
+	- ForgotPassword : amikor a felhasználó a Btn_ForgotPsw gombra nyom, akkor megjelenik és a LoginHolder eltűnik
+		- Btn_FPSave : erre nyomva az új jelszó elmentődik
+		- Btn_SendEmail : erre nyomva kéri a felhasználó az email küldését
+		- Txf_Email_FP : ide írja be a felhasználó az email-t, amire az új jelszóhoz szükséges kódot kapja,
+			a Btn_SendEmail gombra nyomva ennek tartalmát adja tovább
+		- Txf_GeneratedCode_FP : ebbe a mezőbe kell majd beírnia a kódot, melyet emailben kapott
+		- Txf_NewPassword_FP : új jelszót tartalmazó mező
+		- Txf_NewPassword2_FP : az új jelszó megerősítése
 
 	-- Register --
 	a regisztrációhoz szükséges komponensek találhatóak itt meg

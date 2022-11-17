@@ -13,8 +13,6 @@ public class Login : MonoBehaviour
     private GameObject warning_SL; //warning ablak dekralálása.
     [SerializeField]
     private Text warningText; //warning üzenet dekralálása.
-    [SerializeField] 
-    private string loginEndpoint = "http://localhost:18102/api/login"; //az api útvonalának. dekralálása.
     [SerializeField]
     private TMP_InputField usernameField; //felhasználónév mező dekralálása.
     [SerializeField]
@@ -35,8 +33,8 @@ public class Login : MonoBehaviour
         string password = passwordField.text; //jelszó változó egyenlő lesz a jelszó mező értékével.
 
         WWWForm form = new WWWForm(); //létrehozunk egy body felépítést a kérésünknek.
-        form.AddField("aUsername", username); //hozzáadjuk a bodyhoz az aUsername mezőt és a username értéket hozzá rendeljük.
-        form.AddField("aPassword", password); //hozzáadjuk a bodyhoz az aPassowrd mezőt és a password értéket hozzá rendeljük.
+        form.AddField("username", username); //hozzáadjuk a bodyhoz az aUsername mezőt és a username értéket hozzá rendeljük.
+        form.AddField("password", password); //hozzáadjuk a bodyhoz az aPassowrd mezőt és a password értéket hozzá rendeljük.
 
 
         var request = UnityWebRequest.Post("http://localhost:18102/api/login", form); // elküldjük a webrequestet a megadott címre, bodyban a formmal.
@@ -57,18 +55,18 @@ public class Login : MonoBehaviour
         {
             if(request.downloadHandler.text.Contains("Error:"))
             {
-                warning_SL.active = true;
+                warning_SL.SetActive(true);
                 warningText.text = request.downloadHandler.text;
             }
             else
             { 
-                SceneManager.LoadScene(sceneName);
+                SceneManager.LoadScene(1);
             }
             
         }
         else
         {
-            warning_SL.active = true;
+            warning_SL.SetActive(true);
             warningText.text = "The game was unable to connect to the server!";
         }
         yield return null;

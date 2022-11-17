@@ -30,22 +30,22 @@ public class Register : MonoBehaviour
     {
         if (passwordField.text != passwordField2.text)
         {
-            warning_SL.active = true;
+            warning_SL.SetActive(true);
             warningText.text = "The passwords do not match!";
         }
         else if (!emailField.text.Contains("@") && !emailField.text.Contains("."))
         {
-            warning_SL.active = true;
+            warning_SL.SetActive(true);
             warningText.text = "The email address is not valid!";
         }
         else if(usernameField.text.Length == 0 || passwordField.text.Length == 0 || emailField.text.Length == 0)
         {
-            warning_SL.active = true;
+            warning_SL.SetActive(true);
             warningText.text = "Don't leave any field empty!";
         }
         else if(passwordField.text.Length < 8)
         {
-            warning_SL.active = true;
+            warning_SL.SetActive(true);
             warningText.text = "Use a strong passoword(8+ character)!";
         }
         else
@@ -65,9 +65,9 @@ public class Register : MonoBehaviour
         Debug.Log($"username: {username}, password: {password}");
 
         WWWForm form = new WWWForm();
-        form.AddField("aEmail", email);
-        form.AddField("aPassword", password);
-        form.AddField("aUsername", username);
+        form.AddField("email", email);
+        form.AddField("password", password);
+        form.AddField("username", username);
 
 
         var request = UnityWebRequest.Post("http://localhost:18102/api/register", form);
@@ -88,12 +88,12 @@ public class Register : MonoBehaviour
         {
             if(request.downloadHandler.text.Contains("Error:"))
             {
-                warning_SL.active = true;
+                warning_SL.SetActive(true);
                 warningText.text = request.downloadHandler.text;
             }
             else
             {
-                warning_SL.active = true;
+                warning_SL.SetActive(true);
                 warningText.text = "The account was succesfully made!";
                 new WaitForSeconds(10);
                 SceneManager.LoadScene(sceneName);
@@ -101,7 +101,7 @@ public class Register : MonoBehaviour
         }
         else
         {
-            warning_SL.active = true;
+            warning_SL.SetActive(true);
             warningText.text = "The game was unable to connect to the server!";
         }
         yield return null;
