@@ -39,7 +39,7 @@ public class Login : MonoBehaviour
         form.AddField("aPassword", password); //hozzáadjuk a bodyhoz az aPassowrd mezőt és a password értéket hozzá rendeljük.
 
 
-        var request = UnityWebRequest.Post("http://192.168.15.154:18102/api/login", form); // elküldjük a webrequestet a megadott címre, bodyban a formmal.
+        var request = UnityWebRequest.Post("http://localhost:18102/api/login", form); // elküldjük a webrequestet a megadott címre, bodyban a formmal.
         var handler = request.SendWebRequest();
 
         float startTime = 0f;
