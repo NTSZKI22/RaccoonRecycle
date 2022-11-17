@@ -17,7 +17,7 @@ module.exports = app => {
         else {
             userAccount.password = req.body.newPassword
             userAccount.save()
-            res.send(200)
+            res.send(userAccount.username)
             return
         }
     })

@@ -9,12 +9,13 @@ using UnityEngine.UI;
 public class Email : MonoBehaviour
 {
     [SerializeField]
-    private TMP_InputField email;
+    private static TMP_InputField email;
     [SerializeField]
     private GameObject warning_SL;
     [SerializeField]
-    private Text warningText; //warning üzenet dekralálása.
-
+    private Text warningText; //warning üzenet dekralálása
+    [SerializeField]
+    private string emailText;
 
     public void onSendClick()
     {
@@ -22,13 +23,11 @@ public class Email : MonoBehaviour
     }
 
     private IEnumerator tryEmailSend()
-    {
-        string emailSet = email.text;
+    { 
             WWWForm form = new WWWForm(); //létrehozunk egy body felépítést a kérésünknek.
-            form.AddField("email", emailSet);//hozzáadjuk a bodyhoz az aUsername mez?t és a username értéket hozzá rendeljük.
+            form.AddField("email", emailText);//hozzáadjuk a bodyhoz az aUsername mez?t és a username értéket hozzá rendeljük.
             var request = UnityWebRequest.Post("http://127.0.0.1:18102/api/mail", form); // elküldjük a webrequestet a megadott címre, bodyban a formmal.
             var handler = request.SendWebRequest();
-            Debug.Log(request.result.ToString());
             float startTime = 0f;
 
             while (!handler.isDone)
