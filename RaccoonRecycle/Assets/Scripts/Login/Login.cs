@@ -13,8 +13,6 @@ public class Login : MonoBehaviour
     private GameObject warning_SL; //warning ablak dekralálása.
     [SerializeField]
     private Text warningText; //warning üzenet dekralálása.
-    [SerializeField] 
-    private string loginEndpoint = "http://localhost:18102/api/login"; //az api útvonalának. dekralálása.
     [SerializeField]
     private TMP_InputField usernameField; //felhasználónév mező dekralálása.
     [SerializeField]
