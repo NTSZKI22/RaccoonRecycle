@@ -65,9 +65,9 @@ public class Register : MonoBehaviour
         Debug.Log($"username: {username}, password: {password}");
 
         WWWForm form = new WWWForm();
-        form.AddField("aEmail", email);
-        form.AddField("aPassword", password);
-        form.AddField("aUsername", username);
+        form.AddField("email", email);
+        form.AddField("password", password);
+        form.AddField("username", username);
 
 
         var request = UnityWebRequest.Post("http://localhost:18102/api/register", form);

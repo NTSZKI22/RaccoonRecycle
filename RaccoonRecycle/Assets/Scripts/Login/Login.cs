@@ -35,8 +35,8 @@ public class Login : MonoBehaviour
         string password = passwordField.text; //jelszó változó egyenlő lesz a jelszó mező értékével.
 
         WWWForm form = new WWWForm(); //létrehozunk egy body felépítést a kérésünknek.
-        form.AddField("aUsername", username); //hozzáadjuk a bodyhoz az aUsername mezőt és a username értéket hozzá rendeljük.
-        form.AddField("aPassword", password); //hozzáadjuk a bodyhoz az aPassowrd mezőt és a password értéket hozzá rendeljük.
+        form.AddField("username", username); //hozzáadjuk a bodyhoz az aUsername mezőt és a username értéket hozzá rendeljük.
+        form.AddField("password", password); //hozzáadjuk a bodyhoz az aPassowrd mezőt és a password értéket hozzá rendeljük.
 
 
         var request = UnityWebRequest.Post("http://localhost:18102/api/login", form); // elküldjük a webrequestet a megadott címre, bodyban a formmal.
