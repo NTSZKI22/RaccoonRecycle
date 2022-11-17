@@ -10,7 +10,7 @@ const {
 
 module.exports = app => {
     app.post("/api/mail", urlencodedParser, async (req, res, next) => {  //post-ot használunk, mivel szeretnénk adatot kérni a szervertől a /authorize aloldalon.
-        var userAccount = await Account.findOne({ email: req.body.aEmail })
+        var userAccount = await Account.findOne({ email: req.body.email })
         if (userAccount == null) {
             res.send(200);
             return
@@ -27,7 +27,7 @@ module.exports = app => {
             });
             email.sendMail({
                 from: "RaccoonRecycleInfo <kornelhajto2004@gmail.com>",
-                to: req.body.aEmail,
+                to: req.body.email,
                 subject: "Forgotten password!",
                 text: "Your code: " + uuid,
                 html: '<p>In order change your password we sent you a code. If you want to change your password just press uuid in the game and type in your code we sent there. After that you just need to type in a new password and again your new passowrd. Thats it!<p><b>' + uuid + '</b>'
