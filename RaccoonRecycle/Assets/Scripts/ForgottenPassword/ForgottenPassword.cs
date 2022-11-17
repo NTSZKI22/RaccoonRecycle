@@ -18,6 +18,7 @@ public class ForgottenPassword : MonoBehaviour
     private GameObject warning_SL;
     [SerializeField]
     private Text warningText; //warning üzenet dekralálása.
+    public static string localUserName;
 
 
     public void onSaveClick()
@@ -52,6 +53,7 @@ public class ForgottenPassword : MonoBehaviour
             }
             if (request.result == UnityWebRequest.Result.Success)
             {
+                localUserName = request.downloadHandler.text;
                 SceneManager.LoadScene(1);
             }
             else

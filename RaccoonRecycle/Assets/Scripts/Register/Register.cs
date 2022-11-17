@@ -25,6 +25,7 @@ public class Register : MonoBehaviour
     private TMP_InputField emailField;
     [SerializeField]
     private string sceneName;
+    public static string localUserName;
 
     public void onRegisterClick()
     {
@@ -95,7 +96,7 @@ public class Register : MonoBehaviour
             {
                 warning_SL.SetActive(true);
                 warningText.text = "The account was succesfully made!";
-                new WaitForSeconds(10);
+                localUserName = username;
                 SceneManager.LoadScene(sceneName);
             }
         }

@@ -19,12 +19,14 @@ public class Login : MonoBehaviour
     private TMP_InputField passwordField; //jelszó mező dekralálása.
     [SerializeField]
     private string sceneName; //egy karakterlánc dekralálása, hogy eltároljuk a MainScene nevét.
+    public static string localUserName;
 
     public void onLoginClick()
     {
         //a coroutine, egy olyan komponens, ami engedi, hogy egy funkciót stopoljunk, vagy várjunk egy funkcióra, emiatt használjuk.
         //ahoz, hogy kérések működjenek, várnunk kell néhány helyen, mintha async és awaitet használnánk.
-       StartCoroutine(tryLogin());
+        StartCoroutine(tryLogin());
+       
     }
 
     private IEnumerator tryLogin()
@@ -59,7 +61,8 @@ public class Login : MonoBehaviour
                 warningText.text = request.downloadHandler.text;
             }
             else
-            { 
+            {
+                localUserName = usernameField.text;
                 SceneManager.LoadScene(1);
             }
             

@@ -6,45 +6,38 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 module.exports = app => {
     app.post("/api/save", urlencodedParser, async (req, res, next) => {  //post-ot használunk, mivel szeretnénk adatot kérni a szervertől a /authorize aloldalon.
-        var userSave = await save.findOne({ username: req.body.aUsername })
-        if(userSave == null)
-       {
-        var newSave = new save({
-        username: req.body.username,
-        lastSaveDate: Date.now(),
-        normalCurrency: req.body.normalCurrency,
-        prestigeCurrency: req.body.prestigeCurrency,
-        totalEarnings: req.body.totalEarnings,
-        pbUnlocked: req.body.pbUnlocked,
-        pbSoldAmount: req.body.pbSoldAmount,
-        pbValue: req.body.pbValue,
-        pbFrequency: req.body.pbFrequency,
+        var userSave = await save.findOne({ username: req.body.username })
+            userSave.username = req.body.username
+            userSave.lastSaveDate = Date.now()
+                
+            userSave.normalCurrency = req.body.normalCurrency
+            userSave.prestigeCurrency = req.body.prestigeCurrency,
+            userSave.totalEarnings = req.body.totalEarnings,
 
-        bxUnlocked: req.body.bxUnlocked,
-        bxSoldAmount: req.body.bxSoldAmount,
-        bxValue: req.body.bxValue,
-        bxFrequency: req.body.bxFrequency,
+            userSave.pbUnlocked = req.body.pbUnlocked,
+            userSave.pbSoldAmount = req.body.pbSoldAmount,
+            userSave.pbValue =  req.body.pbValue,
+            userSave.pbFrequency = req.body.pbFrequency,
 
-        glUnlocked: req.body.glUnlocked,
-        glSoldAmount: req.body.glSoldAmount,
-        glValue: req.body.glValue,
-        glFrequency: req.body.glFrequency,
+            userSave.bxUnlocked = req.body.bxUnlocked,
+            userSave.bxSoldAmount = req.body.bxSoldAmount,
+            userSave.bxValue = req.body.bxValue,
+            userSave.bxFrequency = req.body.bxFrequency,
 
-        byUnlocked: req.body.byUnlocked,
-        bySoldAmount: req.body.bySoldAmount,
-        byValue: req.body.byValue,
-        byFrequency: req.body.byFrequency,
-       })
-       await newSave.save()
-       res.send('Save data created!')
-       return
-        }
-        else
-        {
-            res.send(500)
+            userSave.glUnlocked = req.body.glUnlocked,
+            userSave.glSoldAmount = req.body.glSoldAmount,
+            userSave.glValue = req.body.glValue,
+            userSave.glFrequency = req.body.glFrequency,
+
+            userSave.byUnlocked = req.body.byUnlocked,
+            userSave.bySoldAmount = req.body.bySoldAmount,
+            userSave.byValue = req.body.byValue,
+            userSave.byFrequency = req.body.byFrequency,
+            console.log(userSave)
+            await userSave.save()
+            res.send('Save data created!')
             return
-        }
-        
+
     })
 
 }
