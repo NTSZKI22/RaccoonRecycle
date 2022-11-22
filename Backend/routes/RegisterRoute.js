@@ -6,9 +6,10 @@ var jsonParser = bodyParser.json()
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 module.exports = app => {
-    app.post("/api/register", urlencodedParser, async (req, res, next) => {  //post-ot használunk, mivel szeretnénk adatot kérni a szervertől a /authorize aloldalon.
-        var userAccount = await Account.findOne({ username: req.body.username })
-        if(userAccount == null)
+    app.post("/api/register", urlencodedParser, async (req, res  ) => {  //post-ot használunk, mivel szeretnénk adatot kérni a szervertől a /authorize aloldalon.
+        var userAccountUsername = await Account.findOne({ username: req.body.username })
+        var userAccountEmail = await Account.findOne({ email: req.body.email })
+        if(userAccountUsername == null && userAccountEmail == null)
        {
         var newAccount = new Account({
         email: req.body.email,
@@ -48,12 +49,10 @@ module.exports = app => {
        res.send('Account created!')
        return
         }
-        else
-        {
-            res.send('Error: There is an account whit this username!')
+        else{
+            res.send('Error: There is an account with this username or email address!')
             return
         }
-        
     })
 
 }

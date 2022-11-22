@@ -5,7 +5,7 @@ var jsonParser = bodyParser.json()
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 module.exports = app => {
-    app.post("/api/save", urlencodedParser, async (req, res, next) => {  //post-ot használunk, mivel szeretnénk adatot kérni a szervertől a /authorize aloldalon.
+    app.post("/api/save", urlencodedParser, async (req, res) => {  //post-ot használunk, mivel szeretnénk adatot kérni a szervertől a /authorize aloldalon.
         var userSave = await save.findOne({ username: req.body.username })
             userSave.username = req.body.username
             userSave.lastSaveDate = Date.now()
@@ -33,9 +33,8 @@ module.exports = app => {
             userSave.bySoldAmount = req.body.bySoldAmount,
             userSave.byValue = req.body.byValue,
             userSave.byFrequency = req.body.byFrequency,
-            console.log(userSave)
             await userSave.save()
-            res.send('Save data created!')
+            res.send('The saving was successful!')
             return
 
     })

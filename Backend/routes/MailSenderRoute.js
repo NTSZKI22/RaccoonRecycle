@@ -8,7 +8,7 @@ const ShortUniqueId = require('short-unique-id')
 const uuidv4 = new ShortUniqueId({ length: 10 })
 
 module.exports = app => {
-    app.post("/api/mail", urlencodedParser, async (req, res, next) => {  //post-ot használunk, mivel szeretnénk adatot kérni a szervertől a /authorize aloldalon.
+    app.post("/api/mail", urlencodedParser, async (req, res) => {  //post-ot használunk, mivel szeretnénk adatot kérni a szervertől a /authorize aloldalon.
         var userAccount = await Account.findOne({ email: req.body.email })
         if (userAccount == null) {
             res.send(200);

@@ -13,7 +13,7 @@ require('./routes/RegisterRoute')(app)
 require('./routes/LoginRoute')(app)
 require('./routes/MailSenderRoute')(app)
 require('./routes/PasswordChangeRoute')(app)
-require('./routes/CreateSaveRoute')(app)
+require('./routes/GetSaveRoute')(app)
 require('./routes/SaveRoute')(app)
 
 app.listen(process.env.PORT, () => {
