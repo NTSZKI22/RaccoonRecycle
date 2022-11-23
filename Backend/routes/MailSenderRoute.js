@@ -6,33 +6,34 @@ var jsonParser = bodyParser.json()
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 const ShortUniqueId = require('short-unique-id')
 const uuidv4 = new ShortUniqueId({ length: 10 })
+//ez a sor felett csak importok és változók/konstansok találhatóak.
 
 module.exports = app => {
-    app.post("/api/mail", urlencodedParser, async (req, res) => {  //post-ot használunk, mivel szeretnénk adatot kérni a szervertől a /authorize aloldalon.
-        var userAccount = await Account.findOne({ email: req.body.email })
-        if (userAccount == null) {
-            res.send(200);
+    app.post("/api/mail", urlencodedParser, async (req, res) => {  //postot használunk mivel a kérés küldésekor a bodyban szeretnénk küldeni az adatokat.
+        var userAccount = await Account.findOne({ email: req.body.email })// keresünk egy accountot a bodyban kapott email cím alapján.
+        if (userAccount == null) { //megnézzük, hogy van e ilyen account.
+            res.send("If there was an account with this address in our system we sent an email to the address.") //amennyiben nincs akkor is elküldünk egy kérést, nem küldünk olyan válasuzt, hogy van ilyen email a rendszerben vagy nincs.
             return
         }
-        else {
-            var uuid = uuidv4()
-            userAccount.password = uuid;
-            var email = nodemailer.createTransport({
-                service: "Gmail",
+        else {//ha van ilyen account akkor az ez alatti rész fog lefutni.
+            var uuid = uuidv4() //generálunk egy uuid-t
+            userAccount.password = uuid; //beállítjuk a felhasználónak a jelszavát erre a generált kódot.
+            var email = nodemailer.createTransport({ //email küldés beállítása.
+                service: "Gmail", //gmail az email fiók domainje.
                 auth: {
-                    user: process.env.EMAIL,
-                    pass: process.env.PASS
+                    user: process.env.EMAIL, //email cím ahonnan küldjük.
+                    pass: process.env.PASS // alkalmazás jelszó.
                 }
             });
-            email.sendMail({
-                from: "RaccoonRecycleInfo <kornelhajto2004@gmail.com>",
-                to: req.body.email,
-                subject: "Forgotten password!",
-                text: "Your code: " + uuid,
-                html: '<p>In order change your password we sent you a code. If you want to change your password just press uuid in the game and type in your code we sent there. After that you just need to type in a new password and again your new passowrd. Thats it!<p><b>' + uuid + '</b>'
+            email.sendMail({ //email elküldése 
+                from: "RaccoonRecycleInfo <kornelhajto2004@gmail.com>", //honnan küldjük az emailt.
+                to: req.body.email, //a cím email cím az ami a kérés bodyjában érkezik, tehát beállítjuk annak.
+                subject: "Forgotten password!", //email tárgya.
+                text: "Your code: " + uuid, //email tartalma.
+                html: '<p>In order change your password we sent you a code. If you want to change your password just press uuid in the game and type in your code we sent there. After that you just need to type in a new password and again your new passowrd. Thats it!<p><b>' + uuid + '</b>' //htm-ben küldöm az email tartalmát, mert könnyen formázható.
             });
-            userAccount.save()
-            res.send("Email sent to the adress!")
+            userAccount.save()//elmentjük a frissített accountot.
+            res.send("If there was an account with this address in our system we sent an email to the address.") //elküldjük a kérőnek, hogy 'If there was an account with this address in our system we sent an email to the address.'.
 
         }
     })

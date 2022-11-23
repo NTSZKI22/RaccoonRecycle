@@ -6,6 +6,7 @@ var app = express()
 const mongoose = require('mongoose')
 mongoose.connect(process.env.MONGOURI)
 
+//Adatbázis sémák.
 require('./models/accountModel')
 require('./models/saveModel')
 
