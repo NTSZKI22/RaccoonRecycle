@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 455494650297208254}
   m_Layer: 0
   m_Name: Trash_PetBottle
-  m_TagString: Untagged
+  m_TagString: PetBottle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
