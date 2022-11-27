@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5175009187397700959}
   - component: {fileID: 828579357759716609}
   - component: {fileID: 455494650297208254}
+  - component: {fileID: 8863026642249995981}
   m_Layer: 0
   m_Name: Trash_PetBottle
   m_TagString: PetBottle
@@ -125,3 +126,16 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &8863026642249995981
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5328154724444198059}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b30fc055ec2edf842b435809c718a567, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 120

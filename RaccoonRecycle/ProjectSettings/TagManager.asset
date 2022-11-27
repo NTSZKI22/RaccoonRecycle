@@ -5,7 +5,6 @@ TagManager:
   serializedVersion: 2
   tags:
   - UpgradePanel
-  - DefSeller1
   - Battery
   - PetBottle
   - Box
@@ -14,6 +13,12 @@ TagManager:
   - Collider_BX
   - Collider_GL
   - Collider_BY
+  - Seller_PB
+  - Seller_BX
+  - Seller_GL
+  - Seller_BY
+  - DefSeller
+  - SellingScript
   layers:
   - Default
   - TransparentFX
