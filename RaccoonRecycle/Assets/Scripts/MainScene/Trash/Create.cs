@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class Create : MonoBehaviour
 {
-    
+    Properties propertiesScript; //tulajdonságokat taralmazó scripthez a változó
+
     public Rigidbody2D trashPrefab; //pbulikus változó a létrehozni kívánt szemétnek
     public GameObject parent; //publikus változó a szemét szülõobjektumához
     
     //ideiglenes változók a szemét mûködéséhez
-    public int frequency;
-    public int speed;
-    public int value;
+    float frequency;
+    float speed;
 
     private Vector2 location; //vector2 változó egy helyzethez
     private Rigidbody2D rb; //fizikával rendelkezõ objektum változó
@@ -19,6 +19,7 @@ public class Create : MonoBehaviour
     void Start() //metódus lefut a játék indulásakor
     {
         location = GameObject.Find("Generator").transform.position; //location változó megkapja a Generator objektum helyzetét adatként
+        propertiesScript = trashPrefab.GetComponent<Properties>(); //a tulajdonságokat tartalmazó script az aktuális trashprefab
         Spawn(); //meghívja a spawn metódust
         StartCoroutine(Flow()); //meghívja a flow metódust
     }
@@ -31,6 +32,9 @@ public class Create : MonoBehaviour
     private void Spawn() //metódus, lefutásával létrehoz szemét objektumokat
     { 
         Rigidbody2D rb = Instantiate(trashPrefab) as Rigidbody2D; //létrehoz egy rigidbody2d-t a trashPrefab-ból
+        propertiesScript.defProperties();
+        frequency = propertiesScript.frequency();
+        speed = propertiesScript.speed();
         rb.transform.position = location; // rb helyzete a generator helyzete lesz
         rb.transform.parent = parent.transform; //rb szülõ objektumát beállítja
         rb.isKinematic = true; //nemtudom pontosan mit csinál, de kell hogy mûködjön, függ tõle az objektum fizikája
@@ -46,6 +50,4 @@ public class Create : MonoBehaviour
         }
 
     }
-
-    
 }

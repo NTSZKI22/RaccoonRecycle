@@ -19,6 +19,8 @@ TagManager:
   - Seller_BY
   - DefSeller
   - SellingScript
+  - WindowBehavior
+  - DatabaseCommunication
   layers:
   - Default
   - TransparentFX

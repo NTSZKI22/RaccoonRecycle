@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 828579357759716609}
   - component: {fileID: 455494650297208254}
   - component: {fileID: 8863026642249995981}
+  - component: {fileID: 7005396852184318789}
   m_Layer: 0
   m_Name: Trash_PetBottle
   m_TagString: PetBottle
@@ -139,3 +140,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 120
+--- !u!114 &7005396852184318789
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5328154724444198059}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0966ba5c0bd0f14eab55e4c3979919e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
