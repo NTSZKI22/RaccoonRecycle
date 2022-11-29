@@ -1,0 +1,51 @@
+// This is your Prisma schema file
+// learn more about it in the docs https//pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Users {
+  id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  username          String  @unique
+  email             String  @unique
+  password          String  @unique
+  lastAuthenticated String
+  registeredAt      String
+  saves             Saves[]
+}
+
+model Saves {
+  id               String  @id @default(auto()) @map("_id") @db.ObjectId
+  Users            Users?  @relation(fields: [usersId], references: [id])
+  usersId          String? @db.ObjectId
+  lastSaveDate     String
+  normalCurrency   Int
+  prestigeCurrency Int
+  totalEarnings    Int
+  pbUnlocked       Boolean
+  pbSoldAmount     Int
+  pbValue          Int
+  pbSpeed          Int
+  pbFrequency      Int
+  bxUnlocked       Boolean
+  bxSoldAmount     Int
+  bxValue          Int
+  bxSpeed          Int
+  bxFrequency      Int
+  glUnlocked       Boolean
+  glSoldAmount     Int
+  glValue          Int
+  glSpeed          Int
+  glFrequency      Int
+  byUnlocked       Boolean
+  bySoldAmount     Int
+  byValue          Int
+  bySpeed          Int
+  byFrequency      Int
+}
