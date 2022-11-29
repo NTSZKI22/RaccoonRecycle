@@ -11,11 +11,10 @@ GameObject:
   - component: {fileID: 2426159626000140177}
   - component: {fileID: 4541188615804693620}
   - component: {fileID: 2728615327050463371}
-  - component: {fileID: 8140215544201105275}
   - component: {fileID: 8828114690394006359}
   m_Layer: 7
   m_Name: DefSeller
-  m_TagString: Untagged
+  m_TagString: DefSeller
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -78,18 +77,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &8140215544201105275
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5014154700571148986}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 31ae967878766fc43a6576788be01eae, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!61 &8828114690394006359
 BoxCollider2D:
   m_ObjectHideFlags: 0
