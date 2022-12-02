@@ -4,31 +4,60 @@ using UnityEngine;
 
 public class HolderBehavior : MonoBehaviour
 {
+    DatabaseCommunication dataScript;
+
     public GameObject Unlock_PB; //petbottle feloldását intézõ ablak
     public GameObject Upgrade_PB; //petbottle fejlesztéseit tartalmazó ablak
+    public GameObject Conveyor_PB; //petbottle-hoz tartozó futószalagelemek
 
     public GameObject Unlock_BX; //kartondoboz feloldását intézõ ablak
     public GameObject Upgrade_BX; //kartondoboz fejlesztéseit tartalmazó ablak
+    public GameObject Conveyor_BX; //kartondobozhoz tartozó futószalagelemek
 
     public GameObject Unlock_GL; //üveg feloldását intézõ ablak
     public GameObject Upgrade_GL; //üveg fejlesztéseit tartalmazó ablak
+    public GameObject Conveyor_GL; //üveghez tartozó futószalagelemek
 
     public GameObject Unlock_BY; //elem feloldását intézõ ablak
     public GameObject Upgrade_BY; //elem fejlesztéseit tartalmazó ablak
+    public GameObject Conveyor_BY; //elemhez tartozó futószalagelemek
 
+    //alap kukák objectumai
+    public GameObject DefSeller1;
+    public GameObject DefSeller2;
+    public GameObject DefSeller3;
+    public GameObject DefSeller4;
 
+    //jelzi, hogy fel van-e oldva a bizonyos elem, funkciói a mentéskor -> lekérés és küldés,  futáskor -> kezdedti betöltés
+    bool PBUnlocked;
+    bool BXUnlocked;
+    bool GLUnlocked;
+    bool BYUnlocked;
 
     void Start() //a játék elindulásakor lefut
     {
-        defaultStart(); //lefut a defaultstart metódus
-        
-        petbottleUnlock();
-        boxUnlock();
+        dataScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<DatabaseCommunication>();
+
+        defaultStart();
+        getData();
+        loadedStart();
     }
 
     void Update() //képfrissítésenként lefut
     {
         
+    }
+
+    void getData() //metódus, lekéri az adatokat a szükséges változókba
+    {
+        //tervezett mûködés: megpróbál megszerezni egy választ, ha nem, alap értéket állít
+        //alap érték: minden false
+        
+        //ideiglenes értékállítás
+        PBUnlocked = dataScript.PB_Unlocked;
+        BXUnlocked = dataScript.BX_Unlocked;
+        GLUnlocked = dataScript.GL_Unlocked;
+        BYUnlocked = dataScript.BY_Unlocked;
     }
 
     void defaultStart() //alapértelmezett indítási felállás (mikor 0.ról kezd)
@@ -46,52 +75,68 @@ public class HolderBehavior : MonoBehaviour
         Upgrade_GL.SetActive(false);
         Upgrade_BY.SetActive(false);
 
-        /*
-        GameObject.Find("lvl1_PetBottle").SetActive(false);
-        GameObject.Find("lvl2_Box").SetActive(false);
-        GameObject.Find("lvl3_Glass").SetActive(false);
-        GameObject.Find("lvl4_Battery").SetActive(false);
-        */
+        
+        Conveyor_PB.SetActive(false);
+        Conveyor_BX.SetActive(false);
+        Conveyor_GL.SetActive(false);
+        Conveyor_BY.SetActive(false);
+        
+    }
+    
+    void loadedStart() //meghívásával egy bizonyos mentés állását tölti be
+    {
+        if (PBUnlocked) petbottleUnlock(); //ha fel van oldva a petbottle akkor meghívja a metódust
+        if (BXUnlocked) boxUnlock(); //ha fel van oldva a doboz akkor meghívja a metódust
+        if (GLUnlocked) glassUnlock(); //ha fel van oldva az üveg akkor meghívja a metódust
+        if (BYUnlocked) batteryUnlock(); //ha fel van oldva az elem akkor meghívja a metódust
     }
 
-    void petbottleUnlock() //metódus, meghívásával minden szükséges elem láthatósága változik - petpalack feloldása
+    public void petbottleUnlock() //metódus, meghívásával minden szükséges elem láthatósága változik - petpalack feloldása
     {
         Unlock_PB.SetActive(false);
         Upgrade_PB.SetActive(true);
 
         Unlock_BX.SetActive(true);
 
-        GameObject.Find("lvl1_PetBottle").SetActive(true);
+        Conveyor_PB.SetActive(true);
+
+        PBUnlocked = true;
     }
 
-    void boxUnlock() //metódus, meghívásával minden szükséges elem láthatósága változik - kartondoboz feloldása
+    public void boxUnlock() //metódus, meghívásával minden szükséges elem láthatósága változik - kartondoboz feloldása
     {
         Unlock_BX.SetActive(false);
         Upgrade_BX.SetActive(true);
 
         Unlock_GL.SetActive(true);
 
-        GameObject.Find("lvl2_Box").SetActive(true);
-        GameObject.Find("TrashCan_Main").SetActive(false);
+        Conveyor_BX.SetActive(true);
+        DefSeller1.SetActive(false);
+
+        BXUnlocked = true;
     }
 
-    void glassUnlock() //metódus, meghívásával minden szükséges elem láthatósága változik - üveg feloldása
+    public void glassUnlock() //metódus, meghívásával minden szükséges elem láthatósága változik - üveg feloldása
     {
         Unlock_GL.SetActive(false);
         Upgrade_GL.SetActive(true);
 
         Unlock_BY.SetActive(true);
 
-        GameObject.Find("lvl3_Glass").SetActive(true);
-        GameObject.Find("TrashCan_Main2").SetActive(false);
+        Conveyor_GL.SetActive(true);
+        DefSeller2.SetActive(false);
+
+        GLUnlocked = true;
     }
 
-    void batteryUnlock() //metódus, meghívásával minden szükséges elem láthatósága változik - elem feloldása
+    public void batteryUnlock() //metódus, meghívásával minden szükséges elem láthatósága változik - elem feloldása
     {
         Unlock_BY.SetActive(false);
         Upgrade_BY.SetActive(true);
 
-        GameObject.Find("lvl4_Battery").SetActive(true);
-        GameObject.Find("TrashCan_Main3").SetActive(false);
+        Conveyor_BY.SetActive(true);
+        DefSeller3.SetActive(false);
+
+        BYUnlocked = true;
     }
 }

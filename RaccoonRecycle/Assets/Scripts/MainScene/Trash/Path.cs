@@ -4,10 +4,13 @@ using UnityEngine;
 
 public class Path : MonoBehaviour
 {
-    public int speed; //ideiglenes véltozó, sebessége az objektumnak
+    //szükséges scriptek
+    Selling sellingScript;
+    Properties propertiesScript;
+
+    float speed; //sebessége az objektumnak
     Rigidbody2D rb; //fizikával rendelkezõ objektum változó
 
-    Selling sellingScript;
 
     void Start() //induláskor lefut
     {
@@ -17,7 +20,8 @@ public class Path : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other) //akkor fut le, amikor a szemét objektum ütközik valamivel
     {
-        
+        propertiesScript = gameObject.GetComponent<Properties>();
+        speed = propertiesScript.speed();
         if (other.gameObject.tag == "Collider_PB" && gameObject.tag == "PetBottle")//ha Collider_PB-vel ütközik PetBottle
         {
             rb.velocity = new Vector2(0, speed); //irányt vált
@@ -44,27 +48,9 @@ public class Path : MonoBehaviour
             Destroy(gameObject);
         }
 
-        if(other.gameObject.tag == "Seller_PB")
+        if(other.gameObject.tag == "Seller_PB" || other.gameObject.tag == "Seller_BX" || other.gameObject.tag == "Seller_GL" || other.gameObject.tag == "Seller_BY")
         {
-            sellingScript.sellingPB();
-            Destroy(gameObject);
-        }
-
-        if (other.gameObject.tag == "Seller_BX")
-        {
-            sellingScript.sellingBX();
-            Destroy(gameObject);
-        }
-
-        if (other.gameObject.tag == "Seller_GL")
-        {
-            sellingScript.sellingGL();
-            Destroy(gameObject);
-        }
-
-        if (other.gameObject.tag == "Seller_BY")
-        {
-            sellingScript.sellingBY();
+            sellingScript.soldTrashType(propertiesScript.value());
             Destroy(gameObject);
         }
     }
