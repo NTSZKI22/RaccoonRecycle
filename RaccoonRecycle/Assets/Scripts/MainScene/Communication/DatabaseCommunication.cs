@@ -11,25 +11,25 @@ public class DatabaseCommunication : MonoBehaviour
     public float prestigeCurrency;
     public float totalEarnings;
 
-    public int PB_soldAmount;
+    public float PB_soldAmount;
     public bool PB_Unlocked;
     public int PB_valueLvl;
     public int PB_speedLvl;
     public int PB_frequencyLvl;
 
-    public int BX_soldAmount;
+    public float BX_soldAmount;
     public bool BX_Unlocked;
     public int BX_valueLvl;
     public int BX_speedLvl;
     public int BX_frequencyLvl;
 
-    public int GL_soldAmount;
+    public float GL_soldAmount;
     public bool GL_Unlocked;
     public int GL_valueLvl;
     public int GL_speedLvl;
     public int GL_frequencyLvl;
 
-    public int BY_soldAmount;
+    public float BY_soldAmount;
     public bool BY_Unlocked;
     public int BY_valueLvl;
     public int BY_speedLvl;
@@ -89,9 +89,90 @@ public class DatabaseCommunication : MonoBehaviour
 
     }
 
+    public void loadCurreny(float nc, float pc, float te)
+    {
+        normalCurrency = nc;
+        prestigeCurrency = pc;
+        totalEarnings = te;
+    }
+
     public void pbValue()
     {
         PB_valueLvl++;
     }
 
+    public void pbSpeed()
+    {
+        PB_speedLvl++;
+    }
+
+    public void pbFrequency()
+    {
+        PB_frequencyLvl++;
+    }
+
+    public void bxValue()
+    {
+        BX_valueLvl++;
+    }
+
+    public void bxSpeed()
+    {
+        BX_speedLvl++;
+    }
+
+    public void bxFrequency()
+    {
+        BX_frequencyLvl++;
+    }
+
+    public void glValue()
+    {
+        GL_valueLvl++;
+    }
+
+    public void glSpeed()
+    {
+        GL_speedLvl++;
+    }
+
+    public void glFrequency()
+    {
+        GL_frequencyLvl++;
+    }
+
+    public void byValue()
+    {
+        BY_valueLvl++;
+    }
+
+    public void bySpeed()
+    {
+        BY_speedLvl++;
+    }
+
+    public void byFrequency()
+    {
+        BY_frequencyLvl++;
+    }
+
+    public void pbEarningsIncrease(float n)
+    {
+        PB_soldAmount += n;
+    }
+
+    public void bxEarningsIncrease(float n)
+    {
+        BX_soldAmount += n;
+    }
+
+    public void glEarningsIncrease(float n)
+    {
+        GL_soldAmount += n;
+    }
+
+    public void byEarningsIncrease(float n)
+    {
+        BY_soldAmount += n;
+    }
 }

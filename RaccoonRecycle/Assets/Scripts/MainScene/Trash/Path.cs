@@ -7,6 +7,7 @@ public class Path : MonoBehaviour
     //szükséges scriptek
     Selling sellingScript;
     Properties propertiesScript;
+    DatabaseCommunication dataScript;
 
     float speed; //sebessége az objektumnak
     Rigidbody2D rb; //fizikával rendelkezõ objektum változó
@@ -16,6 +17,7 @@ public class Path : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>(); //rb-t deklaráljuk mint a jelenlegi fizikával rendelkezõ objektum
         sellingScript = GameObject.FindGameObjectWithTag("SellingScript").GetComponent<Selling>();
+        dataScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<DatabaseCommunication>();
     }
 
     void OnTriggerEnter2D(Collider2D other) //akkor fut le, amikor a szemét objektum ütközik valamivel
@@ -45,12 +47,45 @@ public class Path : MonoBehaviour
         if (other.gameObject.tag == "DefSeller") //ha a defseller-el ütközik
         {
             sellingScript.normalSelling(); //meghívja a sellingscript normalselling metódusát
+
+            switch (gameObject.tag)
+            {
+                case "PetBottle":
+                    dataScript.pbEarningsIncrease(sellingScript.defaultValue);
+                    break;
+                case "Box":
+                    dataScript.bxEarningsIncrease(sellingScript.defaultValue);
+                    break;
+                case "Glass":
+                    dataScript.glEarningsIncrease(sellingScript.defaultValue);
+                    break;
+                case "Battery":
+                    dataScript.byEarningsIncrease(sellingScript.defaultValue);
+                    break;
+            }
+
             Destroy(gameObject);
         }
 
         if(other.gameObject.tag == "Seller_PB" || other.gameObject.tag == "Seller_BX" || other.gameObject.tag == "Seller_GL" || other.gameObject.tag == "Seller_BY")
         {
             sellingScript.soldTrashType(propertiesScript.value());
+            switch (gameObject.tag)
+            {
+                case "PetBottle":
+                    dataScript.pbEarningsIncrease(propertiesScript.value());
+                    break;
+                case "Box":
+                    dataScript.bxEarningsIncrease(propertiesScript.value());
+                    break;
+                case "Glass":
+                    dataScript.glEarningsIncrease(propertiesScript.value());
+                    break;
+                case "Battery":
+                    dataScript.byEarningsIncrease(propertiesScript.value());
+                    break;
+            }
+
             Destroy(gameObject);
         }
     }

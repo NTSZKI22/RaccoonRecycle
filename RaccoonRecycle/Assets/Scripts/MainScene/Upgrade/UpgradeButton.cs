@@ -9,12 +9,27 @@ public class UpgradeButton : MonoBehaviour
     DatabaseCommunication dataScript;
 
     float multiplier;
+    int trashType;
 
-    public Button button_PB_Value;
-    public Text text_PB_Value;
-    int PB_ValueLCostLvl;
-    float PB_ValueDefCost;
-    float PBValCost;
+    int ValueCostLvl;
+    int SpeedCostLvl;
+    int FrequencyCostLvl;
+
+    float ValueDefCost;
+    float SpeedDefCost;
+    float FrequencyDefCost;
+
+    float ValueCost;
+    float SpeedCost;
+    float FrequencyCost;
+
+    public Button button_Value;
+    public Button button_Speed;
+    public Button button_Frequency;
+
+    public Text text_Value;
+    public Text text_Speed;
+    public Text text_Frequency;
 
 
     // Start is called before the first frame update
@@ -23,49 +38,174 @@ public class UpgradeButton : MonoBehaviour
         sellingScript = GameObject.FindGameObjectWithTag("SellingScript").GetComponent<Selling>();
         dataScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<DatabaseCommunication>();
 
+        switch (gameObject.tag)
+        {
+            case "PetBottle": trashType = 1; break;
+            case "Box": trashType = 2; break;
+            case "Glass": trashType = 3; break;
+            case "Battery": trashType = 4; break;
+            default: trashType = 0; break;
+        }
+
         defaultStart();
-        getPBLevels();
+        getLevels();
+        calculateCost();
+        displayCost();
 
-        PBValCost = PB_ValueDefCost * Mathf.Pow(multiplier, PB_ValueLCostLvl);
+        Button btn_UV = button_Value.GetComponent<Button>();
+        btn_UV.onClick.AddListener(value);
 
-        text_PB_Value.text = sellingScript.convertCurrencyToDisplay(PBValCost.ToString());
-        Button btn_UPBV = button_PB_Value.GetComponent<Button>();
-        btn_UPBV.onClick.AddListener(PBValue);
+        Button btn_US = button_Speed.GetComponent<Button>();
+        btn_US.onClick.AddListener(speed);
+
+        Button btn_UF = button_Frequency.GetComponent<Button>();
+        btn_UF.onClick.AddListener(frequency);
     }
 
     // Update is called once per frame
     void Update()
     {
+        calculateCost();
+        displayCost();
         toAble();
-
-        PBValCost = PB_ValueDefCost * Mathf.Pow(multiplier, PB_ValueLCostLvl);
-        text_PB_Value.text = sellingScript.convertCurrencyToDisplay(PBValCost.ToString());
     }
 
     void defaultStart()
     {
         multiplier = 1.07f;
-        PB_ValueDefCost = 50;
-        PB_ValueLCostLvl = 0;
+
+        switch (trashType)
+        {
+            case 0: Debug.Log("Tag hiba"); break;
+            case 1:
+                ValueDefCost = 50;
+                SpeedDefCost = 25;
+                FrequencyDefCost = 15;
+                break;
+            case 2:
+                ValueDefCost = 100;
+                SpeedDefCost = 50;
+                FrequencyDefCost = 30;
+                break;
+            case 3:
+                ValueDefCost = 200;
+                SpeedDefCost = 100;
+                FrequencyDefCost = 60;
+                break;
+            case 4:
+                ValueDefCost = 400;
+                SpeedDefCost = 200;
+                FrequencyDefCost = 120;
+                break;
+            default: Debug.Log("Default értékek");
+                ValueDefCost = 40;
+                SpeedDefCost = 20;
+                FrequencyDefCost = 10;
+                break;
+        }
     }
 
-    void getPBLevels()
+    void getLevels()
     {
-        PB_ValueLCostLvl = dataScript.PB_valueLvl;
+        switch (trashType)
+        {
+            case 0: Debug.Log("Tag hiba"); break;
+            case 1:
+                ValueCostLvl = dataScript.PB_valueLvl;
+                SpeedCostLvl = dataScript.PB_speedLvl;
+                FrequencyCostLvl = dataScript.PB_frequencyLvl;
+                break;
+            case 2:
+                ValueCostLvl = dataScript.BX_valueLvl;
+                SpeedCostLvl = dataScript.BX_speedLvl;
+                FrequencyCostLvl = dataScript.BX_frequencyLvl;
+                break;
+            case 3:
+                ValueCostLvl = dataScript.GL_valueLvl;
+                SpeedCostLvl = dataScript.GL_speedLvl;
+                FrequencyCostLvl = dataScript.GL_frequencyLvl;
+                break;
+            case 4:
+                ValueCostLvl = dataScript.BY_valueLvl;
+                SpeedCostLvl = dataScript.BY_speedLvl;
+                FrequencyCostLvl = dataScript.BY_frequencyLvl;
+                break;
+            default:
+                Debug.Log("Default szintek");
+                ValueCostLvl = 0;
+                SpeedCostLvl = 0;
+                FrequencyCostLvl = 0;
+                break;
+        }
     }
 
     void toAble() //feladata meghatározni, hogy a gomb elérhetõ legyen e
     {
         //gomb elérhetõségét állítja, mely függ attól, hogy van-e elég pénze a feloldásra
-        button_PB_Value.interactable = sellingScript.isEnoughNormalCurrency(PBValCost);
+        button_Value.interactable = sellingScript.isEnoughNormalCurrency(ValueCost);
+        button_Speed.interactable = sellingScript.isEnoughNormalCurrency(SpeedCost);
+        button_Frequency.interactable = sellingScript.isEnoughNormalCurrency(FrequencyCost);
     }
 
-    void PBValue()
+    void calculateCost()
     {
-        dataScript.pbValue();
-        sellingScript.boughtUpgradeNormal(PBValCost);
-        PB_ValueLCostLvl++;
-        text_PB_Value.text = sellingScript.convertCurrencyToDisplay(PBValCost.ToString());
+        ValueCost = ValueDefCost * Mathf.Pow(multiplier, ValueCostLvl);
+        SpeedCost = SpeedDefCost * Mathf.Pow(multiplier, SpeedCostLvl);
+        FrequencyCost = FrequencyDefCost * Mathf.Pow(multiplier, FrequencyCostLvl);
     }
 
+    void displayCost()
+    {
+        text_Value.text = sellingScript.convertCurrencyToDisplay(ValueCost.ToString());
+        text_Speed.text = sellingScript.convertCurrencyToDisplay(SpeedCost.ToString());
+        text_Frequency.text = sellingScript.convertCurrencyToDisplay(FrequencyCost.ToString());
+    }
+
+    void value()
+    {
+        ValueCostLvl++;
+        sellingScript.boughtUpgradeNormal(ValueCost);
+
+        switch (trashType)
+        {
+            case 0: Debug.Log("Tag hiba"); break;
+            case 1: dataScript.pbValue(); break;
+            case 2: dataScript.bxValue(); break;
+            case 3: dataScript.glValue(); break;
+            case 4: dataScript.byValue(); break;
+            default: Debug.Log("Hiba"); break;
+        }
+    }
+
+    void speed()
+    {
+        SpeedCostLvl++;
+        sellingScript.boughtUpgradeNormal(SpeedCost);
+
+        switch (trashType)
+        {
+            case 0: Debug.Log("Tag hiba"); break;
+            case 1: dataScript.pbSpeed(); break;
+            case 2: dataScript.bxSpeed(); break;
+            case 3: dataScript.glSpeed(); break;
+            case 4: dataScript.bySpeed(); break;
+            default: Debug.Log("Hiba"); break;
+        }
+    }
+
+    void frequency()
+    {
+        FrequencyCostLvl++;
+        sellingScript.boughtUpgradeNormal(FrequencyCost);
+
+        switch (trashType)
+        {
+            case 0: Debug.Log("Tag hiba"); break;
+            case 1: dataScript.pbFrequency(); break;
+            case 2: dataScript.bxFrequency(); break;
+            case 3: dataScript.glFrequency(); break;
+            case 4: dataScript.byFrequency(); break;
+            default: Debug.Log("Hiba"); break;
+        }
+    }
 }
