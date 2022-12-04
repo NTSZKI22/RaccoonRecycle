@@ -21,6 +21,7 @@ TagManager:
   - SellingScript
   - WindowBehavior
   - DatabaseCommunication
+  - ScrollSider
   layers:
   - Default
   - TransparentFX

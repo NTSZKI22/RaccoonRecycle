@@ -16,7 +16,7 @@ public class Selling : MonoBehaviour
     public Text pcDisplay; //megjelenítésre használt mezõt tartalmazó változó
 
     //egyenlõre nem fixek, teszteléshez:
-    float defaultValue; //a szemetek alapértelmezett értéke
+    public float defaultValue; //a szemetek alapértelmezett értéke
     float multiplier; //a szemetek értékéhez használt szorzó
 
 
@@ -32,6 +32,7 @@ public class Selling : MonoBehaviour
     void Update() //minden képfrissítésnél lefut
     {
         displayCurrency(); //meghívja a metódust
+        dataScript.loadCurreny(normalCurrency, prestigeCurrency, totalearnings);
     }
 
     void getCurrencieValues() //metódus, feladata megszerezni a normal es prestige currency elmentett mennyiségét

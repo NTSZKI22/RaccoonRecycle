@@ -59,7 +59,7 @@ public class ButtonBehavior : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        toAble(); //gombok használhatósága
+        // toAble(); //gombok használhatósága
     }
 
     void defaultStart() //alap értékállítás bizonyos változóknak
