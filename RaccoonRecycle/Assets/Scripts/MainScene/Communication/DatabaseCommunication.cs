@@ -1,9 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Saving;
+using System.Runtime.InteropServices.ComTypes;
+using Classes;
+using UnityEngine.Networking;
+using System.Security.Cryptography.X509Certificates;
 
 public class DatabaseCommunication : MonoBehaviour
 {
+    Selling sellingScript;
+
+    private static string username;
+
+    public string json;
+
+    public SaveClass saveClass;
 
     int userid;
 
@@ -37,9 +49,10 @@ public class DatabaseCommunication : MonoBehaviour
 
     void Start()
     {
+        sellingScript = GameObject.FindGameObjectWithTag("SellingScript").GetComponent<Selling>();
         //ideiglenesen:
-        userid = -1;
-        getData();
+        userid = 0;
+        StartCoroutine(getData());
     }
 
     // Update is called once per frame
@@ -48,11 +61,10 @@ public class DatabaseCommunication : MonoBehaviour
         saveData();
     }
 
-    void getData()
+    public IEnumerator getData()
     {
         //adatok lekérése
-
-        if(userid == -1)
+        if (userid == -1)
         {
             normalCurrency = 0;
             prestigeCurrency = 0;
@@ -82,6 +94,81 @@ public class DatabaseCommunication : MonoBehaviour
             BY_speedLvl = 0;
             BY_frequencyLvl = 0;
         }
+        else if(userid == 0)
+        {
+            if (Register.localUserName != null)
+            {
+                username = Register.localUserName;
+            }
+            else if (Login.localUserName != null)
+            {
+                username = Login.localUserName;
+            }
+            else if (ForgottenPassword.localUserName != null)
+            {
+                username = ForgottenPassword.localUserName;
+            }
+
+            WWWForm form = new WWWForm();
+            form.AddField("username", username);
+            var request = UnityWebRequest.Post("http://127.0.0.1:18102/api/getsave", form);
+            var handler = request.SendWebRequest();
+
+            float startTime = 0f;
+            while (!handler.isDone)
+            {
+                startTime += Time.deltaTime;
+                if (startTime > 10.0f)
+                {
+                    break;
+                }
+                yield return null;
+            }
+            if (request.result == UnityWebRequest.Result.Success)
+            {
+                json = request.downloadHandler.text;
+                saveClass = JsonUtility.FromJson<SaveClass>(json);
+
+            }
+            else
+            {
+                Debug.Log("eror.");
+            }
+            
+            //adatok beállítása
+            normalCurrency = saveClass.normalCurrency;
+            prestigeCurrency = saveClass.prestigeCurrency;
+            totalEarnings = saveClass.totalEarnings;
+
+            PB_soldAmount = saveClass.pbSoldAmount;
+            PB_Unlocked = saveClass.pbUnlocked;
+            PB_valueLvl = saveClass.pbValue;
+            PB_speedLvl = saveClass.pbSpeed;
+            PB_frequencyLvl = saveClass.pbFrequency;
+
+            BX_soldAmount = saveClass.bxSoldAmount;
+            BX_Unlocked = saveClass.byUnlocked;
+            BX_valueLvl = saveClass.bxValue;
+            BX_speedLvl = saveClass.bxSpeed;
+            BX_frequencyLvl = saveClass.byFrequency;
+
+            GL_soldAmount = saveClass.glSoldAmount;
+            GL_Unlocked = saveClass.glUnlocked;
+            GL_valueLvl = saveClass.glValue;
+            GL_speedLvl = saveClass.glSpeed;
+            GL_frequencyLvl = saveClass.glFrequency;
+
+            BY_soldAmount = saveClass.glSoldAmount;
+            BY_Unlocked = saveClass.glUnlocked;
+            BY_valueLvl = saveClass.glValue;
+            BY_speedLvl = saveClass.glSpeed;
+            BY_frequencyLvl = saveClass.glFrequency;
+
+
+            sellingScript.getCurrencieValues();
+        }
+
+       
     }
 
     void saveData()

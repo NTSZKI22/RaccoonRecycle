@@ -8,6 +8,8 @@ public class Selling : MonoBehaviour
     DatabaseCommunication dataScript;
     Properties propertiesScript;
 
+
+
     float normalCurrency; //az alap currenciet tartalmazó változó
     float prestigeCurrency; //a prestige currenciet tartalmazó változó
     float totalearnings; //a játék kezdete vagy utolsó prestige óta szerzett normal currency
@@ -26,7 +28,8 @@ public class Selling : MonoBehaviour
 
         defaultValue = 10; //alapértelmezett érték beállítása
         multiplier = 1.05f;
-        getCurrencieValues(); //meghívja a metódust
+        //getCurrencieValues(); //meghívja a metódust
+
     }
 
     void Update() //minden képfrissítésnél lefut
@@ -35,7 +38,7 @@ public class Selling : MonoBehaviour
         dataScript.loadCurreny(normalCurrency, prestigeCurrency, totalearnings);
     }
 
-    void getCurrencieValues() //metódus, feladata megszerezni a normal es prestige currency elmentett mennyiségét
+   public void getCurrencieValues() //metódus, feladata megszerezni a normal es prestige currency elmentett mennyiségét
     {
         normalCurrency = dataScript.normalCurrency;
         prestigeCurrency = dataScript.prestigeCurrency;
@@ -46,6 +49,7 @@ public class Selling : MonoBehaviour
     {
         normalCurrency += n; //a normalcurrency mennyiségét növeli az n értékével
         totalearnings += n; //a totalearnigs mennyiségét növeli az n értékével
+        Debug.Log($"{normalCurrency}");
     }
 
     void displayCurrency() //metódus, feladata a currencyk mennyiségének megjelenítése bizonyos objektumokon keresztül
@@ -69,7 +73,7 @@ public class Selling : MonoBehaviour
 
     public bool isEnoughNormalCurrency(float n) //metódus, meghívásával igaz v hamis értéket ad vissza arról, hogy van-e ellég normalcurrency a fejlesztésre
     {
-        if(normalCurrency > n || normalCurrency == n) //ha több vagy egyenlõ
+        if (normalCurrency > n || normalCurrency == n) //ha több vagy egyenlõ
         {
             return true; //igaz
         }
@@ -88,23 +92,47 @@ public class Selling : MonoBehaviour
     public string convertCurrencyToDisplay(string nc) //metódus, meghívásával megjeleníthetõ állapotba lehet alakítani a currency-k mennyiségét, kér egy string nc-t, mely a birtokolt currency szöveggé alakítva
     {
         string[] endings = { "", "", "K", "M", "B", "T", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "N", "O", "P", "Q", "R", "S" }; //tömb, tartalmazza a rövidítéseket, melyek utalnak a birtokolt pénzmennyiség értékére
-        if (nc.Split(",")[0].Length > 4) //tizedesvesszõnél elválasztva a 0. fele ha nagyobb mint 4
+        if (nc.Contains(","))
         {
-            switch (nc.Split(",")[0].Length % 3) //az elsõ fél hosszának hárommal osztva adott maradéka alapján
+            if (nc.Split(",")[0].Length > 4) //tizedesvesszõnél elválasztva a 0. fele ha nagyobb mint 4
             {
-                case 0: //ha a maradék 0
-                    return nc.Substring(0, 3) + "." + nc.Substring(3, 1) + " " + endings[(nc.Split(",")[0].Length) / 3]; //visszaadott formátum
-                case 1: //ha a maradék 1
-                    return nc.Substring(0, 1) + "." + nc.Substring(1, 2) + " " + endings[(nc.Split(",")[0].Length + 2) / 3]; //visszaadott formátum
-                case 2: //ha a maradék 2
-                    return nc.Substring(0, 2) + "." + nc.Substring(2, 2) + " " + endings[(nc.Split(",")[0].Length + 2) / 3]; //visszaadott formátum
-                default: return nc; //alapértelmezett visszatérési érték
+                switch (nc.Split(",")[0].Length % 3) //az elsõ fél hosszának hárommal osztva adott maradéka alapján
+                {
+                    case 0: //ha a maradék 0
+                        return nc.Substring(0, 3) + "." + nc.Substring(3, 1) + " " + endings[(nc.Split(",")[0].Length) / 3]; //visszaadott formátum
+                    case 1: //ha a maradék 1
+                        return nc.Substring(0, 1) + "." + nc.Substring(1, 2) + " " + endings[(nc.Split(",")[0].Length + 2) / 3]; //visszaadott formátum
+                    case 2: //ha a maradék 2
+                        return nc.Substring(0, 2) + "." + nc.Substring(2, 2) + " " + endings[(nc.Split(",")[0].Length + 2) / 3]; //visszaadott formátum
+                    default: return nc; //alapértelmezett visszatérési érték
+                }
+            }
+            else //tizedesvesszõnél elválasztva a 0. fele ha nem nagyobb mint 4
+            {
+                return nc.Split(",")[0]; //visszadaja az elválasztott elsõ felét
             }
         }
-        else //tizedesvesszõnél elválasztva a 0. fele ha nem nagyobb mint 4
+        else
         {
-            return nc.Split(",")[0]; //visszadaja az elválasztott elsõ felét
+            if (nc.Split(".")[0].Length > 4) //tizedesvesszõnél elválasztva a 0. fele ha nagyobb mint 4
+            {
+                switch (nc.Split(".")[0].Length % 3) //az elsõ fél hosszának hárommal osztva adott maradéka alapján
+                {
+                    case 0: //ha a maradék 0
+                        return nc.Substring(0, 3) + "." + nc.Substring(3, 1) + " " + endings[(nc.Split(".")[0].Length) / 3]; //visszaadott formátum
+                    case 1: //ha a maradék 1
+                        return nc.Substring(0, 1) + "." + nc.Substring(1, 2) + " " + endings[(nc.Split(".")[0].Length + 2) / 3]; //visszaadott formátum
+                    case 2: //ha a maradék 2
+                        return nc.Substring(0, 2) + "." + nc.Substring(2, 2) + " " + endings[(nc.Split(".")[0].Length + 2) / 3]; //visszaadott formátum
+                    default: return nc; //alapértelmezett visszatérési érték
+                }
+            }
+            else //tizedesvesszõnél elválasztva a 0. fele ha nem nagyobb mint 4
+            {
+                return nc.Split(".")[0]; //visszadaja az elválasztott elsõ felét
+            }
         }
+        
     }
 
     public void boughtUpgradeNormal(float n) //metódus, meghívva és átadva neki az n-t, levonja az n mennyiségét a normalcurrency-bõl

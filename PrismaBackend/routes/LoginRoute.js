@@ -21,7 +21,7 @@ module.exports = app => {
                         saves: true,
                     },
                     where: {
-                        username: "alexanderh"
+                        username: ""+req.body.username
                     }
                 }))
             }

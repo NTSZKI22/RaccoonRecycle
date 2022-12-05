@@ -25,6 +25,7 @@ public class Register : MonoBehaviour
     private TMP_InputField emailField;
     [SerializeField]
     private string sceneName;
+
     public static string localUserName;
 
     public void onRegisterClick()
