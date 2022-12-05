@@ -1,5 +1,5 @@
-const mongoose = require('mongoose')
-const Account = mongoose.model('account')
+const { PrismaClient } = require('@prisma/client')
+const prisma = new PrismaClient()
 var nodemailer = require('nodemailer')
 var bodyParser = require('body-parser')
 var jsonParser = bodyParser.json()
@@ -10,14 +10,22 @@ const uuidv4 = new ShortUniqueId({ length: 10 })
 
 module.exports = app => {
     app.post("/api/mail", urlencodedParser, async (req, res) => {  //postot használunk mivel a kérés küldésekor a bodyban szeretnénk küldeni az adatokat.
-        var userAccount = await Account.findOne({ email: req.body.email })// keresünk egy accountot a bodyban kapott email cím alapján.
+        var userAccount = await prisma.users.findFirst({ where: { email: req.body.email } })// keresünk egy accountot a bodyban kapott email cím alapján.
         if (userAccount == null) { //megnézzük, hogy van e ilyen account.
-            res.send("If there was an account with this address in our system we sent an email to the address.") //amennyiben nincs akkor is elküldünk egy kérést, nem küldünk olyan válasuzt, hogy van ilyen email a rendszerben vagy nincs.
+            res.send("no") //amennyiben nincs akkor is elküldünk egy kérést, nem küldünk olyan válasuzt, hogy van ilyen email a rendszerben vagy nincs.
             return
         }
         else {//ha van ilyen account akkor az ez alatti rész fog lefutni.
             var uuid = uuidv4() //generálunk egy uuid-t
-            userAccount.password = uuid; //beállítjuk a felhasználónak a jelszavát erre a generált kódot.
+            await prisma.users.update({
+                where:
+                {
+                    email: req.body.email
+                },
+                data: {
+                    password: uuid
+                }
+            }) //beállítjuk a felhasználónak a jelszavát erre a generált kódot.
             var email = nodemailer.createTransport({ //email küldés beállítása.
                 service: "Gmail", //gmail az email fiók domainje.
                 auth: {
@@ -32,7 +40,6 @@ module.exports = app => {
                 text: "Your code: " + uuid, //email tartalma.
                 html: '<p>In order change your password we sent you a code. If you want to change your password just press uuid in the game and type in your code we sent there. After that you just need to type in a new password and again your new passowrd. Thats it!<p><b>' + uuid + '</b>' //htm-ben küldöm az email tartalmát, mert könnyen formázható.
             });
-            userAccount.save()//elmentjük a frissített accountot.
             res.send("If there was an account with this address in our system we sent an email to the address.") //elküldjük a kérőnek, hogy 'If there was an account with this address in our system we sent an email to the address.'.
 
         }

@@ -1,5 +1,5 @@
-const mongoose = require('mongoose')
-const Account = mongoose.model('account')
+const { PrismaClient } = require('@prisma/client')
+const prisma = new PrismaClient()
 var bodyParser = require('body-parser')
 var jsonParser = bodyParser.json()
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
@@ -7,16 +7,23 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 module.exports = app => {
     app.post("/api/login", urlencodedParser, async (req, res) => {  //postot használunk mivel a kérés küldésekor a bodyban szeretnénk küldeni az adatokat.
-        var userAccount = await Account.findOne({ username: req.body.username })// keresünk egy accountot a bodyban kapott username alapján.
+        var userAccount = await prisma.users.findFirst({ where: { username: req.body.username } }) // keresünk egy accountot a bodyban kapott username alapján.
         if (userAccount == null) { //megnézzük, hogy van e ilyen account.
             res.send('Error: Invalid credentials!') //amennyiben nincs akkor visszaküldjük, hogy 'Error: Invalid credentials!'.
             return
         }
         else {
             if (userAccount.password == req.body.password) { //ha a megadott jelszó egyezik a meglévő felhsználónévhez társult jelszóval.
-                userAccount.lastAuthenticated = Date.now()//frissítjük az utolsó autentikáció időpontját.
-                await userAccount.save() //lementjük az adatbázisba a frissített fiókot.
+                //lementjük az adatbázisba a frissített fiókot.
                 res.send('Info: Successful login!') //küldünk egy választ a kérőnek.
+                console.log(await prisma.users.findUnique({
+                    include: {
+                        saves: true,
+                    },
+                    where: {
+                        username: ""+req.body.username
+                    }
+                }))
             }
             else {
                 res.send('Error: Invalid credentials!')//hibás adatokat adott meg a felhasználó, ezért visszaküldjük, hogy 'Error: Invalid credentials!'.
