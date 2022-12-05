@@ -11,8 +11,8 @@ public class SliderBehavior : MonoBehaviour
     public GameObject machinery; //def -75, -42
     public GameObject windows; //def -50
 
-    float machineDefPos = -75f;
-    float windowsDefPos = -50f;
+    float machineDefPos;
+    float windowsDefPos;
 
     Vector2 locationDefMach;
 
@@ -22,15 +22,16 @@ public class SliderBehavior : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        locationDefMach = windows.transform.position;
+        machineDefPos = machinery.transform.position.x;
+        windowsDefPos = windows.transform.position.x;
         Debug.Log(locationDefMach);
     }
 
     // Update is called once per frame
     void Update()
     {
-        machinery.transform.position = new Vector2(scrollSlider.value, machinery.transform.position.y);
-        windows.transform.position = new Vector2(scrollSlider.value + 31 , windows.transform.position.y);
+        machinery.transform.position = new Vector2(machineDefPos - scrollSlider.value, machinery.transform.position.y);
+        windows.transform.position = new Vector2(windowsDefPos - scrollSlider.value , windows.transform.position.y);
 
     }
 

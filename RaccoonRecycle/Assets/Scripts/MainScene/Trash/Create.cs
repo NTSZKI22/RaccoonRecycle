@@ -18,10 +18,12 @@ public class Create : MonoBehaviour
 
     void Start() //metódus lefut a játék indulásakor
     {
-        location = GameObject.Find("Generator").transform.position; //location változó megkapja a Generator objektum helyzetét adatként
+         //location változó megkapja a Generator objektum helyzetét adatként
         propertiesScript = trashPrefab.GetComponent<Properties>(); //a tulajdonságokat tartalmazó script az aktuális trashprefab
+        
         Spawn(); //meghívja a spawn metódust
         StartCoroutine(Flow()); //meghívja a flow metódust
+
     }
 
     void Update() //minden képrissitésnél lefut
@@ -30,14 +32,14 @@ public class Create : MonoBehaviour
     }
 
     private void Spawn() //metódus, lefutásával létrehoz szemét objektumokat
-    { 
+    {
+        location = GameObject.Find("Generator").transform.position;
         Rigidbody2D rb = Instantiate(trashPrefab) as Rigidbody2D; //létrehoz egy rigidbody2d-t a trashPrefab-ból
         propertiesScript.defProperties();
         frequency = propertiesScript.frequency();
         speed = propertiesScript.speed();
         rb.transform.position = location; // rb helyzete a generator helyzete lesz
-        rb.transform.parent = parent.transform; //rb szülõ objektumát beállítja
-        rb.isKinematic = true; //nemtudom pontosan mit csinál, de kell hogy mûködjön, függ tõle az objektum fizikája
+        rb.transform.SetParent(parent.transform); //rb szülõ objektumát beállítja
         rb.velocity = new Vector2(speed, 0); //rb mozgása: megindul ebbe az irányba
     }
     
