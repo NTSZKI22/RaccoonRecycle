@@ -1768,8 +1768,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e372bcad98dd3bc4c94f8a52878a574b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  email: {fileID: 112256379}
   warning_SL: {fileID: 383352064}
   warningText: {fileID: 329524214}
+  emailText: 
 --- !u!114 &369787606
 MonoBehaviour:
   m_ObjectHideFlags: 0

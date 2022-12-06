@@ -16,6 +16,7 @@ module.exports = app => {
                     password: req.body.password,
                     lastAuthenticated: ""+Date.now(),
                     registeredAt: ""+Date.now(),
+                    isOnline: true,
                     saves: {
                         create: {
                             lastSaveDate: ""+Date.now(),

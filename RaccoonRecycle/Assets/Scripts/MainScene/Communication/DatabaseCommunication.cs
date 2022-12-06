@@ -60,7 +60,6 @@ public class DatabaseCommunication : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        saveData();
     }
 
     public IEnumerator getData()

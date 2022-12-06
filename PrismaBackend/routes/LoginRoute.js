@@ -15,15 +15,20 @@ module.exports = app => {
         else {
             if (userAccount.password == req.body.password) { //ha a megadott jelszó egyezik a meglévő felhsználónévhez társult jelszóval.
                 //lementjük az adatbázisba a frissített fiókot.
-                res.send('Info: Successful login!') //küldünk egy választ a kérőnek.
-                console.log(await prisma.users.findUnique({
-                    include: {
-                        saves: true,
-                    },
-                    where: {
-                        username: ""+req.body.username
-                    }
-                }))
+                if (userAccount.isOnline == true) {
+                    res.send('Info: You are logged in currently with your account on another device.')
+                }
+                else {
+                    res.send('Info: Successful login!') //küldünk egy választ a kérőnek.
+                    await prisma.users.update({
+                        where: {
+                            username: "" + req.body.username
+                        },
+                        data: {
+                            isOnline: true
+                        }
+                    })
+                }
             }
             else {
                 res.send('Error: Invalid credentials!')//hibás adatokat adott meg a felhasználó, ezért visszaküldjük, hogy 'Error: Invalid credentials!'.

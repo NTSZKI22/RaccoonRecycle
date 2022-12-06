@@ -12,6 +12,12 @@ module.exports = app => {
             return
         }
         else {
+            const user = await prisma.users.findFirst({
+                where: {
+                    password: req.body.generatedCode
+                }
+            })
+
             await prisma.users.update({
                 where: {
                     password: req.body.generatedCode
@@ -20,7 +26,7 @@ module.exports = app => {
                     password: req.body.newPassword
                 }
             })
-            res.send("Info: Successful password change.")
+            res.send(user)
             return
         }
     })
