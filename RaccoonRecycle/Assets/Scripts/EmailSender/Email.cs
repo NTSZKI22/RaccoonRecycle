@@ -26,7 +26,7 @@ public class Email : MonoBehaviour
     { 
             WWWForm form = new WWWForm(); //létrehozunk egy body felépítést a kérésünknek.
             form.AddField("email", emailText);//hozzáadjuk a bodyhoz az aUsername mez?t és a username értéket hozzá rendeljük.
-            var request = UnityWebRequest.Post("http://127.0.0.1:18102/api/mail", form); // elküldjük a webrequestet a megadott címre, bodyban a formmal.
+            var request = UnityWebRequest.Post("http://188.166.166.197:18102/api/mail", form); // elküldjük a webrequestet a megadott címre, bodyban a formmal.
             var handler = request.SendWebRequest();
             float startTime = 0f;
 

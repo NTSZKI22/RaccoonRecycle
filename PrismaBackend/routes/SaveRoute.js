@@ -42,7 +42,7 @@ module.exports = app => {
                 bySpeed: parseInt(req.body.bySpeed)
             }
         })
-        res.send('The saving was successful!')
+        res.send('Info: The saving was successful!')
         return
 
     })

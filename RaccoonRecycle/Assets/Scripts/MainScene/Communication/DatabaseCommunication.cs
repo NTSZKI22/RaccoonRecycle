@@ -13,7 +13,9 @@ public class DatabaseCommunication : MonoBehaviour
 
     private static string username;
 
-    public string json;
+    private string json;
+
+    private string saveId;
 
     public SaveClass saveClass;
 
@@ -64,116 +66,175 @@ public class DatabaseCommunication : MonoBehaviour
     public IEnumerator getData()
     {
         //adatok lekérése
-        if (userid == -1)
+        switch (userid)
         {
-            normalCurrency = 0;
-            prestigeCurrency = 0;
-            totalEarnings = 0;
-
-            PB_soldAmount = 0;
-            PB_Unlocked = false;
-            PB_valueLvl = 0;
-            PB_speedLvl = 0;
-            PB_frequencyLvl = 0;
-
-            BX_soldAmount = 0;
-            BX_Unlocked = false;
-            BX_valueLvl = 0;
-            BX_speedLvl = 0;
-            BX_frequencyLvl = 0;
-
-            GL_soldAmount = 0;
-            GL_Unlocked = false;
-            GL_valueLvl = 0;
-            GL_speedLvl = 0;
-            GL_frequencyLvl = 0;
-
-            BY_soldAmount = 0;
-            BY_Unlocked = false;
-            BY_valueLvl = 0;
-            BY_speedLvl = 0;
-            BY_frequencyLvl = 0;
-        }
-        else if(userid == 0)
-        {
-            if (Register.localUserName != null)
-            {
-                username = Register.localUserName;
-            }
-            else if (Login.localUserName != null)
-            {
-                username = Login.localUserName;
-            }
-            else if (ForgottenPassword.localUserName != null)
-            {
-                username = ForgottenPassword.localUserName;
-            }
-
-            WWWForm form = new WWWForm();
-            form.AddField("username", username);
-            var request = UnityWebRequest.Post("http://127.0.0.1:18102/api/getsave", form);
-            var handler = request.SendWebRequest();
-
-            float startTime = 0f;
-            while (!handler.isDone)
-            {
-                startTime += Time.deltaTime;
-                if (startTime > 10.0f)
+            case 0:
+                if (Register.localUserName != null)
                 {
-                    break;
+                    username = Register.localUserName;
                 }
-                yield return null;
-            }
-            if (request.result == UnityWebRequest.Result.Success)
-            {
-                json = request.downloadHandler.text;
-                saveClass = JsonUtility.FromJson<SaveClass>(json);
+                else if (Login.localUserName != null)
+                {
+                    username = Login.localUserName;
+                }
+                else if (ForgottenPassword.localUserName != null)
+                {
+                    username = ForgottenPassword.localUserName;
+                }
 
-            }
-            else
-            {
-                Debug.Log("eror.");
-            }
-            
-            //adatok beállítása
-            normalCurrency = saveClass.normalCurrency;
-            prestigeCurrency = saveClass.prestigeCurrency;
-            totalEarnings = saveClass.totalEarnings;
+                WWWForm form = new WWWForm();
+                form.AddField("username", username);
+                var request = UnityWebRequest.Post("http://188.166.166.197:18102/api/getsave", form);
+                var handler = request.SendWebRequest();
 
-            PB_soldAmount = saveClass.pbSoldAmount;
-            PB_Unlocked = saveClass.pbUnlocked;
-            PB_valueLvl = saveClass.pbValue;
-            PB_speedLvl = saveClass.pbSpeed;
-            PB_frequencyLvl = saveClass.pbFrequency;
+                float startTime = 0f;
+                while (!handler.isDone)
+                {
+                    startTime += Time.deltaTime;
+                    if (startTime > 10.0f)
+                    {
+                        break;
+                    }
+                    yield return null;
+                }
+                if (request.result == UnityWebRequest.Result.Success)
+                {
+                    json = request.downloadHandler.text;
+                    saveClass = JsonUtility.FromJson<SaveClass>(json);
 
-            BX_soldAmount = saveClass.bxSoldAmount;
-            BX_Unlocked = saveClass.byUnlocked;
-            BX_valueLvl = saveClass.bxValue;
-            BX_speedLvl = saveClass.bxSpeed;
-            BX_frequencyLvl = saveClass.byFrequency;
+                }
+                else
+                {
+                    Debug.Log("eror.");
+                }
 
-            GL_soldAmount = saveClass.glSoldAmount;
-            GL_Unlocked = saveClass.glUnlocked;
-            GL_valueLvl = saveClass.glValue;
-            GL_speedLvl = saveClass.glSpeed;
-            GL_frequencyLvl = saveClass.glFrequency;
+                //adatok beállítása
+                saveId = saveClass.id;
+                normalCurrency = saveClass.normalCurrency;
+                prestigeCurrency = saveClass.prestigeCurrency;
+                totalEarnings = saveClass.totalEarnings;
 
-            BY_soldAmount = saveClass.glSoldAmount;
-            BY_Unlocked = saveClass.glUnlocked;
-            BY_valueLvl = saveClass.glValue;
-            BY_speedLvl = saveClass.glSpeed;
-            BY_frequencyLvl = saveClass.glFrequency;
+                PB_soldAmount = saveClass.pbSoldAmount;
+                PB_Unlocked = saveClass.pbUnlocked;
+                PB_valueLvl = saveClass.pbValue;
+                PB_speedLvl = saveClass.pbSpeed;
+                PB_frequencyLvl = saveClass.pbFrequency;
+
+                BX_soldAmount = saveClass.bxSoldAmount;
+                BX_Unlocked = saveClass.byUnlocked;
+                BX_valueLvl = saveClass.bxValue;
+                BX_speedLvl = saveClass.bxSpeed;
+                BX_frequencyLvl = saveClass.byFrequency;
+
+                GL_soldAmount = saveClass.glSoldAmount;
+                GL_Unlocked = saveClass.glUnlocked;
+                GL_valueLvl = saveClass.glValue;
+                GL_speedLvl = saveClass.glSpeed;
+                GL_frequencyLvl = saveClass.glFrequency;
+
+                BY_soldAmount = saveClass.glSoldAmount;
+                BY_Unlocked = saveClass.glUnlocked;
+                BY_valueLvl = saveClass.glValue;
+                BY_speedLvl = saveClass.glSpeed;
+                BY_frequencyLvl = saveClass.glFrequency;
 
 
-            sellingScript.getCurrencieValues();
+                sellingScript.getCurrencieValues();
+
+                break;
+
+            case -1:
+
+                normalCurrency = 0;
+                prestigeCurrency = 0;
+                totalEarnings = 0;
+
+                PB_soldAmount = 0;
+                PB_Unlocked = false;
+                PB_valueLvl = 0;
+                PB_speedLvl = 0;
+                PB_frequencyLvl = 0;
+
+                BX_soldAmount = 0;
+                BX_Unlocked = false;
+                BX_valueLvl = 0;
+                BX_speedLvl = 0;
+                BX_frequencyLvl = 0;
+
+                GL_soldAmount = 0;
+                GL_Unlocked = false;
+                GL_valueLvl = 0;
+                GL_speedLvl = 0;
+                GL_frequencyLvl = 0;
+
+                BY_soldAmount = 0;
+                BY_Unlocked = false;
+                BY_valueLvl = 0;
+                BY_speedLvl = 0;
+                BY_frequencyLvl = 0;
+
+                break;
         }
-
-       
     }
 
-    void saveData()
+    public void startSaveData()
     {
+        StartCoroutine(saveData());
+    }
 
+    public IEnumerator saveData()
+    {
+        WWWForm form = new WWWForm();
+        form.AddField("id", saveId);
+        form.AddField("normalCurrency", "" + normalCurrency);
+        form.AddField("prestigeCurrency", "" + prestigeCurrency);
+        form.AddField("totalEarnings", "" + totalEarnings);
+        form.AddField("pbUnlocked", "" + PB_Unlocked);
+        form.AddField("pbSoldAmount", "" + PB_soldAmount);
+        form.AddField("pbValue", "" + PB_valueLvl);
+        form.AddField("pbFrequency", "" + PB_frequencyLvl);
+        form.AddField("pbSpeed", "" + PB_speedLvl);
+
+        form.AddField("bxUnlocked", "" + BX_Unlocked);
+        form.AddField("bxSoldAmount", "" + BX_soldAmount);
+        form.AddField("bxValue", "" + BX_valueLvl);
+        form.AddField("bxFrequency", "" + BX_frequencyLvl);
+        form.AddField("bxSpeed", "" + BX_speedLvl);
+
+        form.AddField("glUnlocked", "" + GL_Unlocked);
+        form.AddField("glSoldAmount", "" + GL_soldAmount);
+        form.AddField("glValue", "" + GL_valueLvl);
+        form.AddField("glFrequency", "" + GL_frequencyLvl);
+        form.AddField("glSpeed", "" + GL_speedLvl);
+
+        form.AddField("byUnlocked", "" + BY_Unlocked);
+        form.AddField("bySoldAmount", "" + BY_soldAmount);
+        form.AddField("byValue", "" + BY_valueLvl);
+        form.AddField("byFrequency", "" + BY_frequencyLvl);
+        form.AddField("bySpeed", "" + BY_speedLvl);
+        var request = UnityWebRequest.Post("http://188.166.166.197:18102/api/save", form);
+        var handler = request.SendWebRequest();
+
+        float startTime = 0f;
+        while (!handler.isDone)
+        {
+            startTime += Time.deltaTime;
+            if (startTime > 10.0f)
+            {
+                break;
+            }
+            yield return null;
+        }
+        if (request.result == UnityWebRequest.Result.Success)
+        {
+            Debug.Log(request.downloadHandler.ToString());
+        }
+        else
+        {
+            Debug.Log("error.");
+        }
+
+        yield return null;
     }
 
     public void loadCurreny(float nc, float pc, float te)

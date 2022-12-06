@@ -38,7 +38,7 @@ public class ForgottenPassword : MonoBehaviour
             WWWForm form = new WWWForm(); //létrehozunk egy body felépítést a kérésünknek.
             form.AddField("generatedCode", generatedCode.text);//hozzáadjuk a bodyhoz az aUsername mez?t és a username értéket hozzá rendeljük.
             form.AddField("newPassword", newPassword.text); //hozzáadjuk a bodyhoz az aPassowrd mez?t és a password értéket hozzá rendeljük.
-            var request = UnityWebRequest.Post("http://localhost:18102/api/passwordchange", form); // elküldjük a webrequestet a megadott címre, bodyban a formmal.
+            var request = UnityWebRequest.Post("http://188.166.166.197:18102/api/passwordchange", form); // elküldjük a webrequestet a megadott címre, bodyban a formmal.
             var handler = request.SendWebRequest();
             float startTime = 0f;
 

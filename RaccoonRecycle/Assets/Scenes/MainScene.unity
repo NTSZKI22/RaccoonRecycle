@@ -4803,9 +4803,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c37f88b35aa6b143b013da05e755e85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Selling: {fileID: 1385602741}
-  dataGet: 0
-  json: 
   normalCurrency: 0
   prestigeCurrency: 0
   totalEarnings: 0
@@ -24246,18 +24243,18 @@ PrefabInstance:
     - target: {fileID: 2484645006855743219, guid: 941c596e5416f5848a3d4082cc05aad2, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1173673171}
+      objectReference: {fileID: 444225052}
     - target: {fileID: 2484645006855743219, guid: 941c596e5416f5848a3d4082cc05aad2, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2484645006855743219, guid: 941c596e5416f5848a3d4082cc05aad2, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: onGet
+      value: startSaveData
       objectReference: {fileID: 0}
     - target: {fileID: 2484645006855743219, guid: 941c596e5416f5848a3d4082cc05aad2, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: GetSave, Assembly-CSharp
+      value: DatabaseCommunication, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 2484645006855743219, guid: 941c596e5416f5848a3d4082cc05aad2, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
