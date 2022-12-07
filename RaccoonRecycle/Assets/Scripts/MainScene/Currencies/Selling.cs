@@ -5,10 +5,8 @@ using UnityEngine.UI;
 
 public class Selling : MonoBehaviour
 {
-    DatabaseCommunication dataScript;
-    Properties propertiesScript;
-
-
+    DatabaseCommunication dataScript; //az adatbázisból megkapott adatokat kezelõ script
+    Properties propertiesScript; //az adott szemetek tulajdonságait kezelõ script
 
     float normalCurrency; //az alap currenciet tartalmazó változó
     float prestigeCurrency; //a prestige currenciet tartalmazó változó
@@ -24,32 +22,23 @@ public class Selling : MonoBehaviour
 
     void Start() //a játék elindulásánál lefut
     {
-        dataScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<DatabaseCommunication>();
+        dataScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<DatabaseCommunication>(); //a scriptet kiveszi az adott objektumból mint komponense
 
         defaultValue = 10; //alapértelmezett érték beállítása
-        multiplier = 1.05f;
-        //getCurrencieValues(); //meghívja a metódust
+        multiplier = 1.05f; //a szorzó alap értékének beállítása 5%-os növekedés
 
     }
 
     void Update() //minden képfrissítésnél lefut
     {
         displayCurrency(); //meghívja a metódust
-        dataScript.loadCurreny(normalCurrency, prestigeCurrency, totalearnings);
-    }
-
-   public void getCurrencieValues() //metódus, feladata megszerezni a normal es prestige currency elmentett mennyiségét
-    {
-        normalCurrency = dataScript.normalCurrency;
-        prestigeCurrency = dataScript.prestigeCurrency;
-        totalearnings = dataScript.totalEarnings;
+        dataScript.loadCurreny(normalCurrency, prestigeCurrency, totalearnings);  //a normal, presstigecurrency és totalearnings értékeit visszaadja a datascript-nek
     }
 
     void addCurrency(float n) //metódus, növeli a currencyk mennyiségét
     {
         normalCurrency += n; //a normalcurrency mennyiségét növeli az n értékével
         totalearnings += n; //a totalearnigs mennyiségét növeli az n értékével
-        Debug.Log($"{normalCurrency}");
     }
 
     void displayCurrency() //metódus, feladata a currencyk mennyiségének megjelenítése bizonyos objektumokon keresztül
@@ -68,7 +57,7 @@ public class Selling : MonoBehaviour
 
     public void soldTrashType(float amount) //petpalack, bármilyen fix szemét eladásakor hívódik, majd fut le, növelli a normalcurrency értékét
     {
-        addCurrency(amount);
+        addCurrency(amount);  //a megkapott mennyiséget átadva meghívjuk az addCurrency-t
     }
 
     public bool isEnoughNormalCurrency(float n) //metódus, meghívásával igaz v hamis értéket ad vissza arról, hogy van-e ellég normalcurrency a fejlesztésre
@@ -92,7 +81,7 @@ public class Selling : MonoBehaviour
     public string convertCurrencyToDisplay(string nc) //metódus, meghívásával megjeleníthetõ állapotba lehet alakítani a currency-k mennyiségét, kér egy string nc-t, mely a birtokolt currency szöveggé alakítva
     {
         string[] endings = { "", "", "K", "M", "B", "T", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "N", "O", "P", "Q", "R", "S" }; //tömb, tartalmazza a rövidítéseket, melyek utalnak a birtokolt pénzmennyiség értékére
-        if (nc.Contains(","))
+        if (nc.Contains(",")) //ha vesszõt tartalmaz az nc
         {
             if (nc.Split(",")[0].Length > 4) //tizedesvesszõnél elválasztva a 0. fele ha nagyobb mint 4
             {
@@ -143,5 +132,25 @@ public class Selling : MonoBehaviour
     public void boughtUpgradePrestige(float n) //metódus, meghívva és átadva neki az n-t, levonja az n mennyiségét a prestigecurrency-bõl
     {
         prestigeCurrency -= n; //pretigecurrency-bõl kivonja az n értékét
+    }
+
+    public void getCurrencieValues() //metódus, feladata megszerezni a normal es prestige currency elmentett mennyiségét
+    {
+        //a változóknak megadja az adatbázisból megszerzett változók értékeit
+        normalCurrency = dataScript.normalCurrency;
+        prestigeCurrency = dataScript.prestigeCurrency;
+        totalearnings = dataScript.totalEarnings;
+    }
+
+    public float prestigeEarning() //feladata visszaadni az aktuálisan megkapható prestigecurrency mennyiségét
+    {
+        return normalCurrency / 100;
+    }
+
+    public void prestigeTasks() //feladata a prestige során elvégezendõ feladatokat végrehajtani
+    {
+        prestigeCurrency += prestigeEarning();
+        totalearnings = 0;
+        normalCurrency = 0;
     }
 }

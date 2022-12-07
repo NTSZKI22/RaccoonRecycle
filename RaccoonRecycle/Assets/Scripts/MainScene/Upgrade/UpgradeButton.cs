@@ -3,55 +3,54 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UpgradeButton : MonoBehaviour
+public class UpgradeButton : MonoBehaviour //kezel mimndent, ami az upgrade gombok lenyomásakor történik
 {
-    Selling sellingScript;
-    DatabaseCommunication dataScript;
+    Selling sellingScript; //a currency-t kezelõ script
+    DatabaseCommunication dataScript; //az adatbázisból megkapott adatokat kezelõ script
 
-    float multiplier;
-    int trashType;
+    float multiplier; //értékszámításokhoz a szorzó
+    int trashType; //a szemét típusa 1-petbottle, 2-box, 3-glass, 4-battery
 
-    int ValueCostLvl;
-    int SpeedCostLvl;
-    int FrequencyCostLvl;
+    int ValueCostLvl; //érték árának szintje
+    int SpeedCostLvl; //sebesség árának szintje
+    int FrequencyCostLvl; //gyakoriság árának szintje
 
-    float ValueDefCost;
-    float SpeedDefCost;
-    float FrequencyDefCost;
+    float ValueDefCost; //érték alap ára
+    float SpeedDefCost; //gyorsaság alap ára
+    float FrequencyDefCost; //gyakoriság alap ára
 
-    float ValueCost;
-    float SpeedCost;
-    float FrequencyCost;
+    float ValueCost; //érték ára - számított érték
+    float SpeedCost; //gyorsaság ára - számított érték
+    float FrequencyCost; //gyakoriság ára - számított érték
 
-    public Button button_Value;
-    public Button button_Speed;
-    public Button button_Frequency;
+    public Button button_Value; //érték fejlesztéséhez tartozó gmb
+    public Button button_Speed; //gyorsaság fejlesztéséhez tartozó gomb
+    public Button button_Frequency; //gyakoriság fejlesztéséhez tartozó gomb
 
-    public Text text_Value;
-    public Text text_Speed;
-    public Text text_Frequency;
+    public Text text_Value; //érték árának megjelenítéséhez használt szöveg
+    public Text text_Speed; //gyorsaság megjelenítéséhez használt szöveg
+    public Text text_Frequency; //gyakoriság megjelenítéséhez használt szöveg
 
 
     // Start is called before the first frame update
     void Start()
     {
-        sellingScript = GameObject.FindGameObjectWithTag("SellingScript").GetComponent<Selling>();
-        dataScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<DatabaseCommunication>();
+        sellingScript = GameObject.FindGameObjectWithTag("SellingScript").GetComponent<Selling>(); //a scriptet kiveszi az adott objektumból mint komponense
+        dataScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<DatabaseCommunication>(); //a scriptet kiveszi az adott objektumból mint komponense
 
+        //az aktuális objektum tag-je alapján(melyen a script van), meghatározza a trashtype értékét
         switch (gameObject.tag)
         {
-            case "PetBottle": trashType = 1; break;
-            case "Box": trashType = 2; break;
-            case "Glass": trashType = 3; break;
-            case "Battery": trashType = 4; break;
-            default: trashType = 0; break;
+            case "PetBottleU": trashType = 1; break;
+            case "BoxU": trashType = 2; break;
+            case "GlassU": trashType = 3; break;
+            case "BatteryU": trashType = 4; break;
+            default: trashType = 0; Debug.Log("TrashType 0!"); break; //ha a tag egyik opcióval se egyezik alap értékként 0-át állítunk valamint logoljuk
         }
 
-        defaultStart();
-        getLevels();
-        calculateCost();
-        displayCost();
+        defaultStart(); //elindítja a defaultstart-ot
 
+        //a feljebb megadott gombok 'gomb' komponensére click listener kerül, kattintáskor a megfelelõ kód fut le
         Button btn_UV = button_Value.GetComponent<Button>();
         btn_UV.onClick.AddListener(value);
 
@@ -65,16 +64,17 @@ public class UpgradeButton : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        calculateCost();
-        displayCost();
-        toAble();
+        calculateCost(); //elindítja a calculatecost-t
+        displayCost(); //elindítja a displaycast-t
+        toAble(); //elindítja a toAble-t
     }
 
-    void defaultStart()
+    void defaultStart() //azon adatokat definiálja, melyeket nem válaszként várunk az adatbázisból
     {
-        multiplier = 1.07f;
+        multiplier = 1.07f; // szorzó értéke 7%-os növekedés
 
-        switch (trashType)
+        //trashtype értékétõl függõen lesznek az tulajdonságok alap árai beállítva
+        switch (trashType) 
         {
             case 0: Debug.Log("Tag hiba"); break;
             case 1:
@@ -105,8 +105,9 @@ public class UpgradeButton : MonoBehaviour
         }
     }
 
-    void getLevels()
+    public void getLevels()  //a szintek értékét szerzi meg a datascript-bõl
     {
+        //trashtype értéke alapján állítja be a value, speed, frequency értékeit
         switch (trashType)
         {
             case 0: Debug.Log("Tag hiba"); break;
@@ -147,65 +148,43 @@ public class UpgradeButton : MonoBehaviour
         button_Frequency.interactable = sellingScript.isEnoughNormalCurrency(FrequencyCost);
     }
 
-    void calculateCost()
+    void calculateCost() //feldata kiszámolni a fejleszthetõ tulajdonságok árait
     {
+        //ár = alap érték * szorzó^szint
         ValueCost = ValueDefCost * Mathf.Pow(multiplier, ValueCostLvl);
         SpeedCost = SpeedDefCost * Mathf.Pow(multiplier, SpeedCostLvl);
         FrequencyCost = FrequencyDefCost * Mathf.Pow(multiplier, FrequencyCostLvl);
     }
 
-    void displayCost()
+    void displayCost() // feldata megjeleníteni a kiszámolt árakat
     {
+        //az értékeket megjeleníthetõ fomába állítjuk, majd azt megkapja a text komponense
         text_Value.text = sellingScript.convertCurrencyToDisplay(ValueCost.ToString());
         text_Speed.text = sellingScript.convertCurrencyToDisplay(SpeedCost.ToString());
         text_Frequency.text = sellingScript.convertCurrencyToDisplay(FrequencyCost.ToString());
     }
 
-    void value()
+    void value() //érték gomb lenyomásakor fut le
     {
-        ValueCostLvl++;
-        sellingScript.boughtUpgradeNormal(ValueCost);
+        ValueCostLvl++; //az ár szintjét növeli eggyel
+        sellingScript.boughtUpgradeNormal(ValueCost); //az árat levonja a normalcurrency egyenlegbõl
 
-        switch (trashType)
-        {
-            case 0: Debug.Log("Tag hiba"); break;
-            case 1: dataScript.pbValue(); break;
-            case 2: dataScript.bxValue(); break;
-            case 3: dataScript.glValue(); break;
-            case 4: dataScript.byValue(); break;
-            default: Debug.Log("Hiba"); break;
-        }
+        dataScript.upgrade(trashType, "value"); //datascript upgrade-ját futtatja le, átadva neki a trashtype-ot és egy stringet (jelenleg: value)
     }
 
-    void speed()
+    void speed() //gyorsaság gomb lenyomásakor fut le
     {
-        SpeedCostLvl++;
-        sellingScript.boughtUpgradeNormal(SpeedCost);
+        SpeedCostLvl++; //az ár szintjét növeli eggyel
+        sellingScript.boughtUpgradeNormal(SpeedCost); //az árat levonja a normalcurrency egyenlegbõl
 
-        switch (trashType)
-        {
-            case 0: Debug.Log("Tag hiba"); break;
-            case 1: dataScript.pbSpeed(); break;
-            case 2: dataScript.bxSpeed(); break;
-            case 3: dataScript.glSpeed(); break;
-            case 4: dataScript.bySpeed(); break;
-            default: Debug.Log("Hiba"); break;
-        }
+        dataScript.upgrade(trashType, "speed"); //datascript upgrade-ját futtatja le, átadva neki a trashtype-ot és egy stringet (jelenleg: speed)
     }
 
-    void frequency()
+    void frequency()//gyakoriság gomb lenyomásakor fut le
     {
-        FrequencyCostLvl++;
-        sellingScript.boughtUpgradeNormal(FrequencyCost);
+        FrequencyCostLvl++; //az ár szintjét növeli eggyel
+        sellingScript.boughtUpgradeNormal(FrequencyCost); //az árat levonja a normalcurrency egyenlegbõl
 
-        switch (trashType)
-        {
-            case 0: Debug.Log("Tag hiba"); break;
-            case 1: dataScript.pbFrequency(); break;
-            case 2: dataScript.bxFrequency(); break;
-            case 3: dataScript.glFrequency(); break;
-            case 4: dataScript.byFrequency(); break;
-            default: Debug.Log("Hiba"); break;
-        }
+        dataScript.upgrade(trashType, "frequency"); //datascript upgrade-ját futtatja le, átadva neki a trashtype-ot és egy stringet (jelenleg: frequency)
     }
 }

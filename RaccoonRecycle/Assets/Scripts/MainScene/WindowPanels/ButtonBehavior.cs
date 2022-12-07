@@ -6,8 +6,8 @@ using UnityEngine.UI;
 public class ButtonBehavior : MonoBehaviour
 {
     //használt scriptek változói
-    Selling sellingScript;
-    HolderBehavior holderScript;
+    Selling sellingScript; //a currency-t kezelõ script
+    HolderBehavior holderScript; //a holderek viselkedését kezelõ script
 
     //minden szemétfajtához tartozó gomb, felirat és ár
     //gomb -> megnyomásával feloldható a futószalag, felirat -> kiírja az árat, cost -> megadja az árat
@@ -30,13 +30,12 @@ public class ButtonBehavior : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        sellingScript = GameObject.FindGameObjectWithTag("SellingScript").GetComponent<Selling>(); //a scriptet kiveszi az adott objektumból mint komponense
+        holderScript = GameObject.FindGameObjectWithTag("WindowBehavior").GetComponent<HolderBehavior>(); //a scriptet kiveszi az adott objektumból mint komponense
+        
         defaultStart(); //alapértelmezett elindulás
 
-        sellingScript = GameObject.FindGameObjectWithTag("SellingScript").GetComponent<Selling>(); //meghatározza a script helyét
-        holderScript = GameObject.FindGameObjectWithTag("WindowBehavior").GetComponent<HolderBehavior>(); //meghatározza a script helyét
-
-        //a gomb objektumok button komponensét elkéri, majd figyelni kezdi
-        //ha ráklikkelnek meghívja a meghatározott metódust
+        //a feljebb megadott gombok 'gomb' komponensére click listener kerül, kattintáskor a megfelelõ kód fut le
         Button btn_UPB = button_UnlockPB.GetComponent<Button>();
         btn_UPB.onClick.AddListener(unlockPB);
         
@@ -59,15 +58,15 @@ public class ButtonBehavior : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // toAble(); //gombok használhatósága
+       // toAble(); //gombok használhatósága
     }
 
     void defaultStart() //alap értékállítás bizonyos változóknak
     {
         cost_UnlockPB = 50;
-        cost_UnlockBX = 100000;
-        cost_UnlockGL = 1500000;
-        cost_UnlockBY = 20000000;
+        cost_UnlockBX = 10000;
+        cost_UnlockGL = 150000;
+        cost_UnlockBY = 2000000;
     }
 
     void toAble() //feladata meghatározni, hogy a gomb elérhetõ legyen e
@@ -81,25 +80,25 @@ public class ButtonBehavior : MonoBehaviour
 
     void unlockPB() //petpalack feloldása
     {
-        holderScript.petbottleUnlock(); //a szügséges objektumok ára változik
+        holderScript.petbottleUnlock(); //a szügséges objektumok láthatósága változik
         sellingScript.boughtUpgradeNormal(cost_UnlockPB); //a feloldás ára levonásra kerül az egyenlegrõl
     }
 
     void unlockBX() //doboz feloldása
     {
-        holderScript.boxUnlock(); //a szügséges objektumok ára változik
+        holderScript.boxUnlock(); //a szügséges objektumok láthatósága változik
         sellingScript.boughtUpgradePrestige(cost_UnlockBX); //a feloldás ára levonásra kerül az egyenlegrõl
     }
 
     void unlockGL() //üveg feloldása
     {
-        holderScript.glassUnlock(); //a szügséges objektumok ára változik
+        holderScript.glassUnlock(); //a szügséges objektumok láthatósága változik
         sellingScript.boughtUpgradePrestige(cost_UnlockGL); //a feloldás ára levonásra kerül az egyenlegrõl
     }
 
     void unlockBY() //elem feloldása
     {
-        holderScript.batteryUnlock(); //a szügséges objektumok ára változik
+        holderScript.batteryUnlock(); //a szügséges objektumok láthatósága változik
         sellingScript.boughtUpgradePrestige(cost_UnlockBY); //a feloldás ára levonásra kerül az egyenlegrõl
     }
 }

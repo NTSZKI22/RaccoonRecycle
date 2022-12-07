@@ -33,11 +33,11 @@ public class Create : MonoBehaviour
 
     private void Spawn() //metódus, lefutásával létrehoz szemét objektumokat
     {
-        location = GameObject.Find("Generator").transform.position;
+        location = GameObject.Find("Generator").transform.position; //a location a generátor objektum poziciója
         Rigidbody2D rb = Instantiate(trashPrefab) as Rigidbody2D; //létrehoz egy rigidbody2d-t a trashPrefab-ból
-        propertiesScript.defProperties();
-        frequency = propertiesScript.frequency();
-        speed = propertiesScript.speed();
+        propertiesScript.defProperties(); //elindítja a defProperties metódust
+        frequency = propertiesScript.frequency(); //a frequency a propertiesScript.frequency által adott érték 
+        speed = propertiesScript.speed(); // a gyorsaság a propertiesScript.speed által adott érték
         rb.transform.position = location; // rb helyzete a generator helyzete lesz
         rb.transform.SetParent(parent.transform); //rb szülõ objektumát beállítja
         rb.velocity = new Vector2(speed, 0); //rb mozgása: megindul ebbe az irányba

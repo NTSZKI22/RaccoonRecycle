@@ -9,7 +9,12 @@ using System.Security.Cryptography.X509Certificates;
 
 public class DatabaseCommunication : MonoBehaviour
 {
-    Selling sellingScript;
+    Selling sellingScript; //a currency-t kezelõ script
+    UpgradeButton pbUpgradeScripts; //a petbottle fejlesztését kezelõ script
+    UpgradeButton bxUpgradeScripts; //a box fejlesztését kezelõ script
+    UpgradeButton glUpgradeScripts; //a glass fejlesztését kezelõ script
+    UpgradeButton byUpgradeScripts; //a battery fejlesztését kezelõ script
+    HolderBehavior holderScript; //a holderek viselkedését kezelõ script
 
     private static string username;
 
@@ -51,7 +56,13 @@ public class DatabaseCommunication : MonoBehaviour
 
     void Start()
     {
-        sellingScript = GameObject.FindGameObjectWithTag("SellingScript").GetComponent<Selling>();
+        sellingScript = GameObject.FindGameObjectWithTag("SellingScript").GetComponent<Selling>(); //a scriptet kiveszi az adott objektumból mint komponense
+        pbUpgradeScripts = GameObject.FindGameObjectWithTag("PetBottleU").GetComponent<UpgradeButton>(); //a scriptet kiveszi az adott objektumból mint komponense
+        bxUpgradeScripts = GameObject.FindGameObjectWithTag("BoxU").GetComponent<UpgradeButton>(); //a scriptet kiveszi az adott objektumból mint komponense
+        glUpgradeScripts = GameObject.FindGameObjectWithTag("GlassU").GetComponent<UpgradeButton>(); //a scriptet kiveszi az adott objektumból mint komponense
+        byUpgradeScripts = GameObject.FindGameObjectWithTag("BatteryU").GetComponent<UpgradeButton>(); //a scriptet kiveszi az adott objektumból mint komponense
+        holderScript = GameObject.FindGameObjectWithTag("WindowBehavior").GetComponent<HolderBehavior>(); //a scriptet kiveszi az adott objektumból mint komponense
+
         //ideiglenesen:
         userid = 0;
         StartCoroutine(getData());
@@ -60,6 +71,7 @@ public class DatabaseCommunication : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
     }
 
     public IEnumerator getData()
@@ -236,90 +248,121 @@ public class DatabaseCommunication : MonoBehaviour
         yield return null;
     }
 
-    public void loadCurreny(float nc, float pc, float te)
+    public void loadCurreny(float nc, float pc, float te) //más scriptek átadják neki ezzel a currency-k értékét
     {
+        //a megadott értékekre állítja a változókat
         normalCurrency = nc;
         prestigeCurrency = pc;
         totalEarnings = te;
     }
 
-    public void pbValue()
+    public void earningIncrease(string type, float n) //feladata a megkapott szeméttípus összbevételét n-nel növelni
     {
-        PB_valueLvl++;
+        switch (type) 
+        {
+            case "PetBottle": PB_soldAmount += n; break;
+            case "Box": BX_soldAmount += n; break;
+            case "Glass": GL_soldAmount += n; break;
+            case "Battery": BY_soldAmount += n; break;
+        }
     }
 
-    public void pbSpeed()
+    public void upgrade(int type, string property) //feladata a megkapott szeméttípus és annak tulajdonsága alapján a megfelelõ szintet növelni
     {
-        PB_speedLvl++;
+        switch (type)
+        {
+            case 1:
+                switch (property)
+                {
+                    case "value": PB_valueLvl++; break;
+                    case "speed": PB_speedLvl++; break;
+                    case "frequency": PB_frequencyLvl++; break;
+                    default: Debug.Log("Property hiba"); break; //kiírja, ha rossz adatot kapott, mint property
+                }
+                break;
+            case 2:
+                switch (property)
+                {
+                    case "value": BX_valueLvl++; break;
+                    case "speed": BX_speedLvl++; break;
+                    case "frequency": BX_frequencyLvl++; break;
+                    default: Debug.Log("Property hiba"); break; //kiírja, ha rossz adatot kapott, mint property
+                }
+                break;
+            case 3:
+                switch (property)
+                {
+                    case "value": GL_valueLvl++; break;
+                    case "speed": GL_speedLvl++; break;
+                    case "frequency": GL_frequencyLvl++; break;
+                    default: Debug.Log("Property hiba"); break; //kiírja, ha rossz adatot kapott, mint property
+                }
+                break;
+            case 4:
+                switch (property)
+                {
+                    case "value": BY_valueLvl++; break;
+                    case "speed": BY_speedLvl++; break;
+                    case "frequency": BY_frequencyLvl++; break;
+                    default: Debug.Log("Property hiba"); break; //kiírja, ha rossz adatot kapott, mint property
+                }
+                break;
+            default: Debug.Log("Type hiba"); break; //kiírja, ha rossz adatot kapott, mint type
+        }
     }
 
-    public void pbFrequency()
+    public void unlock(int type, bool unlock) //feladata az adott típus alapján a szeméttípus feloldottságát változtatni
     {
-        PB_frequencyLvl++;
+        switch (type)
+        {
+            case 1: PB_Unlocked=unlock; break;
+            case 2: BX_Unlocked=unlock; break;
+            case 3: GL_Unlocked=unlock; break;
+            case 4: BY_Unlocked=unlock; break;
+        }
     }
 
-    public void bxValue()
+    public void giveData() //feladata (a játék indulásakor) az összes script metódusát meghívni, amelyik adatot vesz át a mentésbõl
     {
-        BX_valueLvl++;
+        pbUpgradeScripts.getLevels();
+        bxUpgradeScripts.getLevels();
+        glUpgradeScripts.getLevels();
+        byUpgradeScripts.getLevels();
+
+        sellingScript.getCurrencieValues();
+
+        holderScript.getData();
+        holderScript.loadedStart();
     }
 
-    public void bxSpeed()
+    public void prestigeTasks()
     {
-        BX_speedLvl++;
-    }
+        PB_soldAmount = 0;
+        PB_valueLvl = 0;
+        PB_speedLvl = 0;
+        PB_frequencyLvl = 0;
 
-    public void bxFrequency()
-    {
-        BX_frequencyLvl++;
-    }
+        BX_soldAmount = 0;
+        BX_valueLvl = 0;
+        BX_speedLvl = 0;
+        BX_frequencyLvl = 0;
 
-    public void glValue()
-    {
-        GL_valueLvl++;
-    }
+        GL_soldAmount = 0;
+        GL_valueLvl = 0;
+        GL_speedLvl = 0;
+        GL_frequencyLvl = 0;
 
-    public void glSpeed()
-    {
-        GL_speedLvl++;
-    }
+        BY_soldAmount = 0;
+        BY_valueLvl = 0;
+        BY_speedLvl = 0;
+        BY_frequencyLvl = 0;
 
-    public void glFrequency()
-    {
-        GL_frequencyLvl++;
-    }
+        pbUpgradeScripts.getLevels();
+        bxUpgradeScripts.getLevels();
+        glUpgradeScripts.getLevels();
+        byUpgradeScripts.getLevels();
 
-    public void byValue()
-    {
-        BY_valueLvl++;
-    }
-
-    public void bySpeed()
-    {
-        BY_speedLvl++;
-    }
-
-    public void byFrequency()
-    {
-        BY_frequencyLvl++;
-    }
-
-    public void pbEarningsIncrease(float n)
-    {
-        PB_soldAmount += n;
-    }
-
-    public void bxEarningsIncrease(float n)
-    {
-        BX_soldAmount += n;
-    }
-
-    public void glEarningsIncrease(float n)
-    {
-        GL_soldAmount += n;
-    }
-
-    public void byEarningsIncrease(float n)
-    {
-        BY_soldAmount += n;
+        holderScript.getData();
+        holderScript.loadedStart();
     }
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class HolderBehavior : MonoBehaviour
 {
-    DatabaseCommunication dataScript;
+    DatabaseCommunication dataScript; //az adatbázisból megkapott adatokat kezelõ script
 
     public GameObject Unlock_PB; //petbottle feloldását intézõ ablak
     public GameObject Upgrade_PB; //petbottle fejlesztéseit tartalmazó ablak
@@ -22,7 +22,7 @@ public class HolderBehavior : MonoBehaviour
     public GameObject Upgrade_BY; //elem fejlesztéseit tartalmazó ablak
     public GameObject Conveyor_BY; //elemhez tartozó futószalagelemek
 
-    //alap kukák objectumai
+    //alap kukák objektumai
     public GameObject DefSeller1;
     public GameObject DefSeller2;
     public GameObject DefSeller3;
@@ -36,11 +36,11 @@ public class HolderBehavior : MonoBehaviour
 
     void Start() //a játék elindulásakor lefut
     {
-        dataScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<DatabaseCommunication>();
+        dataScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<DatabaseCommunication>(); //a scriptet kiveszi az adott objektumból mint komponense
 
-        defaultStart();
-        getData();
-        loadedStart();
+        defaultStart(); //alapértelmezett indulás
+        getData(); //adatok elkérése
+        loadedStart(); //betöltött adatokkal való indítás
     }
 
     void Update() //képfrissítésenként lefut
@@ -48,12 +48,9 @@ public class HolderBehavior : MonoBehaviour
         
     }
 
-    void getData() //metódus, lekéri az adatokat a szükséges változókba
+    public void getData() //metódus, lekéri az adatokat a szükséges változókba
     {
-        //tervezett mûködés: megpróbál megszerezni egy választ, ha nem, alap értéket állít
-        //alap érték: minden false
-        
-        //ideiglenes értékállítás
+        //a datascriptbõl kivett adatokat
         PBUnlocked = dataScript.PB_Unlocked;
         BXUnlocked = dataScript.BX_Unlocked;
         GLUnlocked = dataScript.GL_Unlocked;
@@ -83,7 +80,7 @@ public class HolderBehavior : MonoBehaviour
         
     }
     
-    void loadedStart() //meghívásával egy bizonyos mentés állását tölti be
+    public void loadedStart() //meghívásával egy bizonyos mentés állását tölti be
     {
         if (PBUnlocked) petbottleUnlock(); //ha fel van oldva a petbottle akkor meghívja a metódust
         if (BXUnlocked) boxUnlock(); //ha fel van oldva a doboz akkor meghívja a metódust
@@ -101,6 +98,8 @@ public class HolderBehavior : MonoBehaviour
         Conveyor_PB.SetActive(true);
 
         PBUnlocked = true;
+
+        dataScript.unlock(1, true);
     }
 
     public void boxUnlock() //metódus, meghívásával minden szükséges elem láthatósága változik - kartondoboz feloldása
@@ -114,6 +113,8 @@ public class HolderBehavior : MonoBehaviour
         DefSeller1.SetActive(false);
 
         BXUnlocked = true;
+
+        dataScript.unlock(2, true);
     }
 
     public void glassUnlock() //metódus, meghívásával minden szükséges elem láthatósága változik - üveg feloldása
@@ -127,6 +128,8 @@ public class HolderBehavior : MonoBehaviour
         DefSeller2.SetActive(false);
 
         GLUnlocked = true;
+
+        dataScript.unlock(3, true);
     }
 
     public void batteryUnlock() //metódus, meghívásával minden szükséges elem láthatósága változik - elem feloldása
@@ -138,5 +141,7 @@ public class HolderBehavior : MonoBehaviour
         DefSeller3.SetActive(false);
 
         BYUnlocked = true;
+
+        dataScript.unlock(4, true);
     }
 }

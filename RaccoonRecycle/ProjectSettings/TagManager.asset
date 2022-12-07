@@ -23,6 +23,10 @@ TagManager:
   - DatabaseCommunication
   - ScrollSider
   - GetSave
+  - PetBottleU
+  - BoxU
+  - GlassU
+  - BatteryU
   layers:
   - Default
   - TransparentFX

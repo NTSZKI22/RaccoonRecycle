@@ -5,44 +5,46 @@ using UnityEngine.UI;
 
 public class Statistics : MonoBehaviour
 {
-    DatabaseCommunication dataScript;
-    Selling sellingScript;
+    DatabaseCommunication dataScript; //az adatbázisból megkapott adatokat kezelõ script
+    Selling sellingScript; //a currency-t kezelõ script
 
-    public Text text_Nc;
-    public Text text_Pc;
-    public Text text_Te;
+    //a megjelnítésre használt különbözõ mezõk
+    public Text text_Nc; //normalCurrency
+    public Text text_Pc; //prestigeCurrency
+    public Text text_Te; //total earnings -> játék kezdete, vagy utolsó prestige óta
 
-    public Text text_PBValue;
-    public Text text_PBEarnings;
+    public Text text_PBValue; //petpalack értéke
+    public Text text_PBEarnings; //petpalackkal szerzett összbevétel
 
-    public Text text_BXValue;
-    public Text text_BXEarnings;
+    public Text text_BXValue; //box értéke
+    public Text text_BXEarnings; //boxxal szerzett összbevétel
 
-    public Text text_GLValue;
-    public Text text_GLEarnings;
+    public Text text_GLValue; //üveg értéke
+    public Text text_GLEarnings; //üveggel szerzett összbevétel
 
-    public Text text_BYValue;
-    public Text text_BYEarnings;
+    public Text text_BYValue; //battery értéke
+    public Text text_BYEarnings; //batteryvel szerzett összbevétel
 
-    float multiplier;
+    float multiplier; //szorzó
 
     // Start is called before the first frame update
     void Start()
     {
-        dataScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<DatabaseCommunication>();
-        sellingScript = GameObject.FindGameObjectWithTag("SellingScript").GetComponent<Selling>();
+        dataScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<DatabaseCommunication>(); //a scriptet kiveszi az adott objektumból mint komponense
+        sellingScript = GameObject.FindGameObjectWithTag("SellingScript").GetComponent<Selling>(); //a scriptet kiveszi az adott objektumból mint komponense
 
-        multiplier = 1.07f;
+        multiplier = 1.07f; //szorzó alap értékét beállítja 7%-ps növekedés
     }
 
     // Update is called once per frame
     void Update()
     {
-        displayData();
+        displayData(); //elindítja a displaydata-t
     }
 
-    void displayData()
+    void displayData() //feladata megjeleníteni az adatokat
     {
+        //a szövegmezõk értékei a datascript-bõl kivett adatok, melyeket elõtte megjeleníthetõ formába alakítunk
         text_Nc.text = sellingScript.convertCurrencyToDisplay(dataScript.normalCurrency.ToString());
         text_Pc.text = sellingScript.convertCurrencyToDisplay(dataScript.prestigeCurrency.ToString());
         text_Te.text = sellingScript.convertCurrencyToDisplay(dataScript.totalEarnings.ToString());

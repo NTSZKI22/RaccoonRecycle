@@ -4,35 +4,33 @@ using UnityEngine;
 
 public class Properties : MonoBehaviour
 {
-    DatabaseCommunication dataScript;
+    DatabaseCommunication dataScript; //az adatbázisból megkapott adatokat kezelõ script
 
-    float defSpeed; //minél nagyobb annál gyorsabb
+    //alap értékei a bizonyos tulajdonságoknak
     float defValue; //minél nagyobb annál többet ért
+    float defSpeed; //minél nagyobb annál gyorsabb
     float defFrequency; //minél kisebb annál gyorsabb
 
-    int speedLvl;
-    int valueLvl;
-    int frequencylvl;
+    int valueLvl; //érték szintje
+    int speedLvl; //gyorsaság szintje
+    int frequencylvl; //gyakoriság szintje
 
-    float multiplierPos;
-    float multiplierNeg;
+    float multiplierPos; //pozitív szorzó
+    float multiplierNeg; //negatív szorzó
+
 
     // Start is called before the first frame update
     void Start()
     {
-        dataScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<DatabaseCommunication>();
+        dataScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<DatabaseCommunication>(); //a scriptet kiveszi az adott objektumból mint komponense
 
         //alap érték megadása a következõ változóknak
-        multiplierPos = 1.07f; 
-        multiplierNeg = 0.95f;
-
-        defSpeed = 110;
-        defValue = 25;
-        defFrequency = 10;
+        multiplierPos = 1.07f; //7%-os növekedés
+        multiplierNeg = 0.95f; //5%-os csökkenés
 
         defProperties(); //alap értéket határoz meg az elemnek, amin van
-        //getLevels(); //elkéri a szintjeit a különbözõ tulajdonságoknak
 
+        
     }
 
     // Update is called once per frame
@@ -45,7 +43,9 @@ public class Properties : MonoBehaviour
     {
         if (this.gameObject.tag == "PetBottle") //ha az objektum petbottle tag-gel rendelkezik
         {
+            
             //alap értékeket ad
+            
             defSpeed = 200; 
             defValue = 25;
             defFrequency = 2;
@@ -107,13 +107,12 @@ public class Properties : MonoBehaviour
 
     public float value() //visszaadja a tényleges értéket
     {
-        valueLvl = dataScript.PB_valueLvl;
         return defValue * Mathf.Pow(multiplierPos, valueLvl); //alapérték * szorzó ^ szint képlet értékét visszaadja
     }
 
     public float valueDef() //visszaadja a tényleges értéket
     {
-        return defValue; //alapérték * szorzó ^ szint képlet értékét visszaadja
+        return defValue; //alapérték
     }
 
     public float speed() //visszaadja a tényleges sepességét
