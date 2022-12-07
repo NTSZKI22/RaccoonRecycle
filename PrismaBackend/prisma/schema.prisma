@@ -11,21 +11,21 @@ datasource db {
 }
 
 model Users {
-  id                String  @id @default(auto()) @map("_id") @db.ObjectId
-  username          String  @unique
-  email             String  @unique
-  password          String  @unique
-  lastAuthenticated String
+  id                String   @id @default(auto()) @map("_id") @db.ObjectId
+  username          String   @unique
+  email             String   @unique
+  password          String   @unique
+  lastAuthenticated DateTime @default(now())
   registeredAt      String
   isOnline          Boolean
   saves             Saves[]
 }
 
 model Saves {
-  id               String  @id @default(auto()) @map("_id") @db.ObjectId
-  Users            Users?  @relation(fields: [usersId], references: [id])
-  usersId          String? @db.ObjectId
-  lastSaveDate     String
+  id               String   @id @default(auto()) @map("_id") @db.ObjectId
+  Users            Users?   @relation(fields: [usersId], references: [id])
+  usersId          String?  @db.ObjectId
+  lastSaveDate     DateTime @default(now())
   normalCurrency   Int
   prestigeCurrency Int
   totalEarnings    Int
@@ -51,9 +51,9 @@ model Saves {
   byFrequency      Int
 }
 
-model Log {
+model Logs {
   id      String   @id @default(auto()) @map("_id") @db.ObjectId
   message String
   madeBy  String
-  madeAt  DateTime
+  madeAt  DateTime @default(now())
 }

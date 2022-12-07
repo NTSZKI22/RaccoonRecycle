@@ -1,25 +1,27 @@
 const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
+const bcrypt = require('bcrypt')
+const saltRounds = 8;
 var bodyParser = require('body-parser')
 var jsonParser = bodyParser.json()
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
+let hash;
 
 module.exports = app => {
     app.post("/api/register", urlencodedParser, async (req, res) => {  //post-ot használunk, mivel szeretnénk adatot kérni a szervertől a /authorize aloldalon.
         var userAccountUsername = await prisma.users.findFirst({ where: { username: req.body.username } })
         var userAccountEmail = await prisma.users.findFirst({ where: { email: req.body.email } })
         if (userAccountUsername == null && userAccountEmail == null) {
+            hash = await bcrypt.hash(req.body.password, saltRounds)
             var newAccount = await prisma.users.create({
                 data: {
                     email: req.body.email,
                     username: req.body.username,
-                    password: req.body.password,
-                    lastAuthenticated: ""+Date.now(),
-                    registeredAt: ""+Date.now(),
+                    password: hash,
+                    registeredAt: "" + Date.now(),
                     isOnline: true,
                     saves: {
                         create: {
-                            lastSaveDate: ""+Date.now(),
                             normalCurrency: 0,
                             prestigeCurrency: 0,
                             totalEarnings: 0,
@@ -48,6 +50,12 @@ module.exports = app => {
                             byFrequency: 0,
                         }
                     }
+                }
+            })
+            await prisma.logs.create({
+                data: {
+                    message: "A user was created, with the username of: "+newAccount.username,
+                    madeBy: "Server"
                 }
             })
             res.send('Account created!')
