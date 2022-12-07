@@ -1,5 +1,6 @@
 const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
+const bcrypt = require('bcrypt')
 var bodyParser = require('body-parser')
 var jsonParser = bodyParser.json()
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
@@ -13,7 +14,7 @@ module.exports = app => {
             return
         }
         else {
-            if (userAccount.password == req.body.password) { //ha a megadott jelszó egyezik a meglévő felhsználónévhez társult jelszóval.
+            if (await bcrypt.compare(req.body.password, userAccount.password)) { //ha a megadott jelszó egyezik a meglévő felhsználónévhez társult jelszóval.
                 //lementjük az adatbázisba a frissített fiókot.
                 if (userAccount.isOnline == true) {
                     res.send('Info: You are logged in currently with your account on another device.')

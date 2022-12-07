@@ -11,8 +11,6 @@ module.exports = app => {
                 id: req.body.id,
             },
             data: {
-                lastSaveDate: "" + Date.now(),
-
                 normalCurrency: parseInt(req.body.normalCurrency),
                 prestigeCurrency: parseInt(req.body.prestigeCurrency),
                 totalEarnings: parseInt(req.body.totalEarnings),
