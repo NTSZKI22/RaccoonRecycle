@@ -41,7 +41,7 @@ public class CreateFirstSave : MonoBehaviour
         }
         else
         {
-            Debug.Log("eror.");
+            Debug.Log("eror. first save");
         }
         Debug.Log(request.downloadHandler.text);
         yield return null;

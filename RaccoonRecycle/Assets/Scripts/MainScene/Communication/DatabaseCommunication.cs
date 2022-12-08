@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Saving;
 using System.Runtime.InteropServices.ComTypes;
 using Classes;
 using UnityEngine.Networking;
@@ -54,6 +53,7 @@ public class DatabaseCommunication : MonoBehaviour
     public int BY_speedLvl;
     public int BY_frequencyLvl;
 
+
     void Start()
     {
         sellingScript = GameObject.FindGameObjectWithTag("SellingScript").GetComponent<Selling>(); //a scriptet kiveszi az adott objektumból mint komponense
@@ -74,6 +74,7 @@ public class DatabaseCommunication : MonoBehaviour
 
     }
 
+    
     public IEnumerator getData()
     {
         //adatok lekérése
@@ -112,11 +113,12 @@ public class DatabaseCommunication : MonoBehaviour
                 {
                     json = request.downloadHandler.text;
                     saveClass = JsonUtility.FromJson<SaveClass>(json);
+                    Debug.Log(json);
 
                 }
                 else
                 {
-                    Debug.Log("eror.");
+                    Debug.Log("eror. getdata");
                 }
 
                 //adatok beállítása
@@ -149,8 +151,11 @@ public class DatabaseCommunication : MonoBehaviour
                 BY_speedLvl = saveClass.glSpeed;
                 BY_frequencyLvl = saveClass.glFrequency;
 
+                Debug.Log(saveClass.id);
+                Debug.Log("savedata get");
 
                 sellingScript.getCurrencieValues();
+                giveData();
 
                 break;
 
@@ -187,7 +192,7 @@ public class DatabaseCommunication : MonoBehaviour
                 break;
         }
     }
-
+    
     public void startSaveData()
     {
         StartCoroutine(saveData());
@@ -201,23 +206,24 @@ public class DatabaseCommunication : MonoBehaviour
         form.AddField("prestigeCurrency", "" + prestigeCurrency);
         form.AddField("totalEarnings", "" + totalEarnings);
         form.AddField("pbUnlocked", "" + PB_Unlocked);
+        Debug.Log(PB_Unlocked);
         form.AddField("pbSoldAmount", "" + PB_soldAmount);
         form.AddField("pbValue", "" + PB_valueLvl);
         form.AddField("pbFrequency", "" + PB_frequencyLvl);
         form.AddField("pbSpeed", "" + PB_speedLvl);
-
+        Debug.Log(BX_Unlocked);
         form.AddField("bxUnlocked", "" + BX_Unlocked);
         form.AddField("bxSoldAmount", "" + BX_soldAmount);
         form.AddField("bxValue", "" + BX_valueLvl);
         form.AddField("bxFrequency", "" + BX_frequencyLvl);
         form.AddField("bxSpeed", "" + BX_speedLvl);
-
+        Debug.Log(GL_Unlocked);
         form.AddField("glUnlocked", "" + GL_Unlocked);
         form.AddField("glSoldAmount", "" + GL_soldAmount);
         form.AddField("glValue", "" + GL_valueLvl);
         form.AddField("glFrequency", "" + GL_frequencyLvl);
         form.AddField("glSpeed", "" + GL_speedLvl);
-
+        Debug.Log(BY_Unlocked);
         form.AddField("byUnlocked", "" + BY_Unlocked);
         form.AddField("bySoldAmount", "" + BY_soldAmount);
         form.AddField("byValue", "" + BY_valueLvl);
@@ -242,8 +248,11 @@ public class DatabaseCommunication : MonoBehaviour
         }
         else
         {
-            Debug.Log("error.");
+           Debug.Log("error. savedata");
         }
+
+        Debug.Log(PB_Unlocked);
+        Debug.Log(BX_Unlocked);
 
         yield return null;
     }
@@ -330,6 +339,10 @@ public class DatabaseCommunication : MonoBehaviour
         byUpgradeScripts.getLevels();
 
         sellingScript.getCurrencieValues();
+
+        Debug.Log(PB_Unlocked);
+        Debug.Log(BX_Unlocked);
+        Debug.Log("giveData");
 
         holderScript.getData();
         holderScript.loadedStart();

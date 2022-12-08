@@ -39,8 +39,8 @@ public class HolderBehavior : MonoBehaviour
         dataScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<DatabaseCommunication>(); //a scriptet kiveszi az adott objektumból mint komponense
 
         defaultStart(); //alapértelmezett indulás
-        getData(); //adatok elkérése
-        loadedStart(); //betöltött adatokkal való indítás
+       // getData(); //adatok elkérése
+       // loadedStart(); //betöltött adatokkal való indítás
     }
 
     void Update() //képfrissítésenként lefut
@@ -55,6 +55,11 @@ public class HolderBehavior : MonoBehaviour
         BXUnlocked = dataScript.BX_Unlocked;
         GLUnlocked = dataScript.GL_Unlocked;
         BYUnlocked = dataScript.BY_Unlocked;
+        Debug.Log(PBUnlocked);
+        Debug.Log(BXUnlocked);
+        Debug.Log(GLUnlocked);
+        Debug.Log(BYUnlocked);
+        Debug.Log("holder, getdata");
     }
 
     void defaultStart() //alapértelmezett indítási felállás (mikor 0.ról kezd)
@@ -77,19 +82,25 @@ public class HolderBehavior : MonoBehaviour
         Conveyor_BX.SetActive(false);
         Conveyor_GL.SetActive(false);
         Conveyor_BY.SetActive(false);
+
+        PBUnlocked = false;
+        GLUnlocked = false;
+        BXUnlocked = false;
+        BYUnlocked = false;
         
     }
     
     public void loadedStart() //meghívásával egy bizonyos mentés állását tölti be
     {
-        if (PBUnlocked) petbottleUnlock(); //ha fel van oldva a petbottle akkor meghívja a metódust
-        if (BXUnlocked) boxUnlock(); //ha fel van oldva a doboz akkor meghívja a metódust
-        if (GLUnlocked) glassUnlock(); //ha fel van oldva az üveg akkor meghívja a metódust
-        if (BYUnlocked) batteryUnlock(); //ha fel van oldva az elem akkor meghívja a metódust
+        if (PBUnlocked == true) { petbottleUnlock(); } //ha fel van oldva a petbottle akkor meghívja a metódust
+        if (BXUnlocked == true) { boxUnlock(); }//ha fel van oldva a doboz akkor meghívja a metódust
+        if (GLUnlocked == true) { glassUnlock(); } //ha fel van oldva az üveg akkor meghívja a metódust
+        if (BYUnlocked == true) { batteryUnlock(); } //ha fel van oldva az elem akkor meghívja a metódust
     }
 
     public void petbottleUnlock() //metódus, meghívásával minden szükséges elem láthatósága változik - petpalack feloldása
     {
+        Debug.Log("petbottle unlock");
         Unlock_PB.SetActive(false);
         Upgrade_PB.SetActive(true);
 
@@ -97,13 +108,13 @@ public class HolderBehavior : MonoBehaviour
 
         Conveyor_PB.SetActive(true);
 
-        PBUnlocked = true;
 
         dataScript.unlock(1, true);
     }
 
     public void boxUnlock() //metódus, meghívásával minden szükséges elem láthatósága változik - kartondoboz feloldása
     {
+        Debug.Log("Box unlock");
         Unlock_BX.SetActive(false);
         Upgrade_BX.SetActive(true);
 
@@ -111,8 +122,7 @@ public class HolderBehavior : MonoBehaviour
 
         Conveyor_BX.SetActive(true);
         DefSeller1.SetActive(false);
-
-        BXUnlocked = true;
+        
 
         dataScript.unlock(2, true);
     }
@@ -127,7 +137,6 @@ public class HolderBehavior : MonoBehaviour
         Conveyor_GL.SetActive(true);
         DefSeller2.SetActive(false);
 
-        GLUnlocked = true;
 
         dataScript.unlock(3, true);
     }
@@ -140,7 +149,6 @@ public class HolderBehavior : MonoBehaviour
         Conveyor_BY.SetActive(true);
         DefSeller3.SetActive(false);
 
-        BYUnlocked = true;
 
         dataScript.unlock(4, true);
     }

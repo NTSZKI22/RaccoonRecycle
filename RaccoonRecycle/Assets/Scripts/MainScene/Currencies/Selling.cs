@@ -144,7 +144,7 @@ public class Selling : MonoBehaviour
 
     public float prestigeEarning() //feladata visszaadni az aktuálisan megkapható prestigecurrency mennyiségét
     {
-        return normalCurrency / 100;
+        return totalearnings / 100;
     }
 
     public void prestigeTasks() //feladata a prestige során elvégezendõ feladatokat végrehajtani
