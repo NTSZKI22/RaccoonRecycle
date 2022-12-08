@@ -12,6 +12,8 @@ const prisma = new PrismaClient()
     require('./routes/SaveRoute')(app)
     require('./routes/PasswordChange')(app)
     require('./routes/UpdateUserRoute')(app)
+    require('./routes/ListOnlineUsersRoute')(app)
+
 
     app.listen(port, () => {
         console.log(`API: API is running on port: ${port}`);
