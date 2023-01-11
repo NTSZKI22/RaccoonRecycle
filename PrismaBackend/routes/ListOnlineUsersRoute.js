@@ -12,7 +12,8 @@ module.exports = app => {
                 isOnline: true
             },
             select: {
-                username: true
+                username: true,
+                saves: true
             }
         })
         //when someone register, we create a save data, so there is no need to check if there is a save with this username or not.

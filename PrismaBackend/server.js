@@ -1,9 +1,13 @@
 const { PrismaClient } = require('@prisma/client')
+const dotenv = require('dotenv').config()
+const cors = require('cors')
 const express = require('express')
 const app = express()
 const port = process.env.PORT;
 const prisma = new PrismaClient()
-
+app.use(cors({
+  origin: '*'
+}))
 
     require('./routes/LoginRoute.js')(app)
     require('./routes/RegisterRoute')(app)

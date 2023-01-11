@@ -8,6 +8,7 @@ public class Path : MonoBehaviour
     Selling sellingScript; //a currency-t kezelõ script
     Properties propertiesScript; //tulajdonságokat taralmazó scripthez a változó
     DatabaseCommunication dataScript; //az adatbázisból megkapott adatokat kezelõ script
+    AudioManager audioManager;
 
     float speed; //sebessége az objektumnak
     Rigidbody2D rb; //fizikával rendelkezõ objektum változó
@@ -18,6 +19,7 @@ public class Path : MonoBehaviour
         rb = GetComponent<Rigidbody2D>(); //rb-t deklaráljuk mint a jelenlegi fizikával rendelkezõ objektum
         sellingScript = GameObject.FindGameObjectWithTag("SellingScript").GetComponent<Selling>(); //a scriptet kiveszi az adott objektumból mint komponense
         dataScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<DatabaseCommunication>(); //a scriptet kiveszi az adott objektumból mint komponense
+        audioManager = GameObject.FindGameObjectWithTag("DefSeller").GetComponent<AudioManager>();
     }
 
     void OnTriggerEnter2D(Collider2D other) //akkor fut le, amikor a szemét objektum ütközik valamivel

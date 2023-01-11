@@ -7,12 +7,21 @@ using TMPro;
 
 public class SettingsBehavior : MonoBehaviour
 {
-    
+    [SerializeField]
     public AudioMixer audioMixer;
+    [SerializeField]
+    public Slider volumeSlider;
+
     public TMP_Dropdown resolutionsDropdown;
+
+    private string master = "VolumeMaster";
 
     Resolution[] resolutions;
 
+    void Awake()
+    {
+        volumeSlider.onValueChanged.AddListener(SetVolume);
+    }
     void Start()
     {
         resolutions = Screen.resolutions;
@@ -51,7 +60,7 @@ public class SettingsBehavior : MonoBehaviour
 
     public void SetVolume(float volume)
     {
-        //audioMixer.SetFloat("Volume", volume);
+        audioMixer.SetFloat(master, volume);
     }
 
     public void SetFullscreen(bool isFullScreen)
