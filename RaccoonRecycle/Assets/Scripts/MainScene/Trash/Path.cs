@@ -8,7 +8,6 @@ public class Path : MonoBehaviour
     Selling sellingScript; //a currency-t kezelõ script
     Properties propertiesScript; //tulajdonságokat taralmazó scripthez a változó
     DatabaseCommunication dataScript; //az adatbázisból megkapott adatokat kezelõ script
-    AudioManager audioManager;
 
     float speed; //sebessége az objektumnak
     Rigidbody2D rb; //fizikával rendelkezõ objektum változó
@@ -19,7 +18,6 @@ public class Path : MonoBehaviour
         rb = GetComponent<Rigidbody2D>(); //rb-t deklaráljuk mint a jelenlegi fizikával rendelkezõ objektum
         sellingScript = GameObject.FindGameObjectWithTag("SellingScript").GetComponent<Selling>(); //a scriptet kiveszi az adott objektumból mint komponense
         dataScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<DatabaseCommunication>(); //a scriptet kiveszi az adott objektumból mint komponense
-        audioManager = GameObject.FindGameObjectWithTag("DefSeller").GetComponent<AudioManager>();
     }
 
     void OnTriggerEnter2D(Collider2D other) //akkor fut le, amikor a szemét objektum ütközik valamivel
@@ -54,7 +52,7 @@ public class Path : MonoBehaviour
         }
 
         if(other.gameObject.tag == "Seller_PB" || other.gameObject.tag == "Seller_BX" || other.gameObject.tag == "Seller_GL" || other.gameObject.tag == "Seller_BY") //ha a végleges sellerrel ütközik
-        {
+        { 
             sellingScript.soldTrashType(propertiesScript.value()); //meghívja a sellingscript soldtrashtype metódusát átadva neki a value tolajdonságot az aktuális szeméttõl
             dataScript.earningIncrease(gameObject.tag, propertiesScript.value()); //növeli az adott szeméttípussal szerzett bevételt
             Destroy(gameObject); //törli a szemét objektumot
