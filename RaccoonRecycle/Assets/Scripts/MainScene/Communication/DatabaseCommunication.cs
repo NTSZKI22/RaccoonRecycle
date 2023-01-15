@@ -66,6 +66,7 @@ public class DatabaseCommunication : MonoBehaviour
         //ideiglenesen:
         userid = 0;
         StartCoroutine(getData());
+        giveData();
     }
 
     // Update is called once per frame
@@ -329,6 +330,7 @@ public class DatabaseCommunication : MonoBehaviour
             case 3: GL_Unlocked=unlock; break;
             case 4: BY_Unlocked=unlock; break;
         }
+        Debug.Log("unlocking... ->"+type + " " + unlock);
     }
 
     public void giveData() //feladata (a játék indulásakor) az összes script metódusát meghívni, amelyik adatot vesz át a mentésbõl

@@ -31,6 +31,11 @@ public class UpgradeButton : MonoBehaviour //kezel mimndent, ami az upgrade gomb
     public Text text_Speed; //gyorsaság megjelenítéséhez használt szöveg
     public Text text_Frequency; //gyakoriság megjelenítéséhez használt szöveg
 
+    public Text text_ValueLvl; //érték szintjének megjelenítéséhez használt szöveg
+    public Text text_SpeedLvl; //gyorsaság szintjének megjelenítéséhez használt szöveg
+    public Text text_FrequencyLvl; //gyakoriság szintjének megjelenítéséhez használt szöveg
+
+    int maxLevel = 75; //maximum szint, ami elérhetõ egy tulajdonság folyamatos fejlesztésével
 
     // Start is called before the first frame update
     void Start()
@@ -66,7 +71,9 @@ public class UpgradeButton : MonoBehaviour //kezel mimndent, ami az upgrade gomb
     {
         calculateCost(); //elindítja a calculatecost-t
         displayCost(); //elindítja a displaycast-t
+        displayLevel(); //elindítja a displayLevel-t
         toAble(); //elindítja a toAble-t
+
     }
 
     void defaultStart() //azon adatokat definiálja, melyeket nem válaszként várunk az adatbázisból
@@ -142,10 +149,34 @@ public class UpgradeButton : MonoBehaviour //kezel mimndent, ami az upgrade gomb
 
     void toAble() //feladata meghatározni, hogy a gomb elérhetõ legyen e
     {
-        //gomb elérhetõségét állítja, mely függ attól, hogy van-e elég pénze a feloldásra
-        button_Value.interactable = sellingScript.isEnoughNormalCurrency(ValueCost);
-        button_Speed.interactable = sellingScript.isEnoughNormalCurrency(SpeedCost);
-        button_Frequency.interactable = sellingScript.isEnoughNormalCurrency(FrequencyCost);
+        //elõször megvizsgálja, hogy elérte-e a maximum szintet, ha igen hamisra állítja az interakciót
+        //ha nem, a gomb elérhetõségét állítja, mely függ attól, hogy van-e elég pénze a feloldásra
+        if(ValueCostLvl <= maxLevel)
+        {
+            button_Value.interactable = sellingScript.isEnoughNormalCurrency(ValueCost);
+        }
+        else
+        {
+            button_Value.interactable = false;
+        }
+
+        if(SpeedCostLvl <= maxLevel)
+        {
+            button_Speed.interactable = sellingScript.isEnoughNormalCurrency(SpeedCost);
+        }
+        else
+        {
+            button_Speed.interactable = false;
+        }
+
+        if (FrequencyCostLvl <= maxLevel)
+        {
+            button_Frequency.interactable = sellingScript.isEnoughNormalCurrency(FrequencyCost);
+        }
+        else
+        {
+            button_Frequency.interactable = false;
+        }
     }
 
     void calculateCost() //feldata kiszámolni a fejleszthetõ tulajdonságok árait
@@ -162,6 +193,38 @@ public class UpgradeButton : MonoBehaviour //kezel mimndent, ami az upgrade gomb
         text_Value.text = sellingScript.convertCurrencyToDisplay(ValueCost.ToString());
         text_Speed.text = sellingScript.convertCurrencyToDisplay(SpeedCost.ToString());
         text_Frequency.text = sellingScript.convertCurrencyToDisplay(FrequencyCost.ToString());
+    }
+
+    void displayLevel() // feldata megjeleníteni a kiszámolt árakat
+    {
+        //az értékeket megjeleníthetõ fomába állítjuk, majd azt megkapja a text komponense
+        if (ValueCostLvl <= maxLevel)
+        {
+            text_ValueLvl.text = $"Lvl {ValueCostLvl}";
+        }
+        else
+        {
+            text_ValueLvl.text = "Max level";
+        }
+
+        if (SpeedCostLvl <= maxLevel)
+        {
+            text_SpeedLvl.text = $"Lvl {SpeedCostLvl}";
+        }
+        else
+        {
+            text_SpeedLvl.text = "Max level";
+        }
+
+        if (FrequencyCostLvl <= maxLevel)
+        {
+            text_FrequencyLvl.text = $"Lvl {FrequencyCostLvl}";
+        }
+        else
+        {
+            text_FrequencyLvl.text = "Max level";
+        }
+        
     }
 
     void value() //érték gomb lenyomásakor fut le

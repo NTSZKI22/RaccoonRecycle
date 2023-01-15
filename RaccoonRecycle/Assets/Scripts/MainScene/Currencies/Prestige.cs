@@ -21,10 +21,6 @@ public class Prestige : MonoBehaviour
         sellingScript = GameObject.FindGameObjectWithTag("SellingScript").GetComponent<Selling>(); //a scriptet kiveszi az adott objektumból mint komponense
         dataScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<DatabaseCommunication>(); //a scriptet kiveszi az adott objektumból mint komponense
 
-        /*
-        Button btn_PresConf = button_PrestigeConfirm.GetComponent<Button>();
-        btn_PresConf.onClick.AddListener(prestige);
-        */
     }
 
     // Update is called once per frame

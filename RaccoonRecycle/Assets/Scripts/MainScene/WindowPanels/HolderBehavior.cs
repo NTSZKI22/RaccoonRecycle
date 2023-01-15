@@ -39,8 +39,8 @@ public class HolderBehavior : MonoBehaviour
         dataScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<DatabaseCommunication>(); //a scriptet kiveszi az adott objektumból mint komponense
 
         defaultStart(); //alapértelmezett indulás
-       // getData(); //adatok elkérése
-       // loadedStart(); //betöltött adatokkal való indítás
+        getData(); //adatok elkérése
+        loadedStart(); //betöltött adatokkal való indítás
     }
 
     void Update() //képfrissítésenként lefut
@@ -55,6 +55,7 @@ public class HolderBehavior : MonoBehaviour
         BXUnlocked = dataScript.BX_Unlocked;
         GLUnlocked = dataScript.GL_Unlocked;
         BYUnlocked = dataScript.BY_Unlocked;
+
         Debug.Log(PBUnlocked);
         Debug.Log(BXUnlocked);
         Debug.Log(GLUnlocked);
@@ -92,10 +93,10 @@ public class HolderBehavior : MonoBehaviour
     
     public void loadedStart() //meghívásával egy bizonyos mentés állását tölti be
     {
-        if (PBUnlocked == true) { petbottleUnlock(); } //ha fel van oldva a petbottle akkor meghívja a metódust
-        if (BXUnlocked == true) { boxUnlock(); }//ha fel van oldva a doboz akkor meghívja a metódust
-        if (GLUnlocked == true) { glassUnlock(); } //ha fel van oldva az üveg akkor meghívja a metódust
-        if (BYUnlocked == true) { batteryUnlock(); } //ha fel van oldva az elem akkor meghívja a metódust
+        if (PBUnlocked) { petbottleUnlock(); } //ha fel van oldva a petbottle akkor meghívja a metódust
+        if (BXUnlocked) { boxUnlock(); }//ha fel van oldva a doboz akkor meghívja a metódust
+        if (GLUnlocked) { glassUnlock(); } //ha fel van oldva az üveg akkor meghívja a metódust
+        if (BYUnlocked) { batteryUnlock(); } //ha fel van oldva az elem akkor meghívja a metódust
     }
 
     public void petbottleUnlock() //metódus, meghívásával minden szükséges elem láthatósága változik - petpalack feloldása
