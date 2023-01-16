@@ -5,24 +5,32 @@ using System.Runtime.InteropServices.ComTypes;
 using Classes;
 using UnityEngine.Networking;
 using System.Security.Cryptography.X509Certificates;
+using Newtonsoft.Json.Bson;
+using MongoDB.Bson;
+using UnityEditor.PackageManager.Requests;
+using System;
 
 public class DatabaseCommunication : MonoBehaviour
 {
-    Selling sellingScript; //a currency-t kezelõ script
-    UpgradeButton pbUpgradeScripts; //a petbottle fejlesztését kezelõ script
-    UpgradeButton bxUpgradeScripts; //a box fejlesztését kezelõ script
-    UpgradeButton glUpgradeScripts; //a glass fejlesztését kezelõ script
-    UpgradeButton byUpgradeScripts; //a battery fejlesztését kezelõ script
-    HolderBehavior holderScript; //a holderek viselkedését kezelõ script
-    GettingProgress progressScript; // a feloldott haladást jelzi vissza
+    Selling sellingScript; //a currency-t kezelï¿½ script
+    UpgradeButton pbUpgradeScripts; //a petbottle fejlesztï¿½sï¿½t kezelï¿½ script
+    UpgradeButton bxUpgradeScripts; //a box fejlesztï¿½sï¿½t kezelï¿½ script
+    UpgradeButton glUpgradeScripts; //a glass fejlesztï¿½sï¿½t kezelï¿½ script
+    UpgradeButton byUpgradeScripts; //a battery fejlesztï¿½sï¿½t kezelï¿½ script
+    HolderBehavior holderScript; //a holderek viselkedï¿½sï¿½t kezelï¿½ script
+    GettingProgress progressScript; // a feloldott haladï¿½st jelzi vissza
 
     private static string username;
+
+    private static string token;
 
     private string json;
 
     private string saveId;
 
     public SaveClass saveClass;
+
+    public string id;
 
     int userid;
 
@@ -53,21 +61,23 @@ public class DatabaseCommunication : MonoBehaviour
     public int BY_valueLvl;
     public int BY_speedLvl;
     public int BY_frequencyLvl;
+    
 
 
     void Start()
     {
-        sellingScript = GameObject.FindGameObjectWithTag("SellingScript").GetComponent<Selling>(); //a scriptet kiveszi az adott objektumból mint komponense
-        pbUpgradeScripts = GameObject.FindGameObjectWithTag("PetBottleU").GetComponent<UpgradeButton>(); //a scriptet kiveszi az adott objektumból mint komponense
-        bxUpgradeScripts = GameObject.FindGameObjectWithTag("BoxU").GetComponent<UpgradeButton>(); //a scriptet kiveszi az adott objektumból mint komponense
-        glUpgradeScripts = GameObject.FindGameObjectWithTag("GlassU").GetComponent<UpgradeButton>(); //a scriptet kiveszi az adott objektumból mint komponense
-        byUpgradeScripts = GameObject.FindGameObjectWithTag("BatteryU").GetComponent<UpgradeButton>(); //a scriptet kiveszi az adott objektumból mint komponense
-        holderScript = GameObject.FindGameObjectWithTag("WindowBehavior").GetComponent<HolderBehavior>(); //a scriptet kiveszi az adott objektumból mint komponense
-        progressScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<GettingProgress>(); //a scriptet kiveszi az adott objektumból mint komponense
+        sellingScript = GameObject.FindGameObjectWithTag("SellingScript").GetComponent<Selling>(); //a scriptet kiveszi az adott objektumbï¿½l mint komponense
+        pbUpgradeScripts = GameObject.FindGameObjectWithTag("PetBottleU").GetComponent<UpgradeButton>(); //a scriptet kiveszi az adott objektumbï¿½l mint komponense
+        bxUpgradeScripts = GameObject.FindGameObjectWithTag("BoxU").GetComponent<UpgradeButton>(); //a scriptet kiveszi az adott objektumbï¿½l mint komponense
+        glUpgradeScripts = GameObject.FindGameObjectWithTag("GlassU").GetComponent<UpgradeButton>(); //a scriptet kiveszi az adott objektumbï¿½l mint komponense
+        byUpgradeScripts = GameObject.FindGameObjectWithTag("BatteryU").GetComponent<UpgradeButton>(); //a scriptet kiveszi az adott objektumbï¿½l mint komponense
+        holderScript = GameObject.FindGameObjectWithTag("WindowBehavior").GetComponent<HolderBehavior>(); //a scriptet kiveszi az adott objektumbï¿½l mint komponense
+        progressScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<GettingProgress>(); //a scriptet kiveszi az adott objektumbï¿½l mint komponense
 
         //ideiglenesen:
         userid = 0;
         StartCoroutine(getData());
+       // StartCoroutine(getID());
         giveData();
     }
 
@@ -76,11 +86,9 @@ public class DatabaseCommunication : MonoBehaviour
     {
 
     }
-
-    
     public IEnumerator getData()
     {
-        //adatok lekérése
+        //adatok lekï¿½rï¿½se
         switch (userid)
         {
             case 0:
@@ -96,11 +104,26 @@ public class DatabaseCommunication : MonoBehaviour
                 {
                     username = ForgottenPassword.localUserName;
                 }
+                if (Register.token != null)
+                {
+                    token = Register.token;
+                }
+                else if (Login.token != null)
+                {
+                    token = Login.token;
+                }
+                else if (ForgottenPassword.token != null)
+                {
+                    token = ForgottenPassword.token;
+                }
 
                 WWWForm form = new WWWForm();
                 form.AddField("username", username);
-                var request = UnityWebRequest.Post("http://188.166.166.197:18102/api/getsave", form);
+                var request = UnityWebRequest.Post("http://localhost:18102/api/getsave", form);
+                request.SetRequestHeader("Authorization", "Bearer " + token);
                 var handler = request.SendWebRequest();
+
+                
 
                 float startTime = 0f;
                 while (!handler.isDone)
@@ -116,7 +139,6 @@ public class DatabaseCommunication : MonoBehaviour
                 {
                     json = request.downloadHandler.text;
                     saveClass = JsonUtility.FromJson<SaveClass>(json);
-                    Debug.Log(json);
 
                 }
                 else
@@ -124,8 +146,10 @@ public class DatabaseCommunication : MonoBehaviour
                     Debug.Log("eror. getdata");
                 }
 
-                //adatok beállítása
-                saveId = saveClass.id;
+
+
+                //adatok beï¿½llï¿½tï¿½sa
+                id = saveClass.usersId;
                 normalCurrency = saveClass.normalCurrency;
                 prestigeCurrency = saveClass.prestigeCurrency;
                 totalEarnings = saveClass.totalEarnings;
@@ -137,7 +161,7 @@ public class DatabaseCommunication : MonoBehaviour
                 PB_frequencyLvl = saveClass.pbFrequency;
 
                 BX_soldAmount = saveClass.bxSoldAmount;
-                BX_Unlocked = saveClass.byUnlocked;
+                BX_Unlocked = saveClass.bxUnlocked;
                 BX_valueLvl = saveClass.bxValue;
                 BX_speedLvl = saveClass.bxSpeed;
                 BX_frequencyLvl = saveClass.byFrequency;
@@ -149,12 +173,11 @@ public class DatabaseCommunication : MonoBehaviour
                 GL_frequencyLvl = saveClass.glFrequency;
 
                 BY_soldAmount = saveClass.glSoldAmount;
-                BY_Unlocked = saveClass.glUnlocked;
+                BY_Unlocked = saveClass.byUnlocked;
                 BY_valueLvl = saveClass.glValue;
                 BY_speedLvl = saveClass.glSpeed;
                 BY_frequencyLvl = saveClass.glFrequency;
 
-                Debug.Log(saveClass.id);
                 Debug.Log("savedata get");
 
                 sellingScript.getCurrencieValues();
@@ -206,35 +229,62 @@ public class DatabaseCommunication : MonoBehaviour
     public IEnumerator saveData()
     {
         WWWForm form = new WWWForm();
-        form.AddField("id", saveId);
+        form.AddField("id", ""+id);
         form.AddField("normalCurrency", "" + normalCurrency);
         form.AddField("prestigeCurrency", "" + prestigeCurrency);
         form.AddField("totalEarnings", "" + totalEarnings);
-        form.AddField("pbUnlocked", "" + PB_Unlocked);
-        Debug.Log(PB_Unlocked);
+        if (GameObject.FindWithTag("petUnlock") is not null)
+        {
+            form.AddField("pbUnlocked", "" + 1);
+        }
+        else
+        {
+            form.AddField("pbUnlocked", "" + 0);
+        }
         form.AddField("pbSoldAmount", "" + PB_soldAmount);
         form.AddField("pbValue", "" + PB_valueLvl);
         form.AddField("pbFrequency", "" + PB_frequencyLvl);
         form.AddField("pbSpeed", "" + PB_speedLvl);
-        Debug.Log(BX_Unlocked);
-        form.AddField("bxUnlocked", "" + BX_Unlocked);
+        if (GameObject.FindWithTag("boxUnlock") is not null)
+        {
+            Debug.Log("jo");
+            form.AddField("bxUnlocked", "" + 1);
+        }
+        else
+        {
+            form.AddField("bxUnlocked", "" + 0);
+        }
         form.AddField("bxSoldAmount", "" + BX_soldAmount);
         form.AddField("bxValue", "" + BX_valueLvl);
         form.AddField("bxFrequency", "" + BX_frequencyLvl);
         form.AddField("bxSpeed", "" + BX_speedLvl);
-        Debug.Log(GL_Unlocked);
-        form.AddField("glUnlocked", "" + GL_Unlocked);
+        if (GameObject.FindWithTag("boxUnlock") is not null)
+        {
+            form.AddField("glUnlocked", "" + 1);
+        }
+        else
+        {
+            form.AddField("glUnlocked", "" + 0);
+        }
         form.AddField("glSoldAmount", "" + GL_soldAmount);
         form.AddField("glValue", "" + GL_valueLvl);
         form.AddField("glFrequency", "" + GL_frequencyLvl);
         form.AddField("glSpeed", "" + GL_speedLvl);
-        Debug.Log(BY_Unlocked);
-        form.AddField("byUnlocked", "" + BY_Unlocked);
+        if (GameObject.FindWithTag("battUnlock") is not null)
+        {
+            Debug.Log("jo");
+            form.AddField("byUnlocked", "" + 1);
+        }
+        else
+        {
+            form.AddField("byUnlocked", "" + 0);
+        }
         form.AddField("bySoldAmount", "" + BY_soldAmount);
         form.AddField("byValue", "" + BY_valueLvl);
         form.AddField("byFrequency", "" + BY_frequencyLvl);
         form.AddField("bySpeed", "" + BY_speedLvl);
-        var request = UnityWebRequest.Post("http://188.166.166.197:18102/api/save", form);
+        var request = UnityWebRequest.Post("http://localhost:18102/api/save", form);
+        request.SetRequestHeader("Authorization", "Bearer " + token);
         var handler = request.SendWebRequest();
 
         float startTime = 0f;
@@ -253,23 +303,20 @@ public class DatabaseCommunication : MonoBehaviour
         }
         else
         {
-           Debug.Log("error. savedata");
+           Debug.Log("error. "+request.downloadHandler.ToString());
         }
-
-        
-
         yield return null;
     }
 
-    public void loadCurreny(float nc, float pc, float te) //más scriptek átadják neki ezzel a currency-k értékét
+    public void loadCurreny(float nc, float pc, float te) //mï¿½s scriptek ï¿½tadjï¿½k neki ezzel a currency-k ï¿½rtï¿½kï¿½t
     {
-        //a megadott értékekre állítja a változókat
+        //a megadott ï¿½rtï¿½kekre ï¿½llï¿½tja a vï¿½ltozï¿½kat
         normalCurrency = nc;
         prestigeCurrency = pc;
         totalEarnings = te;
     }
 
-    public void earningIncrease(string type, float n) //feladata a megkapott szeméttípus összbevételét n-nel növelni
+    public void earningIncrease(string type, float n) //feladata a megkapott szemï¿½ttï¿½pus ï¿½sszbevï¿½telï¿½t n-nel nï¿½velni
     {
         switch (type) 
         {
@@ -280,7 +327,7 @@ public class DatabaseCommunication : MonoBehaviour
         }
     }
 
-    public void upgrade(int type, string property) //feladata a megkapott szeméttípus és annak tulajdonsága alapján a megfelelõ szintet növelni
+    public void upgrade(int type, string property) //feladata a megkapott szemï¿½ttï¿½pus ï¿½s annak tulajdonsï¿½ga alapjï¿½n a megfelelï¿½ szintet nï¿½velni
     {
         switch (type)
         {
@@ -290,7 +337,7 @@ public class DatabaseCommunication : MonoBehaviour
                     case "value": PB_valueLvl++; break;
                     case "speed": PB_speedLvl++; break;
                     case "frequency": PB_frequencyLvl++; break;
-                    default: Debug.Log("Property hiba"); break; //kiírja, ha rossz adatot kapott, mint property
+                    default: Debug.Log("Property hiba"); break; //kiï¿½rja, ha rossz adatot kapott, mint property
                 }
                 break;
             case 2:
@@ -299,7 +346,7 @@ public class DatabaseCommunication : MonoBehaviour
                     case "value": BX_valueLvl++; break;
                     case "speed": BX_speedLvl++; break;
                     case "frequency": BX_frequencyLvl++; break;
-                    default: Debug.Log("Property hiba"); break; //kiírja, ha rossz adatot kapott, mint property
+                    default: Debug.Log("Property hiba"); break; //kiï¿½rja, ha rossz adatot kapott, mint property
                 }
                 break;
             case 3:
@@ -308,7 +355,7 @@ public class DatabaseCommunication : MonoBehaviour
                     case "value": GL_valueLvl++; break;
                     case "speed": GL_speedLvl++; break;
                     case "frequency": GL_frequencyLvl++; break;
-                    default: Debug.Log("Property hiba"); break; //kiírja, ha rossz adatot kapott, mint property
+                    default: Debug.Log("Property hiba"); break; //kiï¿½rja, ha rossz adatot kapott, mint property
                 }
                 break;
             case 4:
@@ -317,14 +364,14 @@ public class DatabaseCommunication : MonoBehaviour
                     case "value": BY_valueLvl++; break;
                     case "speed": BY_speedLvl++; break;
                     case "frequency": BY_frequencyLvl++; break;
-                    default: Debug.Log("Property hiba"); break; //kiírja, ha rossz adatot kapott, mint property
+                    default: Debug.Log("Property hiba"); break; //kiï¿½rja, ha rossz adatot kapott, mint property
                 }
                 break;
-            default: Debug.Log("Type hiba"); break; //kiírja, ha rossz adatot kapott, mint type
+            default: Debug.Log("Type hiba"); break; //kiï¿½rja, ha rossz adatot kapott, mint type
         }
     }
 
-    public void giveData() //feladata (a játék indulásakor) az összes script metódusát meghívni, amelyik adatot vesz át a mentésbõl
+    public void giveData() //feladata (a jï¿½tï¿½k indulï¿½sakor) az ï¿½sszes script metï¿½dusï¿½t meghï¿½vni, amelyik adatot vesz ï¿½t a mentï¿½sbï¿½l
     {
         progresssetupAtStart();
         pbUpgradeScripts.getLevels();

@@ -1,6 +1,8 @@
 const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
+const jwtKey = process.env.JWTKEY
 var bodyParser = require('body-parser')
 var jsonParser = bodyParser.json()
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
@@ -20,7 +22,13 @@ module.exports = app => {
                     res.send('Info: You are logged in currently with your account on another device.')
                 }
                 else {
-                    res.send('Info: Successful login!') //küldünk egy választ a kérőnek.
+                    var data = {
+                        time: Date(),
+                        username: userAccount.username,
+                        emailAddress: userAccount.email
+                    }
+                    const token = jwt.sign(data, jwtKey);
+                    res.send(token) //küldünk egy választ a kérőnek.
                     await prisma.users.update({
                         where: {
                             username: "" + req.body.username

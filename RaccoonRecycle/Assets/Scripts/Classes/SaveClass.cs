@@ -1,3 +1,5 @@
+using Newtonsoft.Json;
+using Newtonsoft.Json.Bson;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,7 +14,7 @@ namespace Classes
         //"glValue":0,"glSpeed":0,"glFrequency":0,"byUnlocked":false,"bySoldAmount":0,"byValue":0,"bySpeed":0,"byFrequency":0}
         public string id;
         public string usersId;
-       // public string lastSaveDate;
+        public string lastSaveDate;
         public int normalCurrency;
         public int prestigeCurrency;
         public int totalEarnings;

@@ -21,6 +21,8 @@ public class Login : MonoBehaviour
     private string sceneName; //egy karakterlánc dekralálása, hogy eltároljuk a MainScene nevét.
     public static string localUserName;
 
+    public static string token;
+
     public void onLoginClick()
     {
         //a coroutine, egy olyan komponens, ami engedi, hogy egy funkciót stopoljunk, vagy várjunk egy funkcióra, emiatt használjuk.
@@ -39,7 +41,7 @@ public class Login : MonoBehaviour
         form.AddField("password", password); //hozzáadjuk a bodyhoz az aPassowrd mezőt és a password értéket hozzá rendeljük.
 
 
-        var request = UnityWebRequest.Post("http://188.166.166.197:18102/api/login", form); // elküldjük a webrequestet a megadott címre, bodyban a formmal.
+        var request = UnityWebRequest.Post("http://localhost:18102/api/login", form); // elküldjük a webrequestet a megadott címre, bodyban a formmal.
         var handler = request.SendWebRequest();
 
         float startTime = 0f;
@@ -60,8 +62,14 @@ public class Login : MonoBehaviour
                 warning_SL.SetActive(true);
                 warningText.text = request.downloadHandler.text;
             }
+            else if (request.downloadHandler.text.Contains("Info:"))
+            {
+                warning_SL.SetActive(true);
+                warningText.text = request.downloadHandler.text;
+            }
             else
             {
+                token = request.downloadHandler.text;
                 localUserName = usernameField.text;
                 SceneManager.LoadScene(1);
             }
