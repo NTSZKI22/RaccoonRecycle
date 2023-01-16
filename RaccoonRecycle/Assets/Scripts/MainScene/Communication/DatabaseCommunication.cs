@@ -199,6 +199,7 @@ public class DatabaseCommunication : MonoBehaviour
     public void startSaveData()
     {
         getTrashStatus();
+        Debug.Log(progressScript.sendProgress());
         StartCoroutine(saveData());
     }
 
@@ -255,8 +256,7 @@ public class DatabaseCommunication : MonoBehaviour
            Debug.Log("error. savedata");
         }
 
-        Debug.Log(PB_Unlocked);
-        Debug.Log(BX_Unlocked);
+        
 
         yield return null;
     }
@@ -326,6 +326,7 @@ public class DatabaseCommunication : MonoBehaviour
 
     public void giveData() //feladata (a játék indulásakor) az összes script metódusát meghívni, amelyik adatot vesz át a mentésbõl
     {
+        progresssetupAtStart();
         pbUpgradeScripts.getLevels();
         bxUpgradeScripts.getLevels();
         glUpgradeScripts.getLevels();
@@ -414,6 +415,27 @@ public class DatabaseCommunication : MonoBehaviour
                 GL_Unlocked = true;
                 BY_Unlocked = true;
                 break;
+            default: Debug.Log("getTrashStats:databasecomm hiba"); break;
+        }
+    }
+
+    void progresssetupAtStart()
+    {
+        if(!PB_Unlocked && !BX_Unlocked && !GL_Unlocked && !BY_Unlocked)
+        {
+            progressScript.ProgressSet(0);
+        }
+        if (PB_Unlocked && !BX_Unlocked && !GL_Unlocked && !BY_Unlocked)
+        {
+            progressScript.ProgressSet(1);
+        }
+        if (PB_Unlocked && BX_Unlocked && GL_Unlocked && !BY_Unlocked)
+        {
+            progressScript.ProgressSet(3);
+        }
+        if (PB_Unlocked && BX_Unlocked && GL_Unlocked && BY_Unlocked)
+        {
+            progressScript.ProgressSet(4);
         }
     }
 }

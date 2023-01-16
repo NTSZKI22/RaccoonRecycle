@@ -63,7 +63,7 @@ public class HolderBehavior : MonoBehaviour
         Debug.Log("holderbehavior, getdata");
     }
 
-    void defaultStart() //alapértelmezett indítási felállás (mikor 0.ról kezd)
+    public void defaultStart() //alapértelmezett indítási felállás (mikor 0.ról kezd)
     {
         //csak a petpalack feloldásához szükséges ablak aktív minden más nem akatív
 
@@ -124,6 +124,7 @@ public class HolderBehavior : MonoBehaviour
 
     public void glassUnlock() //metódus, meghívásával minden szükséges elem láthatósága változik - üveg feloldása
     {
+        Debug.Log("Glass unlock");
         Unlock_GL.SetActive(false);
         Upgrade_GL.SetActive(true);
 
@@ -135,6 +136,7 @@ public class HolderBehavior : MonoBehaviour
 
     public void batteryUnlock() //metódus, meghívásával minden szükséges elem láthatósága változik - elem feloldása
     {
+        Debug.Log("Battery unlock");
         Unlock_BY.SetActive(false);
         Upgrade_BY.SetActive(true);
 
