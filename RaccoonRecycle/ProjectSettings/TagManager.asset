@@ -27,6 +27,10 @@ TagManager:
   - BoxU
   - GlassU
   - BatteryU
+  - petUnlock
+  - boxUnlock
+  - glassUnlock
+  - battUnlock
   layers:
   - Default
   - TransparentFX

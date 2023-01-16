@@ -2,7 +2,9 @@ const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
 const bcrypt = require('bcrypt')
 const saltRounds = 8;
-var bodyParser = require('body-parser')
+var bodyParser = require('body-parser');
+const jwt = require('jsonwebtoken');
+const jwtKey = process.env.JWTKEY;
 var jsonParser = bodyParser.json()
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 let hash;
@@ -12,6 +14,12 @@ module.exports = app => {
         var userAccountUsername = await prisma.users.findFirst({ where: { username: req.body.username } })
         var userAccountEmail = await prisma.users.findFirst({ where: { email: req.body.email } })
         if (userAccountUsername == null && userAccountEmail == null) {
+            var data = {
+                time: Date(),
+                username: req.body.username,
+                emailAddress: req.body.email
+            }
+            const token = jwt.sign(data, jwtKey);
             hash = await bcrypt.hash(req.body.password, saltRounds)
             var newAccount = await prisma.users.create({
                 data: {
@@ -54,11 +62,14 @@ module.exports = app => {
             })
             await prisma.logs.create({
                 data: {
-                    message: "A user was created, with the username of: "+newAccount.username,
+                    message: "A user was created, with the username of: " + newAccount.username,
                     madeBy: "Server"
                 }
             })
-            res.send('Account created!')
+            res.json({
+                message: 'Account created!',
+                token: token
+            })
             return
         }
         else {

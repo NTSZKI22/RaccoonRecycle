@@ -767,7 +767,7 @@ GameObject:
   - component: {fileID: 63578596}
   m_Layer: 6
   m_Name: lvl3_Glass
-  m_TagString: Untagged
+  m_TagString: glassUnlock
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2468,7 +2468,7 @@ GameObject:
   - component: {fileID: 215946487}
   m_Layer: 6
   m_Name: lvl4_Battery
-  m_TagString: Untagged
+  m_TagString: battUnlock
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3466,7 +3466,7 @@ GameObject:
   - component: {fileID: 311138610}
   m_Layer: 6
   m_Name: lvl2_Box
-  m_TagString: Untagged
+  m_TagString: boxUnlock
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -13086,7 +13086,7 @@ GameObject:
   - component: {fileID: 1090031779}
   m_Layer: 6
   m_Name: lvl1_PetBottle
-  m_TagString: Untagged
+  m_TagString: petUnlock
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

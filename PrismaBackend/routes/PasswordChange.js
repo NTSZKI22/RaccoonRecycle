@@ -26,7 +26,13 @@ module.exports = app => {
                     password: req.body.newPassword
                 }
             })
-            res.send(user)
+            var data = {
+                time: Date(),
+                username: account.username,
+                emailAddress: account.email
+            }
+            const token = jwt.sign(data, jwtKey);
+            res.json({message: "Sikeres jelszó cserélés!", token: token})
             return
         }
     })

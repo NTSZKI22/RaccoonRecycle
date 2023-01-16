@@ -5,6 +5,10 @@ using System.Runtime.InteropServices.ComTypes;
 using Classes;
 using UnityEngine.Networking;
 using System.Security.Cryptography.X509Certificates;
+using Newtonsoft.Json.Bson;
+using MongoDB.Bson;
+using UnityEditor.PackageManager.Requests;
+using System;
 
 public class DatabaseCommunication : MonoBehaviour
 {
@@ -23,6 +27,8 @@ public class DatabaseCommunication : MonoBehaviour
     private string saveId;
 
     public SaveClass saveClass;
+
+    public string id;
 
     int userid;
 
@@ -53,6 +59,7 @@ public class DatabaseCommunication : MonoBehaviour
     public int BY_valueLvl;
     public int BY_speedLvl;
     public int BY_frequencyLvl;
+    
 
 
     void Start()
@@ -68,6 +75,7 @@ public class DatabaseCommunication : MonoBehaviour
         //ideiglenesen:
         userid = 0;
         StartCoroutine(getData());
+       // StartCoroutine(getID());
         giveData();
     }
 
@@ -76,8 +84,6 @@ public class DatabaseCommunication : MonoBehaviour
     {
 
     }
-
-    
     public IEnumerator getData()
     {
         //adatok lekérése
@@ -99,8 +105,10 @@ public class DatabaseCommunication : MonoBehaviour
 
                 WWWForm form = new WWWForm();
                 form.AddField("username", username);
-                var request = UnityWebRequest.Post("http://188.166.166.197:18102/api/getsave", form);
+                var request = UnityWebRequest.Post("http://localhost:18102/api/getsave", form);
                 var handler = request.SendWebRequest();
+
+                
 
                 float startTime = 0f;
                 while (!handler.isDone)
@@ -116,7 +124,6 @@ public class DatabaseCommunication : MonoBehaviour
                 {
                     json = request.downloadHandler.text;
                     saveClass = JsonUtility.FromJson<SaveClass>(json);
-                    Debug.Log(json);
 
                 }
                 else
@@ -124,8 +131,10 @@ public class DatabaseCommunication : MonoBehaviour
                     Debug.Log("eror. getdata");
                 }
 
+
+
                 //adatok beállítása
-                saveId = saveClass.id;
+                id = saveClass.usersId;
                 normalCurrency = saveClass.normalCurrency;
                 prestigeCurrency = saveClass.prestigeCurrency;
                 totalEarnings = saveClass.totalEarnings;
@@ -137,7 +146,7 @@ public class DatabaseCommunication : MonoBehaviour
                 PB_frequencyLvl = saveClass.pbFrequency;
 
                 BX_soldAmount = saveClass.bxSoldAmount;
-                BX_Unlocked = saveClass.byUnlocked;
+                BX_Unlocked = saveClass.bxUnlocked;
                 BX_valueLvl = saveClass.bxValue;
                 BX_speedLvl = saveClass.bxSpeed;
                 BX_frequencyLvl = saveClass.byFrequency;
@@ -149,12 +158,11 @@ public class DatabaseCommunication : MonoBehaviour
                 GL_frequencyLvl = saveClass.glFrequency;
 
                 BY_soldAmount = saveClass.glSoldAmount;
-                BY_Unlocked = saveClass.glUnlocked;
+                BY_Unlocked = saveClass.byUnlocked;
                 BY_valueLvl = saveClass.glValue;
                 BY_speedLvl = saveClass.glSpeed;
                 BY_frequencyLvl = saveClass.glFrequency;
 
-                Debug.Log(saveClass.id);
                 Debug.Log("savedata get");
 
                 sellingScript.getCurrencieValues();
@@ -205,35 +213,61 @@ public class DatabaseCommunication : MonoBehaviour
     public IEnumerator saveData()
     {
         WWWForm form = new WWWForm();
-        form.AddField("id", saveId);
+        form.AddField("id", ""+id);
         form.AddField("normalCurrency", "" + normalCurrency);
         form.AddField("prestigeCurrency", "" + prestigeCurrency);
         form.AddField("totalEarnings", "" + totalEarnings);
-        form.AddField("pbUnlocked", "" + PB_Unlocked);
-        Debug.Log(PB_Unlocked);
+        if (GameObject.FindWithTag("petUnlock") is not null)
+        {
+            form.AddField("pbUnlocked", "" + 1);
+        }
+        else
+        {
+            form.AddField("pbUnlocked", "" + 0);
+        }
         form.AddField("pbSoldAmount", "" + PB_soldAmount);
         form.AddField("pbValue", "" + PB_valueLvl);
         form.AddField("pbFrequency", "" + PB_frequencyLvl);
         form.AddField("pbSpeed", "" + PB_speedLvl);
-        Debug.Log(BX_Unlocked);
-        form.AddField("bxUnlocked", "" + BX_Unlocked);
+        if (GameObject.FindWithTag("boxUnlock") is not null)
+        {
+            Debug.Log("jo");
+            form.AddField("bxUnlocked", "" + 1);
+        }
+        else
+        {
+            form.AddField("bxUnlocked", "" + 0);
+        }
         form.AddField("bxSoldAmount", "" + BX_soldAmount);
         form.AddField("bxValue", "" + BX_valueLvl);
         form.AddField("bxFrequency", "" + BX_frequencyLvl);
         form.AddField("bxSpeed", "" + BX_speedLvl);
-        Debug.Log(GL_Unlocked);
-        form.AddField("glUnlocked", "" + GL_Unlocked);
+        if (GameObject.FindWithTag("boxUnlock") is not null)
+        {
+            form.AddField("glUnlocked", "" + 1);
+        }
+        else
+        {
+            form.AddField("glUnlocked", "" + 0);
+        }
         form.AddField("glSoldAmount", "" + GL_soldAmount);
         form.AddField("glValue", "" + GL_valueLvl);
         form.AddField("glFrequency", "" + GL_frequencyLvl);
         form.AddField("glSpeed", "" + GL_speedLvl);
-        Debug.Log(BY_Unlocked);
-        form.AddField("byUnlocked", "" + BY_Unlocked);
+        if (GameObject.FindWithTag("battUnlock") is not null)
+        {
+            Debug.Log("jo");
+            form.AddField("byUnlocked", "" + 1);
+        }
+        else
+        {
+            form.AddField("byUnlocked", "" + 0);
+        }
         form.AddField("bySoldAmount", "" + BY_soldAmount);
         form.AddField("byValue", "" + BY_valueLvl);
         form.AddField("byFrequency", "" + BY_frequencyLvl);
         form.AddField("bySpeed", "" + BY_speedLvl);
-        var request = UnityWebRequest.Post("http://188.166.166.197:18102/api/save", form);
+        var request = UnityWebRequest.Post("http://localhost:18102/api/save", form);
         var handler = request.SendWebRequest();
 
         float startTime = 0f;
@@ -252,12 +286,8 @@ public class DatabaseCommunication : MonoBehaviour
         }
         else
         {
-           Debug.Log("error. savedata");
+           Debug.Log("error. "+request.downloadHandler.ToString());
         }
-
-        Debug.Log(PB_Unlocked);
-        Debug.Log(BX_Unlocked);
-
         yield return null;
     }
 
