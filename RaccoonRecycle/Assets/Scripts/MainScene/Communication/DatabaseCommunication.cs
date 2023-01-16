@@ -22,6 +22,8 @@ public class DatabaseCommunication : MonoBehaviour
 
     private static string username;
 
+    private static string token;
+
     private string json;
 
     private string saveId;
@@ -102,10 +104,23 @@ public class DatabaseCommunication : MonoBehaviour
                 {
                     username = ForgottenPassword.localUserName;
                 }
+                if (Register.token != null)
+                {
+                    token = Register.token;
+                }
+                else if (Login.token != null)
+                {
+                    token = Login.token;
+                }
+                else if (ForgottenPassword.token != null)
+                {
+                    token = ForgottenPassword.token;
+                }
 
                 WWWForm form = new WWWForm();
                 form.AddField("username", username);
                 var request = UnityWebRequest.Post("http://localhost:18102/api/getsave", form);
+                request.SetRequestHeader("Authorization", "Bearer " + token);
                 var handler = request.SendWebRequest();
 
                 
@@ -269,6 +284,7 @@ public class DatabaseCommunication : MonoBehaviour
         form.AddField("byFrequency", "" + BY_frequencyLvl);
         form.AddField("bySpeed", "" + BY_speedLvl);
         var request = UnityWebRequest.Post("http://localhost:18102/api/save", form);
+        request.SetRequestHeader("Authorization", "Bearer " + token);
         var handler = request.SendWebRequest();
 
         float startTime = 0f;

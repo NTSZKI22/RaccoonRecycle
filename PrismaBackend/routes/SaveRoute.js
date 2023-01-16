@@ -8,11 +8,10 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 module.exports = app => {
     app.post("/api/save", urlencodedParser, async (req, res) => {
-        //const bearerHeader = req.headers['authorization']
-        //const bearerToken = bearerHeader.split(' ')[1]
+        const bearerHeader = req.headers['authorization']
+        const bearerToken = bearerHeader.split(' ')[1]
         console.log(req.body.pbUnlocked,req.body.bxUnlocked,req.body.glUnlocked,req.body.byUnlocked)
-        const verified = true   
-        jwt.verify(bearerToken, jwtKey)  //post-ot használunk, mivel szeretnénk adatot kérni a szervertől a /authorize aloldalon.
+        const verified = jwt.verify(bearerToken, jwtKey)  //post-ot használunk, mivel szeretnénk adatot kérni a szervertől a /authorize aloldalon.
         if (verified) {
             var pbu, bxu, glu, byu;
             if(req.body.pbUnlocked != 0){pbu = true}

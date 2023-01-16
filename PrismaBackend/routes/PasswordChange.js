@@ -32,7 +32,7 @@ module.exports = app => {
                 emailAddress: account.email
             }
             const token = jwt.sign(data, jwtKey);
-            res.json({message: "Sikeres jelszó cserélés!", token: token})
+            res.json(token)
             return
         }
     })

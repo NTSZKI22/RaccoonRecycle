@@ -9,9 +9,9 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 module.exports = app => {
     app.post("/api/getsaveid", urlencodedParser, async (req, res) => {  //postot használunk mivel a kérés küldésekor a bodyban szeretnénk küldeni az adatokat.    
-        //const bearerHeader = req.headers['authorization']
-        //const bearerToken = bearerHeader.split(' ')[1]
-        const verified =true //jwt.verify(bearerToken, jwtKey);
+        const bearerHeader = req.headers['authorization']
+        const bearerToken = bearerHeader.split(' ')[1]
+        const verified = jwt.verify(bearerToken, jwtKey);
         if(verified){
             const userSave = await prisma.saves.findFirst({
                 where:

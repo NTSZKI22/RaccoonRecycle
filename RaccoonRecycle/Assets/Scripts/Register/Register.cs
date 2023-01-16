@@ -7,6 +7,7 @@ using UnityEngine.Networking.PlayerConnection;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Unity.VisualScripting;
+using Unity.VisualScripting.Antlr3.Runtime;
 
 public class Register : MonoBehaviour
 {
@@ -27,6 +28,8 @@ public class Register : MonoBehaviour
     private string sceneName;
 
     public static string localUserName;
+
+    public static string token;
 
     public void onRegisterClick()
     {
@@ -97,6 +100,7 @@ public class Register : MonoBehaviour
             {
                 warning_SL.SetActive(true);
                 warningText.text = "The account was succesfully made!";
+                token = request.downloadHandler.text;
                 localUserName = username;
                 SceneManager.LoadScene(sceneName);
             }

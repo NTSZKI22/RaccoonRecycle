@@ -28,7 +28,7 @@ module.exports = app => {
                         emailAddress: userAccount.email
                     }
                     const token = jwt.sign(data, jwtKey);
-                    res.json({message: 'Info: Successful login!', token: token}) //küldünk egy választ a kérőnek.
+                    res.send(token) //küldünk egy választ a kérőnek.
                     await prisma.users.update({
                         where: {
                             username: "" + req.body.username
