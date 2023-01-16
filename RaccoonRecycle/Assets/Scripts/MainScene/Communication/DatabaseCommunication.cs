@@ -12,13 +12,13 @@ using System;
 
 public class DatabaseCommunication : MonoBehaviour
 {
-    Selling sellingScript; //a currency-t kezelõ script
-    UpgradeButton pbUpgradeScripts; //a petbottle fejlesztését kezelõ script
-    UpgradeButton bxUpgradeScripts; //a box fejlesztését kezelõ script
-    UpgradeButton glUpgradeScripts; //a glass fejlesztését kezelõ script
-    UpgradeButton byUpgradeScripts; //a battery fejlesztését kezelõ script
-    HolderBehavior holderScript; //a holderek viselkedését kezelõ script
-    GettingProgress progressScript; // a feloldott haladást jelzi vissza
+    Selling sellingScript; //a currency-t kezelï¿½ script
+    UpgradeButton pbUpgradeScripts; //a petbottle fejlesztï¿½sï¿½t kezelï¿½ script
+    UpgradeButton bxUpgradeScripts; //a box fejlesztï¿½sï¿½t kezelï¿½ script
+    UpgradeButton glUpgradeScripts; //a glass fejlesztï¿½sï¿½t kezelï¿½ script
+    UpgradeButton byUpgradeScripts; //a battery fejlesztï¿½sï¿½t kezelï¿½ script
+    HolderBehavior holderScript; //a holderek viselkedï¿½sï¿½t kezelï¿½ script
+    GettingProgress progressScript; // a feloldott haladï¿½st jelzi vissza
 
     private static string username;
 
@@ -64,13 +64,13 @@ public class DatabaseCommunication : MonoBehaviour
 
     void Start()
     {
-        sellingScript = GameObject.FindGameObjectWithTag("SellingScript").GetComponent<Selling>(); //a scriptet kiveszi az adott objektumból mint komponense
-        pbUpgradeScripts = GameObject.FindGameObjectWithTag("PetBottleU").GetComponent<UpgradeButton>(); //a scriptet kiveszi az adott objektumból mint komponense
-        bxUpgradeScripts = GameObject.FindGameObjectWithTag("BoxU").GetComponent<UpgradeButton>(); //a scriptet kiveszi az adott objektumból mint komponense
-        glUpgradeScripts = GameObject.FindGameObjectWithTag("GlassU").GetComponent<UpgradeButton>(); //a scriptet kiveszi az adott objektumból mint komponense
-        byUpgradeScripts = GameObject.FindGameObjectWithTag("BatteryU").GetComponent<UpgradeButton>(); //a scriptet kiveszi az adott objektumból mint komponense
-        holderScript = GameObject.FindGameObjectWithTag("WindowBehavior").GetComponent<HolderBehavior>(); //a scriptet kiveszi az adott objektumból mint komponense
-        progressScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<GettingProgress>(); //a scriptet kiveszi az adott objektumból mint komponense
+        sellingScript = GameObject.FindGameObjectWithTag("SellingScript").GetComponent<Selling>(); //a scriptet kiveszi az adott objektumbï¿½l mint komponense
+        pbUpgradeScripts = GameObject.FindGameObjectWithTag("PetBottleU").GetComponent<UpgradeButton>(); //a scriptet kiveszi az adott objektumbï¿½l mint komponense
+        bxUpgradeScripts = GameObject.FindGameObjectWithTag("BoxU").GetComponent<UpgradeButton>(); //a scriptet kiveszi az adott objektumbï¿½l mint komponense
+        glUpgradeScripts = GameObject.FindGameObjectWithTag("GlassU").GetComponent<UpgradeButton>(); //a scriptet kiveszi az adott objektumbï¿½l mint komponense
+        byUpgradeScripts = GameObject.FindGameObjectWithTag("BatteryU").GetComponent<UpgradeButton>(); //a scriptet kiveszi az adott objektumbï¿½l mint komponense
+        holderScript = GameObject.FindGameObjectWithTag("WindowBehavior").GetComponent<HolderBehavior>(); //a scriptet kiveszi az adott objektumbï¿½l mint komponense
+        progressScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<GettingProgress>(); //a scriptet kiveszi az adott objektumbï¿½l mint komponense
 
         //ideiglenesen:
         userid = 0;
@@ -86,7 +86,7 @@ public class DatabaseCommunication : MonoBehaviour
     }
     public IEnumerator getData()
     {
-        //adatok lekérése
+        //adatok lekï¿½rï¿½se
         switch (userid)
         {
             case 0:
@@ -133,7 +133,7 @@ public class DatabaseCommunication : MonoBehaviour
 
 
 
-                //adatok beállítása
+                //adatok beï¿½llï¿½tï¿½sa
                 id = saveClass.usersId;
                 normalCurrency = saveClass.normalCurrency;
                 prestigeCurrency = saveClass.prestigeCurrency;
@@ -207,6 +207,7 @@ public class DatabaseCommunication : MonoBehaviour
     public void startSaveData()
     {
         getTrashStatus();
+        Debug.Log(progressScript.sendProgress());
         StartCoroutine(saveData());
     }
 
@@ -291,15 +292,15 @@ public class DatabaseCommunication : MonoBehaviour
         yield return null;
     }
 
-    public void loadCurreny(float nc, float pc, float te) //más scriptek átadják neki ezzel a currency-k értékét
+    public void loadCurreny(float nc, float pc, float te) //mï¿½s scriptek ï¿½tadjï¿½k neki ezzel a currency-k ï¿½rtï¿½kï¿½t
     {
-        //a megadott értékekre állítja a változókat
+        //a megadott ï¿½rtï¿½kekre ï¿½llï¿½tja a vï¿½ltozï¿½kat
         normalCurrency = nc;
         prestigeCurrency = pc;
         totalEarnings = te;
     }
 
-    public void earningIncrease(string type, float n) //feladata a megkapott szeméttípus összbevételét n-nel növelni
+    public void earningIncrease(string type, float n) //feladata a megkapott szemï¿½ttï¿½pus ï¿½sszbevï¿½telï¿½t n-nel nï¿½velni
     {
         switch (type) 
         {
@@ -310,7 +311,7 @@ public class DatabaseCommunication : MonoBehaviour
         }
     }
 
-    public void upgrade(int type, string property) //feladata a megkapott szeméttípus és annak tulajdonsága alapján a megfelelõ szintet növelni
+    public void upgrade(int type, string property) //feladata a megkapott szemï¿½ttï¿½pus ï¿½s annak tulajdonsï¿½ga alapjï¿½n a megfelelï¿½ szintet nï¿½velni
     {
         switch (type)
         {
@@ -320,7 +321,7 @@ public class DatabaseCommunication : MonoBehaviour
                     case "value": PB_valueLvl++; break;
                     case "speed": PB_speedLvl++; break;
                     case "frequency": PB_frequencyLvl++; break;
-                    default: Debug.Log("Property hiba"); break; //kiírja, ha rossz adatot kapott, mint property
+                    default: Debug.Log("Property hiba"); break; //kiï¿½rja, ha rossz adatot kapott, mint property
                 }
                 break;
             case 2:
@@ -329,7 +330,7 @@ public class DatabaseCommunication : MonoBehaviour
                     case "value": BX_valueLvl++; break;
                     case "speed": BX_speedLvl++; break;
                     case "frequency": BX_frequencyLvl++; break;
-                    default: Debug.Log("Property hiba"); break; //kiírja, ha rossz adatot kapott, mint property
+                    default: Debug.Log("Property hiba"); break; //kiï¿½rja, ha rossz adatot kapott, mint property
                 }
                 break;
             case 3:
@@ -338,7 +339,7 @@ public class DatabaseCommunication : MonoBehaviour
                     case "value": GL_valueLvl++; break;
                     case "speed": GL_speedLvl++; break;
                     case "frequency": GL_frequencyLvl++; break;
-                    default: Debug.Log("Property hiba"); break; //kiírja, ha rossz adatot kapott, mint property
+                    default: Debug.Log("Property hiba"); break; //kiï¿½rja, ha rossz adatot kapott, mint property
                 }
                 break;
             case 4:
@@ -347,15 +348,16 @@ public class DatabaseCommunication : MonoBehaviour
                     case "value": BY_valueLvl++; break;
                     case "speed": BY_speedLvl++; break;
                     case "frequency": BY_frequencyLvl++; break;
-                    default: Debug.Log("Property hiba"); break; //kiírja, ha rossz adatot kapott, mint property
+                    default: Debug.Log("Property hiba"); break; //kiï¿½rja, ha rossz adatot kapott, mint property
                 }
                 break;
-            default: Debug.Log("Type hiba"); break; //kiírja, ha rossz adatot kapott, mint type
+            default: Debug.Log("Type hiba"); break; //kiï¿½rja, ha rossz adatot kapott, mint type
         }
     }
 
-    public void giveData() //feladata (a játék indulásakor) az összes script metódusát meghívni, amelyik adatot vesz át a mentésbõl
+    public void giveData() //feladata (a jï¿½tï¿½k indulï¿½sakor) az ï¿½sszes script metï¿½dusï¿½t meghï¿½vni, amelyik adatot vesz ï¿½t a mentï¿½sbï¿½l
     {
+        progresssetupAtStart();
         pbUpgradeScripts.getLevels();
         bxUpgradeScripts.getLevels();
         glUpgradeScripts.getLevels();
@@ -444,6 +446,27 @@ public class DatabaseCommunication : MonoBehaviour
                 GL_Unlocked = true;
                 BY_Unlocked = true;
                 break;
+            default: Debug.Log("getTrashStats:databasecomm hiba"); break;
+        }
+    }
+
+    void progresssetupAtStart()
+    {
+        if(!PB_Unlocked && !BX_Unlocked && !GL_Unlocked && !BY_Unlocked)
+        {
+            progressScript.ProgressSet(0);
+        }
+        if (PB_Unlocked && !BX_Unlocked && !GL_Unlocked && !BY_Unlocked)
+        {
+            progressScript.ProgressSet(1);
+        }
+        if (PB_Unlocked && BX_Unlocked && GL_Unlocked && !BY_Unlocked)
+        {
+            progressScript.ProgressSet(3);
+        }
+        if (PB_Unlocked && BX_Unlocked && GL_Unlocked && BY_Unlocked)
+        {
+            progressScript.ProgressSet(4);
         }
     }
 }

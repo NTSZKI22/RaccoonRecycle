@@ -8,6 +8,7 @@ public class ButtonBehavior : MonoBehaviour
     //használt scriptek változói
     Selling sellingScript; //a currency-t kezelõ script
     HolderBehavior holderScript; //a holderek viselkedését kezelõ script
+    GettingProgress progressScript; // a feloldott haladást jelzi vissza
 
     //minden szemétfajtához tartozó gomb, felirat és ár
     //gomb -> megnyomásával feloldható a futószalag, felirat -> kiírja az árat, cost -> megadja az árat
@@ -32,7 +33,8 @@ public class ButtonBehavior : MonoBehaviour
     {
         sellingScript = GameObject.FindGameObjectWithTag("SellingScript").GetComponent<Selling>(); //a scriptet kiveszi az adott objektumból mint komponense
         holderScript = GameObject.FindGameObjectWithTag("WindowBehavior").GetComponent<HolderBehavior>(); //a scriptet kiveszi az adott objektumból mint komponense
-        
+        progressScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<GettingProgress>(); //a scriptet kiveszi az adott objektumból mint komponense
+
         defaultStart(); //alapértelmezett elindulás
 
         //a feljebb megadott gombok 'gomb' komponensére click listener kerül, kattintáskor a megfelelõ kód fut le
@@ -58,7 +60,7 @@ public class ButtonBehavior : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       //toAble(); //gombok használhatósága
+       toAble(); //gombok használhatósága
     }
 
     void defaultStart() //alap értékállítás bizonyos változóknak
@@ -82,23 +84,27 @@ public class ButtonBehavior : MonoBehaviour
     {
         holderScript.petbottleUnlock(); //a szügséges objektumok láthatósága változik
         sellingScript.boughtUpgradeNormal(cost_UnlockPB); //a feloldás ára levonásra kerül az egyenlegrõl
+        progressScript.ProgressSet(1);
     }
 
     void unlockBX() //doboz feloldása
     {
         holderScript.boxUnlock(); //a szügséges objektumok láthatósága változik
         sellingScript.boughtUpgradePrestige(cost_UnlockBX); //a feloldás ára levonásra kerül az egyenlegrõl
+        progressScript.ProgressSet(2);
     }
 
     void unlockGL() //üveg feloldása
     {
         holderScript.glassUnlock(); //a szügséges objektumok láthatósága változik
         sellingScript.boughtUpgradePrestige(cost_UnlockGL); //a feloldás ára levonásra kerül az egyenlegrõl
+        progressScript.ProgressSet(3);
     }
 
     void unlockBY() //elem feloldása
     {
         holderScript.batteryUnlock(); //a szügséges objektumok láthatósága változik
         sellingScript.boughtUpgradePrestige(cost_UnlockBY); //a feloldás ára levonásra kerül az egyenlegrõl
+        progressScript.ProgressSet(4);
     }
 }
