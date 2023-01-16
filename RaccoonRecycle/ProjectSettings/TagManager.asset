@@ -27,6 +27,7 @@ TagManager:
   - BoxU
   - GlassU
   - BatteryU
+  - SliderMarker
   layers:
   - Default
   - TransparentFX
