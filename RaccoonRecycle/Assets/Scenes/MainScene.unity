@@ -5096,6 +5096,7 @@ GameObject:
   m_Component:
   - component: {fileID: 444225051}
   - component: {fileID: 444225052}
+  - component: {fileID: 444225053}
   m_Layer: 7
   m_Name: Communication
   m_TagString: DatabaseCommunication
@@ -5134,25 +5135,46 @@ MonoBehaviour:
   prestigeCurrency: 0
   totalEarnings: 0
   PB_soldAmount: 0
-  PB_Unlocked: 0
   PB_valueLvl: 0
   PB_speedLvl: 0
   PB_frequencyLvl: 0
   BX_soldAmount: 0
-  BX_Unlocked: 0
   BX_valueLvl: 0
   BX_speedLvl: 0
   BX_frequencyLvl: 0
   GL_soldAmount: 0
-  GL_Unlocked: 0
   GL_valueLvl: 0
   GL_speedLvl: 0
   GL_frequencyLvl: 0
   BY_soldAmount: 0
-  BY_Unlocked: 0
   BY_valueLvl: 0
   BY_speedLvl: 0
   BY_frequencyLvl: 0
+--- !u!114 &444225053
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 444225050}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5f42942174f0ec4faf0ebd1228236c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Unlock_PB: {fileID: 2107582393}
+  Upgrade_PB: {fileID: 60849989}
+  Unlock_BX: {fileID: 1124304926}
+  Upgrade_BX: {fileID: 664785002}
+  Unlock_GL: {fileID: 1381827189}
+  Upgrade_GL: {fileID: 1952429621}
+  Unlock_BY: {fileID: 853068749}
+  Upgrade_BY: {fileID: 1309769691}
+  PB_Unlocked: 0
+  BX_Unlocked: 0
+  GL_Unlocked: 0
+  BTY_Unlocked: 0
+  progress: 0
 --- !u!1001 &445799618
 PrefabInstance:
   m_ObjectHideFlags: 0

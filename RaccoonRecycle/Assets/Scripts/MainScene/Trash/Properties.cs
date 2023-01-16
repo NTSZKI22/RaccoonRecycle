@@ -25,8 +25,8 @@ public class Properties : MonoBehaviour
         dataScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<DatabaseCommunication>(); //a scriptet kiveszi az adott objektumból mint komponense
 
         //alap érték megadása a következõ változóknak
-        multiplierPos = 1.07f; //7%-os növekedés
-        multiplierNeg = 0.95f; //5%-os csökkenés
+        multiplierPos = 1.02f; //2%-os növekedés
+        multiplierNeg = 0.98f; //2%-os csökkenés
 
         defProperties(); //alap értéket határoz meg az elemnek, amin van
 

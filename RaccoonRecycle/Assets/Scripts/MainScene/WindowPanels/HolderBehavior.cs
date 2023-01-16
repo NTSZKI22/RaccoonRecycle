@@ -51,16 +51,16 @@ public class HolderBehavior : MonoBehaviour
     public void getData() //metódus, lekéri az adatokat a szükséges változókba
     {
         //a datascriptbõl kivett adatokat
-        PBUnlocked = dataScript.PB_Unlocked;
-        BXUnlocked = dataScript.BX_Unlocked;
-        GLUnlocked = dataScript.GL_Unlocked;
-        BYUnlocked = dataScript.BY_Unlocked;
+        PBUnlocked = dataScript.giveTrashStatus("PetBottle");
+        BXUnlocked = dataScript.giveTrashStatus("Box");
+        GLUnlocked = dataScript.giveTrashStatus("Glass");
+        BYUnlocked = dataScript.giveTrashStatus("Battery");
 
         Debug.Log(PBUnlocked);
         Debug.Log(BXUnlocked);
         Debug.Log(GLUnlocked);
         Debug.Log(BYUnlocked);
-        Debug.Log("holder, getdata");
+        Debug.Log("holderbehavior, getdata");
     }
 
     void defaultStart() //alapértelmezett indítási felállás (mikor 0.ról kezd)
@@ -108,9 +108,6 @@ public class HolderBehavior : MonoBehaviour
         Unlock_BX.SetActive(true);
 
         Conveyor_PB.SetActive(true);
-
-
-        dataScript.unlock(1, true);
     }
 
     public void boxUnlock() //metódus, meghívásával minden szükséges elem láthatósága változik - kartondoboz feloldása
@@ -123,9 +120,6 @@ public class HolderBehavior : MonoBehaviour
 
         Conveyor_BX.SetActive(true);
         DefSeller1.SetActive(false);
-        
-
-        dataScript.unlock(2, true);
     }
 
     public void glassUnlock() //metódus, meghívásával minden szükséges elem láthatósága változik - üveg feloldása
@@ -137,9 +131,6 @@ public class HolderBehavior : MonoBehaviour
 
         Conveyor_GL.SetActive(true);
         DefSeller2.SetActive(false);
-
-
-        dataScript.unlock(3, true);
     }
 
     public void batteryUnlock() //metódus, meghívásával minden szükséges elem láthatósága változik - elem feloldása
@@ -149,8 +140,5 @@ public class HolderBehavior : MonoBehaviour
 
         Conveyor_BY.SetActive(true);
         DefSeller3.SetActive(false);
-
-
-        dataScript.unlock(4, true);
     }
 }

@@ -14,6 +14,7 @@ public class DatabaseCommunication : MonoBehaviour
     UpgradeButton glUpgradeScripts; //a glass fejlesztését kezelõ script
     UpgradeButton byUpgradeScripts; //a battery fejlesztését kezelõ script
     HolderBehavior holderScript; //a holderek viselkedését kezelõ script
+    GettingProgress progressScript; // a feloldott haladást jelzi vissza
 
     private static string username;
 
@@ -30,25 +31,25 @@ public class DatabaseCommunication : MonoBehaviour
     public float totalEarnings;
 
     public float PB_soldAmount;
-    public bool PB_Unlocked;
+    private bool PB_Unlocked;
     public int PB_valueLvl;
     public int PB_speedLvl;
     public int PB_frequencyLvl;
 
     public float BX_soldAmount;
-    public bool BX_Unlocked;
+    private bool BX_Unlocked;
     public int BX_valueLvl;
     public int BX_speedLvl;
     public int BX_frequencyLvl;
 
     public float GL_soldAmount;
-    public bool GL_Unlocked;
+    private bool GL_Unlocked;
     public int GL_valueLvl;
     public int GL_speedLvl;
     public int GL_frequencyLvl;
 
     public float BY_soldAmount;
-    public bool BY_Unlocked;
+    private bool BY_Unlocked;
     public int BY_valueLvl;
     public int BY_speedLvl;
     public int BY_frequencyLvl;
@@ -62,6 +63,7 @@ public class DatabaseCommunication : MonoBehaviour
         glUpgradeScripts = GameObject.FindGameObjectWithTag("GlassU").GetComponent<UpgradeButton>(); //a scriptet kiveszi az adott objektumból mint komponense
         byUpgradeScripts = GameObject.FindGameObjectWithTag("BatteryU").GetComponent<UpgradeButton>(); //a scriptet kiveszi az adott objektumból mint komponense
         holderScript = GameObject.FindGameObjectWithTag("WindowBehavior").GetComponent<HolderBehavior>(); //a scriptet kiveszi az adott objektumból mint komponense
+        progressScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<GettingProgress>(); //a scriptet kiveszi az adott objektumból mint komponense
 
         //ideiglenesen:
         userid = 0;
@@ -196,6 +198,7 @@ public class DatabaseCommunication : MonoBehaviour
     
     public void startSaveData()
     {
+        getTrashStatus();
         StartCoroutine(saveData());
     }
 
@@ -321,18 +324,6 @@ public class DatabaseCommunication : MonoBehaviour
         }
     }
 
-    public void unlock(int type, bool unlock) //feladata az adott típus alapján a szeméttípus feloldottságát változtatni
-    {
-        switch (type)
-        {
-            case 1: PB_Unlocked=unlock; break;
-            case 2: BX_Unlocked=unlock; break;
-            case 3: GL_Unlocked=unlock; break;
-            case 4: BY_Unlocked=unlock; break;
-        }
-        Debug.Log("unlocking... ->"+type + " " + unlock);
-    }
-
     public void giveData() //feladata (a játék indulásakor) az összes script metódusát meghívni, amelyik adatot vesz át a mentésbõl
     {
         pbUpgradeScripts.getLevels();
@@ -341,10 +332,6 @@ public class DatabaseCommunication : MonoBehaviour
         byUpgradeScripts.getLevels();
 
         sellingScript.getCurrencieValues();
-
-        Debug.Log(PB_Unlocked);
-        Debug.Log(BX_Unlocked);
-        Debug.Log("giveData");
 
         holderScript.getData();
         holderScript.loadedStart();
@@ -379,5 +366,54 @@ public class DatabaseCommunication : MonoBehaviour
 
         holderScript.getData();
         holderScript.loadedStart();
+    }
+
+    public bool giveTrashStatus(string type)
+    {
+        switch (type)
+        {
+            case "PetBottle": return PB_Unlocked; break;
+            case "Box": return BX_Unlocked; break;
+            case "Glass": return GL_Unlocked; break;
+            case "Battery": return BY_Unlocked; break;
+        }
+        return false;
+    }
+
+    void getTrashStatus()
+    {
+        switch (progressScript.sendProgress())
+        {
+            case 0:
+                PB_Unlocked = false;
+                BX_Unlocked = false;
+                GL_Unlocked = false;
+                BY_Unlocked = false;
+                break;
+            case 1:
+                PB_Unlocked = true;
+                BX_Unlocked = false;
+                GL_Unlocked = false;
+                BY_Unlocked = false;
+                break;
+            case 2:
+                PB_Unlocked = true;
+                BX_Unlocked = true;
+                GL_Unlocked = false;
+                BY_Unlocked = false;
+                break;
+            case 3:
+                PB_Unlocked = true;
+                BX_Unlocked = true;
+                GL_Unlocked = true;
+                BY_Unlocked = false;
+                break;
+            case 4:
+                PB_Unlocked = true;
+                BX_Unlocked = true;
+                GL_Unlocked = true;
+                BY_Unlocked = true;
+                break;
+        }
     }
 }
