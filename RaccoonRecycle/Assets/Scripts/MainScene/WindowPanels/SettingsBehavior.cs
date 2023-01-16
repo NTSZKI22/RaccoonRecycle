@@ -7,6 +7,8 @@ using TMPro;
 
 public class SettingsBehavior : MonoBehaviour
 {
+    IncomeNumbers incomeScript;
+
     [SerializeField]
     public AudioMixer audioMixer;
     [SerializeField]
@@ -30,6 +32,7 @@ public class SettingsBehavior : MonoBehaviour
 
     void Start()
     {
+        incomeScript = GameObject.FindGameObjectWithTag("SellingScript").GetComponent<IncomeNumbers>(); //a scriptet kiveszi az adott objektumból mint komponense
         isFullScreen = true;
         isOnDisplay = true;
 
@@ -97,6 +100,7 @@ public class SettingsBehavior : MonoBehaviour
     {
         isOnDisplay = !isOnDisplay;
         Debug.Log(isOnDisplay);
+        incomeScript.toggleOn(isOnDisplay);
     }
 
 }

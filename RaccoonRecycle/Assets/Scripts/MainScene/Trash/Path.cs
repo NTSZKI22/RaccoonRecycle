@@ -8,6 +8,7 @@ public class Path : MonoBehaviour
     Selling sellingScript; //a currency-t kezelõ script
     Properties propertiesScript; //tulajdonságokat taralmazó scripthez a változó
     DatabaseCommunication dataScript; //az adatbázisból megkapott adatokat kezelõ script
+    IncomeNumbers incomeScript;
 
     float speed; //sebessége az objektumnak
     Rigidbody2D rb; //fizikával rendelkezõ objektum változó
@@ -17,6 +18,7 @@ public class Path : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>(); //rb-t deklaráljuk mint a jelenlegi fizikával rendelkezõ objektum
         sellingScript = GameObject.FindGameObjectWithTag("SellingScript").GetComponent<Selling>(); //a scriptet kiveszi az adott objektumból mint komponense
+        incomeScript = GameObject.FindGameObjectWithTag("SellingScript").GetComponent<IncomeNumbers>(); //a scriptet kiveszi az adott objektumból mint komponense
         dataScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<DatabaseCommunication>(); //a scriptet kiveszi az adott objektumból mint komponense
     }
 
@@ -48,6 +50,7 @@ public class Path : MonoBehaviour
         {
             sellingScript.normalSelling(); //meghívja a sellingscript normalselling metódusát
             dataScript.earningIncrease(gameObject.tag, sellingScript.defaultValue); //növeli az adott szeméttípussal szerzett bevételt
+            incomeScript.showIncome(sellingScript.defaultValue, other.gameObject.transform.position);
             Destroy(gameObject); //törli a szemét objektumot
         }
 
@@ -55,6 +58,7 @@ public class Path : MonoBehaviour
         { 
             sellingScript.soldTrashType(propertiesScript.value()); //meghívja a sellingscript soldtrashtype metódusát átadva neki a value tolajdonságot az aktuális szeméttõl
             dataScript.earningIncrease(gameObject.tag, propertiesScript.value()); //növeli az adott szeméttípussal szerzett bevételt
+            incomeScript.showIncome(propertiesScript.value(), other.gameObject.transform.position);
             Destroy(gameObject); //törli a szemét objektumot
         }
     }
