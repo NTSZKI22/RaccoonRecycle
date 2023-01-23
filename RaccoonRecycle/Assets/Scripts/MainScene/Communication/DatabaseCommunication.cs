@@ -7,7 +7,6 @@ using UnityEngine.Networking;
 using System.Security.Cryptography.X509Certificates;
 using Newtonsoft.Json.Bson;
 using MongoDB.Bson;
-using UnityEditor.PackageManager.Requests;
 using System;
 
 public class DatabaseCommunication : MonoBehaviour
@@ -19,6 +18,8 @@ public class DatabaseCommunication : MonoBehaviour
     UpgradeButton byUpgradeScripts; //a battery fejleszt�s�t kezel� script
     HolderBehavior holderScript; //a holderek viselked�s�t kezel� script
     GettingProgress progressScript; // a feloldott halad�st jelzi vissza
+
+    OfflineEarning offlineEarning = new OfflineEarning(); // az offline eltöltött órákat adja vissza
 
     private static string username;
 
@@ -73,6 +74,8 @@ public class DatabaseCommunication : MonoBehaviour
         byUpgradeScripts = GameObject.FindGameObjectWithTag("BatteryU").GetComponent<UpgradeButton>(); //a scriptet kiveszi az adott objektumb�l mint komponense
         holderScript = GameObject.FindGameObjectWithTag("WindowBehavior").GetComponent<HolderBehavior>(); //a scriptet kiveszi az adott objektumb�l mint komponense
         progressScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<GettingProgress>(); //a scriptet kiveszi az adott objektumb�l mint komponense
+
+
 
         //ideiglenesen:
         userid = 0;
@@ -139,14 +142,15 @@ public class DatabaseCommunication : MonoBehaviour
                 {
                     json = request.downloadHandler.text;
                     saveClass = JsonUtility.FromJson<SaveClass>(json);
-
+                    Debug.Log(saveClass.lastSaveDate);
                 }
                 else
                 {
                     Debug.Log("eror. getdata");
                 }
 
-
+                double offlineHours = offlineEarning.OfflineEarnings(DateTime.Parse(saveClass.lastSaveDate, null, System.Globalization.DateTimeStyles.RoundtripKind));
+                Debug.Log(offlineHours);
 
                 //adatok be�ll�t�sa
                 id = saveClass.usersId;
