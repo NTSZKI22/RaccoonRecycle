@@ -3,6 +3,8 @@ const prisma = new PrismaClient()
 var bodyParser = require('body-parser')
 var jsonParser = bodyParser.json()
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
+const jwt = require('jsonwebtoken')
+const jwtKey = process.env.JWTKEY
 
 module.exports = app => {
     app.post("/api/passwordchange", urlencodedParser, async (req, res) => {  //post-ot használunk, mivel szeretnénk adatot kérni a szervertől a /authorize aloldalon.
