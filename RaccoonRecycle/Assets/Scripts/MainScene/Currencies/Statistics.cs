@@ -33,7 +33,7 @@ public class Statistics : MonoBehaviour
         dataScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<DatabaseCommunication>(); //a scriptet kiveszi az adott objektumból mint komponense
         sellingScript = GameObject.FindGameObjectWithTag("SellingScript").GetComponent<Selling>(); //a scriptet kiveszi az adott objektumból mint komponense
 
-        multiplier = 1.07f; //szorzó alap értékét beállítja 7%-ps növekedés
+        multiplier = 1.02f; //szorzó alap értékét beállítja 2%-ps növekedés
     }
 
     // Update is called once per frame

@@ -28,6 +28,7 @@ TagManager:
   - GlassU
   - BatteryU
   - SliderMarker
+  - OfflineEarningsScript
   layers:
   - Default
   - TransparentFX

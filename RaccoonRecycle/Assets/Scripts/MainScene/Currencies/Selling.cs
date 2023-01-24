@@ -55,7 +55,7 @@ public class Selling : MonoBehaviour
         addCurrency(defaultValue); //a szemetek alap értékét átadva meghívjuk az addCurrency-t
     }
 
-    public void soldTrashType(float amount) //petpalack, bármilyen fix szemét eladásakor hívódik, majd fut le, növelli a normalcurrency értékét
+    public void soldTrashType(float amount) //bármilyen fix szemét eladásakor hívódik, majd fut le, növelli a normalcurrency értékét
     {
         addCurrency(amount);  //a megkapott mennyiséget átadva meghívjuk az addCurrency-t
     }

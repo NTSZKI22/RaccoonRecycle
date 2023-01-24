@@ -18,6 +18,7 @@ public class DatabaseCommunication : MonoBehaviour
     UpgradeButton byUpgradeScripts; //a battery fejleszt�s�t kezel� script
     HolderBehavior holderScript; //a holderek viselked�s�t kezel� script
     GettingProgress progressScript; // a feloldott halad�st jelzi vissza
+    OfflineEarning oEarningScript;
 
     OfflineEarning offlineEarning = new OfflineEarning(); // az offline eltöltött órákat adja vissza
 
@@ -74,7 +75,7 @@ public class DatabaseCommunication : MonoBehaviour
         byUpgradeScripts = GameObject.FindGameObjectWithTag("BatteryU").GetComponent<UpgradeButton>(); //a scriptet kiveszi az adott objektumb�l mint komponense
         holderScript = GameObject.FindGameObjectWithTag("WindowBehavior").GetComponent<HolderBehavior>(); //a scriptet kiveszi az adott objektumb�l mint komponense
         progressScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<GettingProgress>(); //a scriptet kiveszi az adott objektumb�l mint komponense
-
+        oEarningScript = GameObject.FindGameObjectWithTag("OfflineEarningsScript").GetComponent<OfflineEarning>(); //a scriptet kiveszi az adott objektumb�l mint komponense
 
 
         //ideiglenesen:
@@ -377,6 +378,7 @@ public class DatabaseCommunication : MonoBehaviour
 
     public void giveData() //feladata (a j�t�k indul�sakor) az �sszes script met�dus�t megh�vni, amelyik adatot vesz �t a ment�sb�l
     {
+        oEarningScript.proceedWithTasks();
         progresssetupAtStart();
         pbUpgradeScripts.getLevels();
         bxUpgradeScripts.getLevels();
