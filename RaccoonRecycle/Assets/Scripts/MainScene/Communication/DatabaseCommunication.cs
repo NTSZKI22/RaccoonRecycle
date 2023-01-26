@@ -63,8 +63,8 @@ public class DatabaseCommunication : MonoBehaviour
     public int BY_valueLvl;
     public int BY_speedLvl;
     public int BY_frequencyLvl;
-    
 
+    public DateTime lastSaveTime;
 
     void Start()
     {
@@ -82,7 +82,7 @@ public class DatabaseCommunication : MonoBehaviour
         userid = 0;
         StartCoroutine(getData());
        // StartCoroutine(getID());
-        giveData();
+        //giveData();
     }
 
     // Update is called once per frame
@@ -123,7 +123,7 @@ public class DatabaseCommunication : MonoBehaviour
 
                 WWWForm form = new WWWForm();
                 form.AddField("username", username);
-                var request = UnityWebRequest.Post("http://localhost:18102/api/getsave", form);
+                var request = UnityWebRequest.Post("http://188.166.166.197:18102/api/getsave", form);
                 request.SetRequestHeader("Authorization", "Bearer " + token);
                 var handler = request.SendWebRequest();
 
@@ -150,9 +150,6 @@ public class DatabaseCommunication : MonoBehaviour
                     Debug.Log("eror. getdata");
                 }
 
-                double offlineHours = offlineEarning.OfflineEarnings(DateTime.Parse(saveClass.lastSaveDate, null, System.Globalization.DateTimeStyles.RoundtripKind));
-                Debug.Log(offlineHours);
-
                 //adatok be�ll�t�sa
                 id = saveClass.usersId;
                 normalCurrency = saveClass.normalCurrency;
@@ -169,7 +166,7 @@ public class DatabaseCommunication : MonoBehaviour
                 BX_Unlocked = saveClass.bxUnlocked;
                 BX_valueLvl = saveClass.bxValue;
                 BX_speedLvl = saveClass.bxSpeed;
-                BX_frequencyLvl = saveClass.byFrequency;
+                BX_frequencyLvl = saveClass.bxFrequency;
 
                 GL_soldAmount = saveClass.glSoldAmount;
                 GL_Unlocked = saveClass.glUnlocked;
@@ -177,16 +174,22 @@ public class DatabaseCommunication : MonoBehaviour
                 GL_speedLvl = saveClass.glSpeed;
                 GL_frequencyLvl = saveClass.glFrequency;
 
-                BY_soldAmount = saveClass.glSoldAmount;
+                BY_soldAmount = saveClass.bySoldAmount;
                 BY_Unlocked = saveClass.byUnlocked;
-                BY_valueLvl = saveClass.glValue;
-                BY_speedLvl = saveClass.glSpeed;
-                BY_frequencyLvl = saveClass.glFrequency;
+                BY_valueLvl = saveClass.byValue;
+                BY_speedLvl = saveClass.bySpeed;
+                BY_frequencyLvl = saveClass.byFrequency;
+
+                lastSaveTime = DateTime.Parse(saveClass.lastSaveDate, null, System.Globalization.DateTimeStyles.RoundtripKind);
+                //lastSaveTime.AddHours(1);
 
                 Debug.Log("savedata get");
-
-                sellingScript.getCurrencieValues();
+                Debug.Log(saveClass.pbUnlocked);
+                Debug.Log(json);
                 giveData();
+                sellingScript.getCurrencieValues();
+                
+                
 
                 break;
 
@@ -238,7 +241,7 @@ public class DatabaseCommunication : MonoBehaviour
         form.AddField("normalCurrency", "" + normalCurrency);
         form.AddField("prestigeCurrency", "" + prestigeCurrency);
         form.AddField("totalEarnings", "" + totalEarnings);
-        if (GameObject.FindWithTag("petUnlock") is not null)
+        if (GameObject.FindWithTag("PetBottleU") is not null)
         {
             form.AddField("pbUnlocked", "" + 1);
         }
@@ -250,7 +253,7 @@ public class DatabaseCommunication : MonoBehaviour
         form.AddField("pbValue", "" + PB_valueLvl);
         form.AddField("pbFrequency", "" + PB_frequencyLvl);
         form.AddField("pbSpeed", "" + PB_speedLvl);
-        if (GameObject.FindWithTag("boxUnlock") is not null)
+        if (GameObject.FindWithTag("BoxU") is not null)
         {
             Debug.Log("jo");
             form.AddField("bxUnlocked", "" + 1);
@@ -263,7 +266,7 @@ public class DatabaseCommunication : MonoBehaviour
         form.AddField("bxValue", "" + BX_valueLvl);
         form.AddField("bxFrequency", "" + BX_frequencyLvl);
         form.AddField("bxSpeed", "" + BX_speedLvl);
-        if (GameObject.FindWithTag("boxUnlock") is not null)
+        if (GameObject.FindWithTag("GlassU") is not null)
         {
             form.AddField("glUnlocked", "" + 1);
         }
@@ -275,7 +278,7 @@ public class DatabaseCommunication : MonoBehaviour
         form.AddField("glValue", "" + GL_valueLvl);
         form.AddField("glFrequency", "" + GL_frequencyLvl);
         form.AddField("glSpeed", "" + GL_speedLvl);
-        if (GameObject.FindWithTag("battUnlock") is not null)
+        if (GameObject.FindWithTag("BatteryU") is not null)
         {
             Debug.Log("jo");
             form.AddField("byUnlocked", "" + 1);
@@ -288,7 +291,7 @@ public class DatabaseCommunication : MonoBehaviour
         form.AddField("byValue", "" + BY_valueLvl);
         form.AddField("byFrequency", "" + BY_frequencyLvl);
         form.AddField("bySpeed", "" + BY_speedLvl);
-        var request = UnityWebRequest.Post("http://localhost:18102/api/save", form);
+        var request = UnityWebRequest.Post("http://188.166.166.197:18102/api/save", form);
         request.SetRequestHeader("Authorization", "Bearer " + token);
         var handler = request.SendWebRequest();
 
@@ -304,7 +307,7 @@ public class DatabaseCommunication : MonoBehaviour
         }
         if (request.result == UnityWebRequest.Result.Success)
         {
-            Debug.Log(request.downloadHandler.ToString());
+            Debug.Log("Sikerült!");
         }
         else
         {
@@ -378,8 +381,10 @@ public class DatabaseCommunication : MonoBehaviour
 
     public void giveData() //feladata (a j�t�k indul�sakor) az �sszes script met�dus�t megh�vni, amelyik adatot vesz �t a ment�sb�l
     {
-        oEarningScript.proceedWithTasks();
-        progresssetupAtStart();
+        Debug.Log("dc givedata start");
+        holderScript.getData();
+        holderScript.loadedStart();
+
         pbUpgradeScripts.getLevels();
         bxUpgradeScripts.getLevels();
         glUpgradeScripts.getLevels();
@@ -387,8 +392,13 @@ public class DatabaseCommunication : MonoBehaviour
 
         sellingScript.getCurrencieValues();
 
-        holderScript.getData();
-        holderScript.loadedStart();
+        
+
+        oEarningScript.proceedWithTasks();
+        progresssetupAtStart();
+
+        Debug.Log("dc givedata");
+        Debug.Log(PB_Unlocked);
     }
 
     public void prestigeTasks()
@@ -426,16 +436,17 @@ public class DatabaseCommunication : MonoBehaviour
     {
         switch (type)
         {
-            case "PetBottle": return PB_Unlocked; break;
-            case "Box": return BX_Unlocked; break;
-            case "Glass": return GL_Unlocked; break;
-            case "Battery": return BY_Unlocked; break;
+            case "PetBottle": return PB_Unlocked; 
+            case "Box": return BX_Unlocked; 
+            case "Glass": return GL_Unlocked; 
+            case "Battery": return BY_Unlocked; 
         }
         return false;
     }
 
     void getTrashStatus()
     {
+        /*
         switch (progressScript.sendProgress())
         {
             case 0:
@@ -470,6 +481,7 @@ public class DatabaseCommunication : MonoBehaviour
                 break;
             default: Debug.Log("getTrashStats:databasecomm hiba"); break;
         }
+        */
     }
 
     void progresssetupAtStart()

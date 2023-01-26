@@ -39,8 +39,8 @@ public class HolderBehavior : MonoBehaviour
         dataScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<DatabaseCommunication>(); //a scriptet kiveszi az adott objektumból mint komponense
 
         defaultStart(); //alapértelmezett indulás
-        getData(); //adatok elkérése
-        loadedStart(); //betöltött adatokkal való indítás
+        //getData(); //adatok elkérése
+        //loadedStart(); //betöltött adatokkal való indítás
     }
 
     void Update() //képfrissítésenként lefut

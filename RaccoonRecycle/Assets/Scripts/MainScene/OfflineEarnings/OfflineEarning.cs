@@ -11,9 +11,9 @@ public class OfflineEarning : MonoBehaviour
     DatabaseCommunication dataScript; //az adatbázisból megkapott adatokat kezelő script
     Selling sellingScript; //a currency-t kezel� script
 
-    float[] values;
-    float[] frequencies;
-    bool[] unlocks;
+    float[] values = new float[5];
+    float[] frequencies = new float[5];
+    bool[] unlocks = new bool[5];
 
     float multiplierPos = 1.02f; //2%-os növekedés
     float multiplierNeg = 0.98f; //2%-os csökkenés
@@ -38,15 +38,18 @@ public class OfflineEarning : MonoBehaviour
     public float OfflineEarnings(DateTime lastSaveDate)
     {
         DateTime now = DateTime.Now;
+        now = now.AddHours(-1);
         TimeSpan? offlineHours = new TimeSpan();
         offlineHours = now.Subtract(lastSaveDate);
         if (offlineHours.Value.TotalHours > 0.15)
         {
+            Debug.Log("offline 600f");
             return 600f;
         }
         else
         {
             float offlineSeconds = (float)offlineHours.Value.TotalSeconds;
+            Debug.Log($"offline {offlineSeconds}");
             return offlineSeconds;
         }
         return 0f;
@@ -57,7 +60,7 @@ public class OfflineEarning : MonoBehaviour
         values[1] = 25 * Mathf.Pow(multiplierPos, dataScript.PB_valueLvl);
         values[2] = 50 * Mathf.Pow(multiplierPos, dataScript.BX_valueLvl);
         values[3] = 100 * Mathf.Pow(multiplierPos, dataScript.GL_valueLvl);
-        values[3] = 200 * Mathf.Pow(multiplierPos, dataScript.BY_valueLvl);
+        values[4] = 200 * Mathf.Pow(multiplierPos, dataScript.BY_valueLvl);
 
         frequencies[1] = 2 * Mathf.Pow(multiplierPos, dataScript.PB_frequencyLvl);
         frequencies[2] = 3 * Mathf.Pow(multiplierPos, dataScript.BX_frequencyLvl);
@@ -95,7 +98,8 @@ public class OfflineEarning : MonoBehaviour
     public void proceedWithTasks() //ezzel lehet majd elindítani az offline earning teask-jeit !!hiányoss
     {
         getData(); //megszerzi a szükséges adatokat
-        calculateEarning(OfflineEarnings(DateTime.Parse(dataScript.saveClass.lastSaveDate, null, System.Globalization.DateTimeStyles.RoundtripKind))); 
+        DateTime time = dataScript.lastSaveTime;
+        calculateEarning(OfflineEarnings(time)); 
         offlineEarning_Holder.SetActive(true); //láthatóvá teszi az ablakot
         Debug.Log(earnedOffline);
         text_Earning.text = sellingScript.convertCurrencyToDisplay(earnedOffline.ToString()); //megjeleníti a szerzett pénzmennyiséget

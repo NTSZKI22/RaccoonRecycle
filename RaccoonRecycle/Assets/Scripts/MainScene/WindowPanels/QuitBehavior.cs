@@ -1,6 +1,7 @@
 using Classes;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -8,6 +9,7 @@ using UnityEngine.Networking;
 public class QuitBehavior : MonoBehaviour
 {
     private static string username;
+    private static string token;
 
 
     void Update()
@@ -42,9 +44,22 @@ public class QuitBehavior : MonoBehaviour
         {
             username = ForgottenPassword.localUserName;
         }
+        if (Register.token != null)
+        {
+            token = Register.token;
+        }
+        else if (Login.token != null)
+        {
+            token = Login.token;
+        }
+        else if (ForgottenPassword.token != null)
+        {
+            token = ForgottenPassword.token;
+        }
         WWWForm form = new WWWForm();
         form.AddField("username", username);
-        var request = UnityWebRequest.Post("http://188.166.166.197:18102/api/updatestatus", form);
+        var request = UnityWebRequest.Post("http://188.166.166.197:18102/api/updateuser", form);
+        request.SetRequestHeader("Authorization", "Bearer " + token);
         var handler = request.SendWebRequest();
 
         float startTime = 0f;
