@@ -1,0 +1,53 @@
+amikbe at kell venni adatokat: selling, AchivementController
+
+uj adatok:
+float normalCurrency_spent      -> achievementcontroller
+	def: 0
+
+float prestigeCurrency_spent    -> achievementcontroller
+	def: 0
+
+int gemCurrency			-> selling
+	def: 0
+
+string[] achievementProgress	-> achivementcontroller
+	def: { "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0" }
+	22 x "0_0"    0-21
+
+int itemLvl_1			-> gemshopbehavior
+	def: 0
+
+int itemLvl_2			-> gemshopbehavior
+	def: 0
+
+int itemLvl_3			-> gemshopbehavior
+	def:0
+
+
+hatralevo teendok (Reka):
+achievement controller: getData() kiegeszitese, giveData() írása achievementProgress visszaadására
+selling: Update() kiegeszitese az uj adatokkal (loadcurrency) -> gemcurrency, normalcurrency_spent, prestigcurrency_spent
+gemshopbehavior -> az itemLvl-ek adni es kapni tudja majd
+databaseCommunication: 
+	az uj adatokkal kiegesziteni -> betolteni, adni, kapni, menteni rendesen tudjon
+
+itemLvl3 szintje befolyasolja a prestige-kor kapott currency mennyiseget
+	0->0
+	1->50%
+	2->100%
+
+itemLvl2 befolyasolja a trash-ek értékét
+	0->0
+	1->25%
+	2->50%
+	3->75%
+	4->100%
+	5->125%
+
+itemLvl1 befolyasolja az offline earning-et
+	0-> 15p
+	1-> 30p
+	2-> 1ó
+	3-> 1,5ó
+
+offline earning: alapból csökkenteni az offline kapott currency mennyiségét 70%-ra

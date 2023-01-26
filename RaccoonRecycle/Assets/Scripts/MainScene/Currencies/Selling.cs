@@ -19,10 +19,16 @@ public class Selling : MonoBehaviour
     public float defaultValue; //a szemetek alapértelmezett értéke
     float multiplier; //a szemetek értékéhez használt szorzó
 
+    int gemCurrency;
+    float normalCurrency_spent;
+    float prestigeCurrency_spent;
+
+    public Text gcDisplay;
 
     void Start() //a játék elindulásánál lefut
     {
         dataScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<DatabaseCommunication>(); //a scriptet kiveszi az adott objektumból mint komponense
+        gemCurrency = 0;
 
         defaultValue = 10; //alapértelmezett érték beállítása
         multiplier = 1.05f; //a szorzó alap értékének beállítása 5%-os növekedés
@@ -45,10 +51,15 @@ public class Selling : MonoBehaviour
     {
         ncDisplay.text = convertCurrencyToDisplay(normalCurrency.ToString()); //ncdisplay étékét az átalakítottt normalcurrency-vé állítja
         pcDisplay.text = convertCurrencyToDisplay(prestigeCurrency.ToString()); //pcdisplay étékét az átalakítottt prestigecurrency-vé állítja
+        gcDisplay.text = convertCurrencyToDisplay(gemCurrency.ToString()); //pcdisplay étékét az átalakítottt prestigecurrency-vé állítja
     }
 
-
     //public methods: 
+
+    public void claimedAchievement(int reward)
+    {
+        gemCurrency += reward;
+    }
 
     public void normalSelling() //metódus, más scriptek és objektumok által is meghívható, mely a default seller által történõ eladáskor fut le
     {
@@ -72,6 +83,15 @@ public class Selling : MonoBehaviour
     public bool isEnoughPrestigeCurrency(float n) //metódus, meghívásával igaz v hamis értéket ad vissza arról, hogy van-e ellég prestigecurrency a fejlesztésre
     {
         if (prestigeCurrency > n || prestigeCurrency == n) //ha több vagy egyenlõ
+        {
+            return true; //igaz
+        }
+        return false; //hamis
+    }
+
+    public bool isEnoughGemCurrency(float n) //metódus, meghívásával igaz v hamis értéket ad vissza arról, hogy van-e ellég prestigecurrency a fejlesztésre
+    {
+        if (gemCurrency > n || gemCurrency == n) //ha több vagy egyenlõ
         {
             return true; //igaz
         }
@@ -127,11 +147,18 @@ public class Selling : MonoBehaviour
     public void boughtUpgradeNormal(float n) //metódus, meghívva és átadva neki az n-t, levonja az n mennyiségét a normalcurrency-bõl
     {
         normalCurrency -= n; //normalcurrency-bõl kivonja az n értékét
+        normalCurrency_spent += n;
     }
 
     public void boughtUpgradePrestige(float n) //metódus, meghívva és átadva neki az n-t, levonja az n mennyiségét a prestigecurrency-bõl
     {
         prestigeCurrency -= n; //pretigecurrency-bõl kivonja az n értékét
+        prestigeCurrency_spent += n;
+    }
+
+    public void boughtGemshop(int n) //metódus, meghívva és átadva neki az n-t, levonja az n mennyiségét a prestigecurrency-bõl
+    {
+        gemCurrency -= n; //pretigecurrency-bõl kivonja az n értékét
     }
 
     public void getCurrencieValues() //metódus, feladata megszerezni a normal es prestige currency elmentett mennyiségét
