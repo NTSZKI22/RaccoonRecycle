@@ -12,51 +12,6 @@
 
 0_0  -> a_b
 
-for i
-	switch(i)
-		case: 6, 7, 8, 9, 10, 11, 12, 13, 14
-			switch(a)
-				case 0: kiir szovegek[i]
-				case 1
-					switch(b)
-						case 0: szovg(i 
-						case 1
-		case 0, 2, 3, 15, 16, 17, 18, 20, 21, 22
-			szovg (i, x[b])
-
-
-string szovg(int index, float behelyett)
-	string vissza = sovegek[index]
-	switch(index)
-		case: 0, 1, 2, 3, 15, 16, 17, 18
-			st = vissza.split(" "),  st[2] = behelyett(kiirhato formaban), st[]->vissza
-			return vissza;
-		case: 4
-			st = vissza.split(" "),  st[3] = behelyett(kiirhato formaban), st[]->vissza
-			return vissza;
-		case: 5
-			st = vissza.split(" "),  st[5] = behelyett(kiirhato formaban), st[]->vissza
-			return vissza;
-		case: 19, 20, 21, 22
-			st = vissza.split(" "),  st[6] = behelyett(kiirhato formaban), st[]->vissza
-			return vissza;
-
-button toable{
-		if a>b
- 		button elérhető
-
-		button lenyomva ++
-
-		a=b button nem elérhető
-
-		achievmet toable -> a++
-
-achievment toable
-	for i
-		switch(i)
-			case 1: totalearning> x[n]   a->n
-
-
 
 (7) 0:  Earn x Raccoins in total
 (4) 1:  Have c Racoonium

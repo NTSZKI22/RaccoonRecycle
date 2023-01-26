@@ -29,6 +29,7 @@ TagManager:
   - BatteryU
   - SliderMarker
   - OfflineEarningsScript
+  - AchivementScript
   layers:
   - Default
   - TransparentFX
