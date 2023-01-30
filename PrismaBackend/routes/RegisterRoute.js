@@ -57,6 +57,11 @@ module.exports = app => {
                             byValue: 0,
                             byFrequency: 0,
                         }
+                    },
+                    Achievements: {
+                        create: {
+                            
+                        }
                     }
                 }
             })

@@ -11,14 +11,15 @@ datasource db {
 }
 
 model Users {
-  id                String   @id @default(auto()) @map("_id") @db.ObjectId
-  username          String   @unique
-  email             String   @unique
-  password          String   @unique
-  lastAuthenticated DateTime @default(now())
+  id                String         @id @default(auto()) @map("_id") @db.ObjectId
+  username          String         @unique
+  email             String         @unique
+  password          String         @unique
+  lastAuthenticated DateTime       @default(now())
   registeredAt      String
   isOnline          Boolean
   saves             Saves[]
+  Achievements      Achievements[]
 }
 
 model Saves {
@@ -51,8 +52,21 @@ model Saves {
   byFrequency      Int
 }
 
+model Achievements {
+  id                     String   @id @default(auto()) @map("_id") @db.ObjectId
+  normalCurrency_spent   Float    @default(0)
+  prestigeCurrency_spent Float    @default(0)
+  gemCurrency            Int      @default(0)
+  achievementProgress    String[] @default(["0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0"])
+  itemLvl_1              Int      @default(0)
+  itemLvl_2              Int      @default(0)
+  itemLvl_3              Int      @default(0)
+  User                   Users?   @relation(fields: [usersId], references: [id])
+  usersId                String?  @db.ObjectId
+}
+
 model Logs {
-  id      String      @id @default(auto()) @map("_id") @db.ObjectId
+  id      String   @id @default(auto()) @map("_id") @db.ObjectId
   message String
   madeBy  String
   madeAt  DateTime @default(now())

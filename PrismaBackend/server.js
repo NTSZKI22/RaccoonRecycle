@@ -18,7 +18,9 @@ app.use(cors({
     require('./routes/UpdateUserRoute')(app)
     require('./routes/ListOnlineUsersRoute')(app)
     require('./routes/GetSaveIDRoute')(app)
-    require('./routes/SaveRoute') 
+    require('./routes/SaveRoute') (app)
+    require('./routes/GetAchievementsRoute')(app)
+    require('./routes/SetAchievementsRoute')(app)
 
 
     app.listen(port, () => {
