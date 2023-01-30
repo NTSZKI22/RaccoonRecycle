@@ -71,7 +71,7 @@ public class AchivementHolderBehavior : MonoBehaviour
 
     void toAble()
     {
-        if (a > b)
+        if (a!=0 && (a > b || a == b))
         {
             button_Achiv_Claim.interactable = true;
         }
@@ -99,6 +99,10 @@ public class AchivementHolderBehavior : MonoBehaviour
         {
             text_Achiv_Reward.text = rewards[b].ToString();
         }
+        if (max)
+        {
+            text_Achiv_Reward.text = "";
+        }
         text_Achiv_Text.text = kiir;
 
     }
@@ -106,15 +110,11 @@ public class AchivementHolderBehavior : MonoBehaviour
     void maxolt()
     {
         int hossz = rewards.Length;
-        if( a==b && a==hossz && b == hossz)
+        int hossz2 = placeholders.Length;
+        if( b==hossz || b == hossz2)
         {
             max = true;
             holder.SetActive(false);
-        }
-        else
-        {
-            holder.SetActive(true);
-            max = false;
         }
     }
 }

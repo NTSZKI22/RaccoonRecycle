@@ -56,7 +56,7 @@ public class Path : MonoBehaviour
 
         if(other.gameObject.tag == "Seller_PB" || other.gameObject.tag == "Seller_BX" || other.gameObject.tag == "Seller_GL" || other.gameObject.tag == "Seller_BY") //ha a végleges sellerrel ütközik
         { 
-            sellingScript.soldTrashType(propertiesScript.value()); //meghívja a sellingscript soldtrashtype metódusát átadva neki a value tolajdonságot az aktuális szeméttõl
+            sellingScript.soldTrash(propertiesScript.value()); //meghívja a sellingscript soldtrashtype metódusát átadva neki a value tolajdonságot az aktuális szeméttõl
             dataScript.earningIncrease(gameObject.tag, propertiesScript.value()); //növeli az adott szeméttípussal szerzett bevételt
             incomeScript.showIncome(propertiesScript.value(), other.gameObject.transform.position);
             Destroy(gameObject); //törli a szemét objektumot

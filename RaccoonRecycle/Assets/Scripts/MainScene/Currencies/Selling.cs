@@ -25,6 +25,10 @@ public class Selling : MonoBehaviour
 
     public Text gcDisplay;
 
+    public int itemLvl_2;
+    int itemLvl_3;
+
+
     void Start() //a játék elindulásánál lefut
     {
         dataScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<DatabaseCommunication>(); //a scriptet kiveszi az adott objektumból mint komponense
@@ -37,8 +41,10 @@ public class Selling : MonoBehaviour
 
     void Update() //minden képfrissítésnél lefut
     {
+        itemLvl_3 = dataScript.itemLvl_3;
+        itemLvl_2 = dataScript.itemLvl_2;
         displayCurrency(); //meghívja a metódust
-        dataScript.loadCurreny(normalCurrency, prestigeCurrency, totalearnings);  //a normal, presstigecurrency és totalearnings értékeit visszaadja a datascript-nek
+        dataScript.loadCurreny(normalCurrency, prestigeCurrency, totalearnings, gemCurrency, normalCurrency_spent, prestigeCurrency_spent);  //a normal, presstigecurrency és totalearnings értékeit visszaadja a datascript-nek
     }
 
     void addCurrency(float n) //metódus, növeli a currencyk mennyiségét
@@ -66,7 +72,20 @@ public class Selling : MonoBehaviour
         addCurrency(defaultValue); //a szemetek alap értékét átadva meghívjuk az addCurrency-t
     }
 
-    public void soldTrashType(float amount) //bármilyen fix szemét eladásakor hívódik, majd fut le, növelli a normalcurrency értékét
+    public void soldTrash(float amount) //bármilyen fix szemét eladásakor hívódik, majd fut le, növelli a normalcurrency értékét
+    {
+        switch (itemLvl_2)
+        {
+            case 0: addCurrency(amount); break;
+            case 1: addCurrency(amount*1.25f); break;
+            case 2: addCurrency(amount*1.5f); break;
+            case 3: addCurrency(amount*1.75f); break;
+            case 4: addCurrency(amount*2f); break;
+            case 5: addCurrency(amount*2.25f); break;
+        }
+    }
+
+    public void increaseMoney(float amount) //bármilyen fix szemét eladásakor hívódik, majd fut le, növelli a normalcurrency értékét
     {
         addCurrency(amount);  //a megkapott mennyiséget átadva meghívjuk az addCurrency-t
     }
@@ -167,11 +186,21 @@ public class Selling : MonoBehaviour
         normalCurrency = dataScript.normalCurrency;
         prestigeCurrency = dataScript.prestigeCurrency;
         totalearnings = dataScript.totalEarnings;
+        gemCurrency = dataScript.gemCurrency;
+        normalCurrency_spent = dataScript.normalCurrency_spent;
+        prestigeCurrency_spent = dataScript.prestigeCurrency_spent;
     }
 
     public float prestigeEarning() //feladata visszaadni az aktuálisan megkapható prestigecurrency mennyiségét
     {
+        switch (itemLvl_3)
+        {
+            case 1: return totalearnings / 100 * 1.5f;
+            case 2: return totalearnings / 100 * 2;
+            default: return totalearnings / 100;
+        }
         return totalearnings / 100;
+
     }
 
     public void prestigeTasks() //feladata a prestige során elvégezendõ feladatokat végrehajtani

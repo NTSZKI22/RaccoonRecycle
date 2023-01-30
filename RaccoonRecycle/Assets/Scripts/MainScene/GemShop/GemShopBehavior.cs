@@ -9,6 +9,8 @@ public class GemShopBehavior : MonoBehaviour
                            //isEnoughGemCurrency
                            //boughtGemshop
 
+    DatabaseCommunication dataScript; //az adatbázisból megkapott adatokat kezelõ script
+
     public Text text_Item_Text_1;
     public Text text_Item_Cost_1;
     public Text text_Item_Details_1;
@@ -38,6 +40,7 @@ public class GemShopBehavior : MonoBehaviour
     void Start()
     {
         sellingScript = GameObject.FindGameObjectWithTag("SellingScript").GetComponent<Selling>(); //a scriptet kiveszi az adott objektumból mint komponense
+        dataScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<DatabaseCommunication>(); //a scriptet kiveszi az adott objektumból mint komponense
 
         text_Item_Text_1.text = "Offline earning upgrade";
         Button btn_Buy_1 = button_Item_Buy_1.GetComponent<Button>();
@@ -64,6 +67,13 @@ public class GemShopBehavior : MonoBehaviour
     {
         showText();
         toAble();
+    }
+
+    public void getData()
+    {
+        itemLvl_1 = dataScript.itemLvl_1;
+        itemLvl_2 = dataScript.itemLvl_2;
+        itemLvl_3 = dataScript.itemLvl_3;
     }
 
     void showText()
@@ -132,18 +142,21 @@ public class GemShopBehavior : MonoBehaviour
     public void bought1()
     {
         sellingScript.boughtGemshop(cost_1[itemLvl_1]); 
-        itemLvl_1++; 
+        itemLvl_1++;
+        dataScript.itemLvl_1 = itemLvl_1;
     }
 
     public void bought2()
     {
         sellingScript.boughtGemshop(cost_2[itemLvl_2]);
         itemLvl_2++;
+        dataScript.itemLvl_2 = itemLvl_2;
     }
 
     public void bought3()
     {
         sellingScript.boughtGemshop(cost_3[itemLvl_3]);
         itemLvl_3++;
+        dataScript.itemLvl_3 = itemLvl_3;
     }
 }

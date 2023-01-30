@@ -1,10 +1,13 @@
-using System.Collections;
+Ôªøusing System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class AchivementController : MonoBehaviour
 {
+    DatabaseCommunication dataScript; //az adatb√°zisb√≥l megkapott adatokat kezel≈ë script
+    Selling sellingScript; //a currency-t kezelÔøΩ script
+
     string[] x = new string[] { "100", "1000", "10K", "100K", "1M", "10M", "100M" };
     string[] c = new string[] { "10K", "100K", "1M", "10M" };
     string[] y = new string[] { "10", "20", "30", "40", "50", "60", "70", "76(max)" };
@@ -37,7 +40,7 @@ public class AchivementController : MonoBehaviour
         "6 Upgrade the Battery value to n Raccoins"
     };
 
-    //kezdetbeli deklar·ciÛ
+    //kezdetbeli deklar√°ci√≥
     string[] achievementProgress = new string[] { "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0" };
 
     public GameObject notificationDot;
@@ -46,7 +49,7 @@ public class AchivementController : MonoBehaviour
     public GameObject notificationWindow;
     public GameObject parent;
 
-    float multiplierPos = 1.02f; //2%-os nˆvekedÈs
+    float multiplierPos = 1.02f; //2%-os n√∂veked√©s
 
     //database-bol
     float normalCurrency;
@@ -91,6 +94,9 @@ public class AchivementController : MonoBehaviour
 
     void Start()
     {
+        dataScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<DatabaseCommunication>(); //a scriptet kiveszi az adott objektumb√≥l mint komponense
+        sellingScript = GameObject.FindGameObjectWithTag("SellingScript").GetComponent<Selling>(); //a scriptet kiveszi az adott objektumbÔøΩl mint komponense
+
         //testingData();
         PB_defValue = 25;
         BX_defValue = 50;
@@ -138,23 +144,64 @@ public class AchivementController : MonoBehaviour
     {
         getData();
         refreshAchievments();
+        returnData();
         notifyDot();
     }
 
-    void getData()
+    public void getData()
     {
-        //itt fogja majd folyamatosan meszerezni az adatokat
+        achievementProgress = dataScript.achievementProgress;
+
+        normalCurrency = dataScript.normalCurrency;
+        prestigeCurrency = dataScript.prestigeCurrency;
+        totalEarnings = dataScript.totalEarnings;
+        normalCurrency_spent = dataScript.normalCurrency_spent;
+        prestigeCurrency_spent = dataScript.prestigeCurrency_spent;
+
+        PB_soldAmount = dataScript.PB_soldAmount;
+        PB_Unlocked = dataScript.giveTrashStatus("PetBottle");
+        PB_valueLvl = dataScript.PB_valueLvl;
+        PB_speedLvl = dataScript.PB_speedLvl;
+        PB_frequencyLvl = dataScript.PB_frequencyLvl;
+
+        BX_soldAmount = dataScript.BX_soldAmount;
+        BX_Unlocked = dataScript.giveTrashStatus("Box");
+        BX_valueLvl = dataScript.BX_valueLvl;
+        BX_speedLvl = dataScript.BX_speedLvl;
+        BX_frequencyLvl = dataScript.BX_frequencyLvl;
+
+        GL_soldAmount = dataScript.GL_soldAmount;
+        GL_Unlocked = dataScript.giveTrashStatus("Glass");
+        GL_valueLvl = dataScript.GL_valueLvl;
+        GL_speedLvl = dataScript.GL_speedLvl;
+        GL_frequencyLvl = dataScript.GL_frequencyLvl;
+
+        BY_soldAmount = dataScript.BY_soldAmount;
+        BY_Unlocked = dataScript.giveTrashStatus("Battery");
+        BY_valueLvl = dataScript.BY_valueLvl;
+        BY_speedLvl = dataScript.BY_speedLvl;
+        BY_frequencyLvl = dataScript.BY_frequencyLvl;
     }
 
     void notifyDot()
     {
+        Debug.Log(" ");
         int count = 0;
         for (int i = 0; i < achievementProgress.Length; i++)
         {
-            string[] st = achievementProgress[i].Split("_");
-            if (int.Parse(st[0])> int.Parse(st[1]))
+            string[] ab = achievementProgress[i].Split("_");
+            if (int.Parse(ab[0]) !=0 && (int.Parse(ab[0]) > int.Parse(ab[1]) || int.Parse(ab[0]) == int.Parse(ab[1])))
             {
-                count++;
+                if(i == 6 || i== 7 || i== 8 || i==9 || i==10 || i== 11 || i== 12 || i==13 || i== 14)
+                {
+                    if (achievementProgress[i].Equals("1_0"))
+                    {
+                        count++;
+                    }
+                }else if (!achievementProgress[i].Equals("0_0"))
+                {
+                    count++;
+                }
             }
         }
         if (count > 0)
@@ -239,6 +286,11 @@ public class AchivementController : MonoBehaviour
         achievementProgress[index] = $"{ab[0]}_{b}";
     }
 
+    public void returnData()
+    {
+        dataScript.achievementProgress = achievementProgress;
+    }
+
     void refreshAchievments()
     {
         Achievement_General(0, new int[] { 100, 1000, 10000, 100000, 1000000, 10000000, 100000000 }, totalEarnings); //Earn x Raccoins in total
@@ -247,7 +299,7 @@ public class AchivementController : MonoBehaviour
         Achievement_General(3, new int[] { 100, 1000, 10000, 100000, 1000000, 10000000, 100000000 }, prestigeCurrency_spent); //Spend x Racoonium
 
         Achievement_Any(4, new int[] { 10, 20, 30, 40, 50, 60, 70, 76 },
-            new int[] { PB_valueLvl, PB_speedLvl, PB_frequencyLvl, BX_valueLvl, BX_speedLvl, BX_frequencyLvl, GL_valueLvl, GL_speedLvl, GL_frequencyLvl, BY_valueLvl, BY_speedLvl, BY_frequencyLvl }); //Reach level y with any upgrades
+            new int[] { PB_valueLvl, PB_speedLvl, PB_frequencyLvl, BX_valueLvl, BX_speedLvl, BX_frequencyLvl, GL_valueLvl, GL_speedLvl, GL_frequencyLvl, BY_valueLvl, BY_speedLvl, BY_frequencyLvl}); //Reach level y with any upgrades
         Achievement_All(5, new int[] { 10, 25, 50, 100, 150, 200, 300, 400, 500 },
             new int[] { PB_valueLvl, PB_speedLvl, PB_frequencyLvl, BX_valueLvl, BX_speedLvl, BX_frequencyLvl, GL_valueLvl, GL_speedLvl, GL_frequencyLvl, BY_valueLvl, BY_speedLvl, BY_frequencyLvl }); //Reach a total of z level with upgrades
         Achievement_Any(6, new int[] { 76 },
@@ -274,37 +326,46 @@ public class AchivementController : MonoBehaviour
         Achievement_value(22, new int[] { 300, 400, 500, 600, 700, 800, 900 }, BY_valueLvl, BY_defValue); //Upgrade the Battery value to n Raccoins
     }
 
-    void Achievement_General(int AchNumber, int[] requirements, float control) //achnumber -> achievment sz·ma, requirements -> sz·mok amikre ellenırzi, control-> a sz·m amit a requirements-hez hasonlÌt
+    void Achievement_General(int AchNumber, int[] requirements, float control) //achnumber -> achievment sz√°ma, requirements -> sz√°mok amikre ellen≈ërzi, control-> a sz√°m amit a requirements-hez hasonl√≠t
     {
         int a = 0;
         for (int i = 0; i < requirements.Length; i++)
         {
-            if (control > requirements[i])
+            //Debug.Log($"{AchNumber}:    control:{control}   req: {requirements[i]} i:{i}");
+            if ((control > requirements[i]) || (control == requirements[i]))
             {
                 a = i;
+                //Debug.Log($"{AchNumber}:    true");
+            }
+            else
+            {
+                //Debug.Log($"{AchNumber}:    false");
             }
         }
         string[] ab = achievementProgress[AchNumber].Split("_");
+        //Debug.Log($"{a} > {int.Parse(ab[0])}");
         if (a > int.Parse(ab[0]))
         {
             notifyWindow();
             achievementProgress[AchNumber] = $"{a}_{ab[1]}";
-           // Debug.Log($"{ AchNumber}:    {a}_{ab[1]}");
+            //Debug.Log($"{ AchNumber}:    {a}_{ab[1]}");
         }
     }
 
-    void Achievement_Any(int AchNumber, int[] requirements, int[] controls) //achnumber -> achievment sz·ma, requirements -> sz·mok amikre ellenırzi, control-> a sz·mok amit a requirements-hez hasonlÌt / legal·bb egyik jÛ legyen
+    void Achievement_Any(int AchNumber, int[] requirements, int[] controls) //achnumber -> achievment sz√°ma, requirements -> sz√°mok amikre ellen≈ërzi, control-> a sz√°mok amit a requirements-hez hasonl√≠t / legal√°bb egyik j√≥ legyen
     {
         int a = 0;
         bool van = false;
-        for (int i = 0; i < requirements.Length; i++)
+        for (int i = 0; i < controls.Length; i++)
         {
-            for (int j = 0; j < controls.Length; j++)
+            for (int j = 0; j < requirements.Length; j++)
             {
-                if (controls[j] > requirements[i])
+                if ( (controls[i] > requirements[j] || controls[i] == requirements[j]))
                 {
-                    a = i;
+                    van = true;
+                    a = Mathf.Max(a, j);
                 }
+
             }
         }
         string[] ab = achievementProgress[AchNumber].Split("_");
@@ -312,11 +373,11 @@ public class AchivementController : MonoBehaviour
         {
             notifyWindow();
             achievementProgress[AchNumber] = $"{a}_{ab[1]}";
-          //  Debug.Log($"{AchNumber}:    {a}_{ab[1]}");
+            //Debug.Log($"{AchNumber}:    {a}_{ab[1]}");
         }
     }
 
-    void Achievement_All(int AchNumber, int[] requirements, int[] controls) //achnumber -> achievment sz·ma, requirements -> sz·mok amikre ellenırzi, control-> a sz·mok amik ˆsszegÈt a requirements-hez hasonlÌtja
+    void Achievement_All(int AchNumber, int[] requirements, int[] controls) //achnumber -> achievment sz√°ma, requirements -> sz√°mok amikre ellen≈ërzi, control-> a sz√°mok amik √∂sszeg√©t a requirements-hez hasonl√≠tja
     {
         int a = 0;
         int sum = 0;
@@ -340,7 +401,7 @@ public class AchivementController : MonoBehaviour
         }
     }
 
-    void Achievement_MaxFull(int AchNumber, int requirement, int[] controls) //achnumber -> achievment sz·ma, requirement -> elÈrendı feltÈtel, control-> a sz·mok amiket ellenıriz, osszesnek meg kell felelnie
+    void Achievement_MaxFull(int AchNumber, int requirement, int[] controls) //achnumber -> achievment sz√°ma, requirement -> el√©rend≈ë felt√©tel, control-> a sz√°mok amiket ellen≈ëriz, osszesnek meg kell felelnie
     {
         int a = 1;
         int count = 0;
@@ -363,7 +424,7 @@ public class AchivementController : MonoBehaviour
         }
     }
 
-    void Achivement_True(int AchNumber, bool control) //achnumber -> achievment sz·ma, control-> megnÈzi h igaz-e
+    void Achivement_True(int AchNumber, bool control) //achnumber -> achievment sz√°ma, control-> megn√©zi h igaz-e
     {
         if (control)
         {
@@ -377,7 +438,7 @@ public class AchivementController : MonoBehaviour
         }
     }
 
-    void Achievement_value(int AchNumber, int[] requirements, int control, float defValue)  //achnumber -> achievment sz·ma, requirements -> sz·mok amikre ellenırzi, control -> szintje a value-nak, defValue-> alap ÈrtÈke a szemÈtnek
+    void Achievement_value(int AchNumber, int[] requirements, int control, float defValue)  //achnumber -> achievment sz√°ma, requirements -> sz√°mok amikre ellen≈ërzi, control -> szintje a value-nak, defValue-> alap √©rt√©ke a szem√©tnek
     {
         float value = defValue * Mathf.Pow(multiplierPos, control);
         int a = 0;

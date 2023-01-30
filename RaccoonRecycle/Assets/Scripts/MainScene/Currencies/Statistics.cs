@@ -27,6 +27,8 @@ public class Statistics : MonoBehaviour
 
     float multiplier; //szorzó
 
+    int itemLvl_2;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -40,25 +42,37 @@ public class Statistics : MonoBehaviour
     void Update()
     {
         displayData(); //elindítja a displaydata-t
+        itemLvl_2 = dataScript.itemLvl_2;
     }
 
     void displayData() //feladata megjeleníteni az adatokat
     {
+        float szorzo = 1;
+        switch (itemLvl_2)
+        {
+            case 0: szorzo = szorzo; break;
+            case 1: szorzo = 1.25f; break;
+            case 2: szorzo = 1.5f; break;
+            case 3: szorzo = 1.75f; break;
+            case 4: szorzo = 2f; break;
+            case 5: szorzo = 2.25f; break;
+        }
+
         //a szövegmezõk értékei a datascript-bõl kivett adatok, melyeket elõtte megjeleníthetõ formába alakítunk
         text_Nc.text = sellingScript.convertCurrencyToDisplay(dataScript.normalCurrency.ToString());
         text_Pc.text = sellingScript.convertCurrencyToDisplay(dataScript.prestigeCurrency.ToString());
         text_Te.text = sellingScript.convertCurrencyToDisplay(dataScript.totalEarnings.ToString());
 
-        text_PBValue.text = sellingScript.convertCurrencyToDisplay((25 * Mathf.Pow(multiplier, dataScript.PB_valueLvl)).ToString());
+        text_PBValue.text = sellingScript.convertCurrencyToDisplay((25 * Mathf.Pow(multiplier, dataScript.PB_valueLvl) * szorzo).ToString());
         text_PBEarnings.text = sellingScript.convertCurrencyToDisplay(dataScript.PB_soldAmount.ToString());
 
-        text_BXValue.text = sellingScript.convertCurrencyToDisplay((50 * Mathf.Pow(multiplier, dataScript.BX_valueLvl)).ToString());
+        text_BXValue.text = sellingScript.convertCurrencyToDisplay((50 * Mathf.Pow(multiplier, dataScript.BX_valueLvl) * szorzo).ToString());
         text_BXEarnings.text = sellingScript.convertCurrencyToDisplay(dataScript.BX_soldAmount.ToString());
 
-        text_GLValue.text = sellingScript.convertCurrencyToDisplay((100 * Mathf.Pow(multiplier, dataScript.GL_valueLvl)).ToString());
+        text_GLValue.text = sellingScript.convertCurrencyToDisplay((100 * Mathf.Pow(multiplier, dataScript.GL_valueLvl) * szorzo).ToString());
         text_GLEarnings.text = sellingScript.convertCurrencyToDisplay(dataScript.GL_soldAmount.ToString());
 
-        text_BYValue.text = sellingScript.convertCurrencyToDisplay((200 * Mathf.Pow(multiplier, dataScript.BY_valueLvl)).ToString());
+        text_BYValue.text = sellingScript.convertCurrencyToDisplay((200 * Mathf.Pow(multiplier, dataScript.BY_valueLvl) * szorzo).ToString());
         text_BYEarnings.text = sellingScript.convertCurrencyToDisplay(dataScript.BY_soldAmount.ToString());
     }
 }

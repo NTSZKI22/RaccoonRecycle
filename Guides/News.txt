@@ -1,10 +1,10 @@
 amikbe at kell venni adatokat: selling, AchivementController
 
 uj adatok:
-float normalCurrency_spent      -> achievementcontroller
+float normalCurrency_spent      -> achievementcontroller, selling
 	def: 0
 
-float prestigeCurrency_spent    -> achievementcontroller
+float prestigeCurrency_spent    -> achievementcontroller, selling
 	def: 0
 
 int gemCurrency			-> selling
@@ -25,11 +25,6 @@ int itemLvl_3			-> gemshopbehavior
 
 
 hatralevo teendok (Reka):
-achievement controller: getData() kiegeszitese, giveData() írása achievementProgress visszaadására
-selling: Update() kiegeszitese az uj adatokkal (loadcurrency) -> gemcurrency, normalcurrency_spent, prestigcurrency_spent
-gemshopbehavior -> az itemLvl-ek adni es kapni tudja majd
-databaseCommunication: 
-	az uj adatokkal kiegesziteni -> betolteni, adni, kapni, menteni rendesen tudjon
 
 itemLvl3 szintje befolyasolja a prestige-kor kapott currency mennyiseget
 	0->0

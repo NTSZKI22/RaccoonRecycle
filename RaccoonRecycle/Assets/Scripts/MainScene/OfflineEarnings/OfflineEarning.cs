@@ -22,6 +22,8 @@ public class OfflineEarning : MonoBehaviour
     public Button button_Confirm;
     public GameObject offlineEarning_Holder;
 
+    int itemLvl_1;
+
     //def value - 10
     //pb - 25, bx - 50, gl - 100, by - 200 -> value
     //pb - 2, bx - 3, gl - 4, by - 6 -> frequency
@@ -35,24 +37,72 @@ public class OfflineEarning : MonoBehaviour
         proceedWithTasks();
     }
 
+
     public float OfflineEarnings(DateTime lastSaveDate)
     {
         DateTime now = DateTime.Now;
         now = now.AddHours(-1);
         TimeSpan? offlineHours = new TimeSpan();
         offlineHours = now.Subtract(lastSaveDate);
-        if (offlineHours.Value.TotalHours > 0.15)
+
+        switch (itemLvl_1)
         {
-            Debug.Log("offline 600f");
-            return 600f;
+            case 0:
+                if (offlineHours.Value.TotalHours > 0.25)
+                {
+                    Debug.Log("offline 600f");
+                    return 600f;
+                }
+                else
+                {
+                    float offlineSeconds = (float)offlineHours.Value.TotalSeconds;
+                    Debug.Log($"offline {offlineSeconds}");
+                    return offlineSeconds;
+                }
+                return 0f;
+            case 1:
+                if (offlineHours.Value.TotalHours > 0.5)
+                {
+                    Debug.Log("offline 1800f");
+                    return 1800f;
+                }
+                else
+                {
+                    float offlineSeconds = (float)offlineHours.Value.TotalSeconds;
+                    Debug.Log($"offline {offlineSeconds}");
+                    return offlineSeconds;
+                }
+                return 0f;
+            case 2:
+                if (offlineHours.Value.TotalHours > 1)
+                {
+                    Debug.Log("offline 3600f");
+                    return 3600f;
+                }
+                else
+                {
+                    float offlineSeconds = (float)offlineHours.Value.TotalSeconds;
+                    Debug.Log($"offline {offlineSeconds}");
+                    return offlineSeconds;
+                }
+                return 0f;
+            case 3:
+                if (offlineHours.Value.TotalHours > 1.5)
+                {
+                    Debug.Log("offline 5400f");
+                    return 5400f;
+                }
+                else
+                {
+                    float offlineSeconds = (float)offlineHours.Value.TotalSeconds;
+                    Debug.Log($"offline {offlineSeconds}");
+                    return offlineSeconds;
+                }
+                return 0f;
         }
-        else
-        {
-            float offlineSeconds = (float)offlineHours.Value.TotalSeconds;
-            Debug.Log($"offline {offlineSeconds}");
-            return offlineSeconds;
-        }
+
         return 0f;
+
     }
 
     public void getData() //megszerzi az adatokat a datascriptből
@@ -71,6 +121,8 @@ public class OfflineEarning : MonoBehaviour
         unlocks[2] = dataScript.giveTrashStatus("Box");
         unlocks[3] = dataScript.giveTrashStatus("Glass");
         unlocks[4] = dataScript.giveTrashStatus("Battery");
+
+        itemLvl_1 = dataScript.itemLvl_1;
     }
 
     float calculateEarning(float time) //kiszámolja az offline szerzett currency-t
@@ -79,16 +131,16 @@ public class OfflineEarning : MonoBehaviour
         {
             if (unlocks[i])
             {
-                earnedOffline += time / frequencies[i] * values[i];
+                earnedOffline += time / frequencies[i] * values[i] * 0.7f;
             }
             else
             {
                 switch (i)
                 {
-                    case 1: earnedOffline += time / 2 * 10; break;
-                    case 2: earnedOffline += time / 3 * 10; break;
-                    case 3: earnedOffline += time / 4 * 10; break;
-                    case 4: earnedOffline += time / 6 * 10; break;
+                    case 1: earnedOffline += time / 2 * 10 * 0.7f; break;
+                    case 2: earnedOffline += time / 3 * 10 * 0.7f; break;
+                    case 3: earnedOffline += time / 4 * 10 * 0.7f; break;
+                    case 4: earnedOffline += time / 6 * 10 * 0.7f; break;
                 }
             }
         }
@@ -107,6 +159,6 @@ public class OfflineEarning : MonoBehaviour
 
     public void confirmed() //akkor futódik le, ha leokolja az ablakot a játékos
     {
-        sellingScript.soldTrashType(earnedOffline); //megkapja a keresett pénzmennyiséget
+        sellingScript.increaseMoney(earnedOffline); //megkapja a keresett pénzmennyiséget
     }
 }

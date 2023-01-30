@@ -30,6 +30,7 @@ TagManager:
   - SliderMarker
   - OfflineEarningsScript
   - AchivementScript
+  - GemshopScript
   layers:
   - Default
   - TransparentFX

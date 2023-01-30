@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class SliderBehavior : MonoBehaviour
 {
-    GettingProgress progressScript; // a feloldott haladást jelzi vissz
+    DatabaseCommunication dataScript; //az adatbázisból megkapott adatokat kezelõ script
 
     public GameObject parent;
     public Slider scrollSlider;
@@ -29,10 +29,17 @@ public class SliderBehavior : MonoBehaviour
     float postionValue;
     float sliderValue;
 
+    bool PB_Unlocked;
+    bool BX_Unlocked;
+    bool GL_Unlocked;
+    bool BY_Unlocked;
+
+    int progress;
+
     // Start is called before the first frame update
     void Start()
     {
-        progressScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<GettingProgress>(); //a scriptet kiveszi az adott objektumból mint komponense
+        dataScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<DatabaseCommunication>(); //a scriptet kiveszi az adott objektumból mint komponense
 
         machineDefPos = machinery.transform.position.x;
         windowsDefPos = windows.transform.position.x;
@@ -48,6 +55,11 @@ public class SliderBehavior : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        PB_Unlocked = dataScript.giveTrashStatus("PetBottle");
+        BX_Unlocked = dataScript.giveTrashStatus("Box");
+        GL_Unlocked = dataScript.giveTrashStatus("Glass");
+        BY_Unlocked = dataScript.giveTrashStatus("Battery");
+
         setMaxValue();
         machinery.transform.position = new Vector2(machineDefPos - scrollSlider.value, machinery.transform.position.y);
         windows.transform.position = new Vector2(windowsDefPos - scrollSlider.value , windows.transform.position.y);
@@ -56,8 +68,41 @@ public class SliderBehavior : MonoBehaviour
 
     void setMaxValue()
     {
+        if(PB_Unlocked == false)
+        {
+            progress = 0;
+        }
+        else
+        {
+            if(BX_Unlocked == false)
+            {
+                progress = 1;
+            }
+            else
+            {
+                if(GL_Unlocked == false)
+                {
+                    progress = 2;
+                }
+                else
+                {
+                    if(BY_Unlocked == false)
+                    {
+                        progress = 3;
+                    }
+                    else
+                    {
+                        progress = 4;
+                    }
+                }
+            }
+
+        }
+
+
+
         screenWidth = Screen.currentResolution.width;
-        switch (progressScript.sendProgress())
+        switch (progress)
         {
             case 0: 
                 scrollSlider.interactable = false;  

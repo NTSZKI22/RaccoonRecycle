@@ -19,6 +19,8 @@ public class DatabaseCommunication : MonoBehaviour
     HolderBehavior holderScript; //a holderek viselked�s�t kezel� script
     GettingProgress progressScript; // a feloldott halad�st jelzi vissza
     OfflineEarning oEarningScript;
+    AchivementController achivementScript;
+    GemShopBehavior gemshopScript;
 
     OfflineEarning offlineEarning = new OfflineEarning(); // az offline eltöltött órákat adja vissza
 
@@ -64,6 +66,15 @@ public class DatabaseCommunication : MonoBehaviour
     public int BY_speedLvl;
     public int BY_frequencyLvl;
 
+    //uj adatok:
+    public float normalCurrency_spent;
+    public float prestigeCurrency_spent;
+    public int gemCurrency;
+    public string[] achievementProgress;
+    public int itemLvl_1;
+    public int itemLvl_2;
+    public int itemLvl_3;
+
     public DateTime lastSaveTime;
 
     void Start()
@@ -76,13 +87,24 @@ public class DatabaseCommunication : MonoBehaviour
         holderScript = GameObject.FindGameObjectWithTag("WindowBehavior").GetComponent<HolderBehavior>(); //a scriptet kiveszi az adott objektumb�l mint komponense
         progressScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<GettingProgress>(); //a scriptet kiveszi az adott objektumb�l mint komponense
         oEarningScript = GameObject.FindGameObjectWithTag("OfflineEarningsScript").GetComponent<OfflineEarning>(); //a scriptet kiveszi az adott objektumb�l mint komponense
+        achivementScript = GameObject.FindGameObjectWithTag("AchivementScript").GetComponent<AchivementController>(); //a scriptet kiveszi az adott objektumb�l mint komponense
+        gemshopScript = GameObject.FindGameObjectWithTag("GemshopScript").GetComponent<GemShopBehavior>(); //a scriptet kiveszi az adott objektumb�l mint komponense
 
 
         //ideiglenesen:
         userid = 0;
         StartCoroutine(getData());
-       // StartCoroutine(getID());
+        // StartCoroutine(getID());
         //giveData();
+
+        //amig nem kap adatot adatbazisbol
+        achievementProgress = new string[] { "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0" };
+        normalCurrency_spent = 0;
+        prestigeCurrency_spent = 0;
+        gemCurrency = 0;
+        itemLvl_1 = 0;
+        itemLvl_2 = 0;
+        itemLvl_3 = 0;
     }
 
     // Update is called once per frame
@@ -90,6 +112,7 @@ public class DatabaseCommunication : MonoBehaviour
     {
 
     }
+
     public IEnumerator getData()
     {
         //adatok lek�r�se
@@ -229,8 +252,6 @@ public class DatabaseCommunication : MonoBehaviour
     
     public void startSaveData()
     {
-        getTrashStatus();
-        Debug.Log(progressScript.sendProgress());
         StartCoroutine(saveData());
     }
 
@@ -316,12 +337,15 @@ public class DatabaseCommunication : MonoBehaviour
         yield return null;
     }
 
-    public void loadCurreny(float nc, float pc, float te) //m�s scriptek �tadj�k neki ezzel a currency-k �rt�k�t
+    public void loadCurreny(float nc, float pc, float te, int gc, float ncs, float pcs) //m�s scriptek �tadj�k neki ezzel a currency-k �rt�k�t
     {
         //a megadott �rt�kekre �ll�tja a v�ltoz�kat
         normalCurrency = nc;
         prestigeCurrency = pc;
         totalEarnings = te;
+        gemCurrency = gc;
+        normalCurrency_spent = ncs;
+        prestigeCurrency_spent = pcs;
     }
 
     public void earningIncrease(string type, float n) //feladata a megkapott szem�tt�pus �sszbev�tel�t n-nel n�velni
@@ -392,13 +416,10 @@ public class DatabaseCommunication : MonoBehaviour
 
         sellingScript.getCurrencieValues();
 
-        
+        achivementScript.getData();
+        gemshopScript.getData();
 
         oEarningScript.proceedWithTasks();
-        progresssetupAtStart();
-
-        Debug.Log("dc givedata");
-        Debug.Log(PB_Unlocked);
     }
 
     public void prestigeTasks()
@@ -444,63 +465,4 @@ public class DatabaseCommunication : MonoBehaviour
         return false;
     }
 
-    void getTrashStatus()
-    {
-        /*
-        switch (progressScript.sendProgress())
-        {
-            case 0:
-                PB_Unlocked = false;
-                BX_Unlocked = false;
-                GL_Unlocked = false;
-                BY_Unlocked = false;
-                break;
-            case 1:
-                PB_Unlocked = true;
-                BX_Unlocked = false;
-                GL_Unlocked = false;
-                BY_Unlocked = false;
-                break;
-            case 2:
-                PB_Unlocked = true;
-                BX_Unlocked = true;
-                GL_Unlocked = false;
-                BY_Unlocked = false;
-                break;
-            case 3:
-                PB_Unlocked = true;
-                BX_Unlocked = true;
-                GL_Unlocked = true;
-                BY_Unlocked = false;
-                break;
-            case 4:
-                PB_Unlocked = true;
-                BX_Unlocked = true;
-                GL_Unlocked = true;
-                BY_Unlocked = true;
-                break;
-            default: Debug.Log("getTrashStats:databasecomm hiba"); break;
-        }
-        */
-    }
-
-    void progresssetupAtStart()
-    {
-        if(!PB_Unlocked && !BX_Unlocked && !GL_Unlocked && !BY_Unlocked)
-        {
-            progressScript.ProgressSet(0);
-        }
-        if (PB_Unlocked && !BX_Unlocked && !GL_Unlocked && !BY_Unlocked)
-        {
-            progressScript.ProgressSet(1);
-        }
-        if (PB_Unlocked && BX_Unlocked && GL_Unlocked && !BY_Unlocked)
-        {
-            progressScript.ProgressSet(3);
-        }
-        if (PB_Unlocked && BX_Unlocked && GL_Unlocked && BY_Unlocked)
-        {
-            progressScript.ProgressSet(4);
-        }
-    }
 }
