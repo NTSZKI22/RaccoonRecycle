@@ -23,6 +23,8 @@ int itemLvl_2			-> gemshopbehavior
 int itemLvl_3			-> gemshopbehavior
 	def:0
 
+Backenden modellek minden megvan. -------------
+
 
 hatralevo teendok (Reka):
 

@@ -3,6 +3,7 @@ const prisma = new PrismaClient()
 const jwt = require('jsonwebtoken')
 const jwtKey = process.env.JWTKEY
 var bodyParser = require('body-parser')
+const { transformDocument } = require('@prisma/client/runtime')
 var jsonParser = bodyParser.json()
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 //ez a sor felett csak importok találhatóak.

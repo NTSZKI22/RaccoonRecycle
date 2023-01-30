@@ -185,7 +185,6 @@ public class AchivementController : MonoBehaviour
 
     void notifyDot()
     {
-        Debug.Log(" ");
         int count = 0;
         for (int i = 0; i < achievementProgress.Length; i++)
         {

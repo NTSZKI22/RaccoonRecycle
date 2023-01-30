@@ -31,6 +31,10 @@ TagManager:
   - OfflineEarningsScript
   - AchivementScript
   - GemshopScript
+  - U1
+  - U2
+  - U3
+  - U4
   layers:
   - Default
   - TransparentFX

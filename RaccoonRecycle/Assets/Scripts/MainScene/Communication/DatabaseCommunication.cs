@@ -6,8 +6,8 @@ using Classes;
 using UnityEngine.Networking;
 using System.Security.Cryptography.X509Certificates;
 using Newtonsoft.Json.Bson;
-using MongoDB.Bson;
 using System;
+using Newtonsoft.Json;
 
 public class DatabaseCommunication : MonoBehaviour
 {
@@ -33,6 +33,7 @@ public class DatabaseCommunication : MonoBehaviour
     private string saveId;
 
     public SaveClass saveClass;
+    public AchievementMainClass achievementClass;
 
     public string id;
 
@@ -166,13 +167,15 @@ public class DatabaseCommunication : MonoBehaviour
                 {
                     json = request.downloadHandler.text;
                     saveClass = JsonUtility.FromJson<SaveClass>(json);
-                    Debug.Log(saveClass.lastSaveDate);
+                    StartCoroutine(getAchievements());
+                    yield return null;
                 }
                 else
                 {
                     Debug.Log("eror. getdata");
+                    yield return null;
                 }
-
+                
                 //adatok be�ll�t�sa
                 id = saveClass.usersId;
                 normalCurrency = saveClass.normalCurrency;
@@ -204,7 +207,9 @@ public class DatabaseCommunication : MonoBehaviour
                 BY_frequencyLvl = saveClass.byFrequency;
 
                 lastSaveTime = DateTime.Parse(saveClass.lastSaveDate, null, System.Globalization.DateTimeStyles.RoundtripKind);
+
                 //lastSaveTime.AddHours(1);
+
 
                 Debug.Log("savedata get");
                 Debug.Log(saveClass.pbUnlocked);
@@ -262,7 +267,7 @@ public class DatabaseCommunication : MonoBehaviour
         form.AddField("normalCurrency", "" + normalCurrency);
         form.AddField("prestigeCurrency", "" + prestigeCurrency);
         form.AddField("totalEarnings", "" + totalEarnings);
-        if (GameObject.FindWithTag("PetBottleU") is not null)
+        if (GameObject.FindWithTag("U1") is not null)
         {
             form.AddField("pbUnlocked", "" + 1);
         }
@@ -274,7 +279,7 @@ public class DatabaseCommunication : MonoBehaviour
         form.AddField("pbValue", "" + PB_valueLvl);
         form.AddField("pbFrequency", "" + PB_frequencyLvl);
         form.AddField("pbSpeed", "" + PB_speedLvl);
-        if (GameObject.FindWithTag("BoxU") is not null)
+        if (GameObject.FindWithTag("U2") is not null)
         {
             Debug.Log("jo");
             form.AddField("bxUnlocked", "" + 1);
@@ -287,7 +292,7 @@ public class DatabaseCommunication : MonoBehaviour
         form.AddField("bxValue", "" + BX_valueLvl);
         form.AddField("bxFrequency", "" + BX_frequencyLvl);
         form.AddField("bxSpeed", "" + BX_speedLvl);
-        if (GameObject.FindWithTag("GlassU") is not null)
+        if (GameObject.FindWithTag("U3") is not null)
         {
             form.AddField("glUnlocked", "" + 1);
         }
@@ -299,7 +304,7 @@ public class DatabaseCommunication : MonoBehaviour
         form.AddField("glValue", "" + GL_valueLvl);
         form.AddField("glFrequency", "" + GL_frequencyLvl);
         form.AddField("glSpeed", "" + GL_speedLvl);
-        if (GameObject.FindWithTag("BatteryU") is not null)
+        if (GameObject.FindWithTag("U4") is not null)
         {
             Debug.Log("jo");
             form.AddField("byUnlocked", "" + 1);
@@ -312,7 +317,8 @@ public class DatabaseCommunication : MonoBehaviour
         form.AddField("byValue", "" + BY_valueLvl);
         form.AddField("byFrequency", "" + BY_frequencyLvl);
         form.AddField("bySpeed", "" + BY_speedLvl);
-        var request = UnityWebRequest.Post("http://188.166.166.197:18102/api/save", form);
+        //var request = UnityWebRequest.Post("http://188.166.166.197:18102/api/save", form);
+        var request = UnityWebRequest.Post("http://localhost:18102/api/save", form);
         request.SetRequestHeader("Authorization", "Bearer " + token);
         var handler = request.SendWebRequest();
 
@@ -329,6 +335,8 @@ public class DatabaseCommunication : MonoBehaviour
         if (request.result == UnityWebRequest.Result.Success)
         {
             Debug.Log("Sikerült!");
+            StartCoroutine(saveAchievements());
+            yield return null;
         }
         else
         {
@@ -465,4 +473,122 @@ public class DatabaseCommunication : MonoBehaviour
         return false;
     }
 
+
+    public IEnumerator getAchievements()
+    {
+        if (Register.token != null)
+        {
+            token = Register.token;
+        }
+        else if (Login.token != null)
+        {
+            token = Login.token;
+        }
+        else if (ForgottenPassword.token != null)
+        {
+            token = ForgottenPassword.token;
+        }
+
+        WWWForm form = new WWWForm();
+        var request = UnityWebRequest.Post("http://localhost:18102/api/getAchievements", form);
+        request.SetRequestHeader("Authorization", "Bearer " + token);
+        var handler = request.SendWebRequest();
+
+
+
+        float startTime = 0f;
+        while (!handler.isDone)
+        {
+            startTime += Time.deltaTime;
+            if (startTime > 10.0f)
+            {
+                break;
+            }
+            yield return null;
+        }
+        if (request.result == UnityWebRequest.Result.Success)
+        {
+            json = request.downloadHandler.text;
+            achievementClass =  JsonConvert.DeserializeObject<AchievementMainClass>(json); //Sikeresen megkapja az adatot backendről
+            //Sikeresen deserializáljuk.
+
+            normalCurrency_spent = (float)achievementClass.Achievements[0].normalCurrency_spent;
+            prestigeCurrency_spent = (float)achievementClass.Achievements[0].prestigeCurrency_spent;
+            gemCurrency = achievementClass.Achievements[0].gemCurrency;
+            itemLvl_1 = achievementClass.Achievements[0].itemLvl_1;
+            itemLvl_2 = achievementClass.Achievements[0].itemLvl_2;
+            itemLvl_3 = achievementClass.Achievements[0].itemLvl_3;
+            achievementProgress = achievementClass.Achievements[0].achievementProgress;
+            yield return null;
+        }
+        else
+        {
+            Debug.Log("eror. getdata");
+            yield return null;
+        }
+    }
+
+
+    public IEnumerator saveAchievements()
+    {
+        if (Register.token != null)
+        {
+            token = Register.token;
+        }
+        else if (Login.token != null)
+        {
+            token = Login.token;
+        }
+        else if (ForgottenPassword.token != null)
+        {
+            token = ForgottenPassword.token;
+        }
+
+        AchievementClass achievementToSend = new AchievementClass
+        {
+            id = "",
+            achievementProgress = achievementProgress,
+            gemCurrency = gemCurrency,
+            itemLvl_1 = itemLvl_1,
+            itemLvl_2 = itemLvl_2,
+            itemLvl_3 = itemLvl_3,
+            normalCurrency_spent = normalCurrency_spent,
+            prestigeCurrency_spent = prestigeCurrency_spent,
+            usersId = ""
+        };
+        string jsonToSend = JsonConvert.SerializeObject(achievementToSend, Formatting.Indented);    
+
+        WWWForm form = new WWWForm();
+        var request = UnityWebRequest.Post("http://localhost:18102/api/setAchievements", form);
+        byte[] arrayToSend = new System.Text.UTF8Encoding().GetBytes(jsonToSend);
+        request.uploadHandler = (UploadHandler)new UploadHandlerRaw(arrayToSend);
+        request.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
+        request.SetRequestHeader("Content-Type", "application/json");
+        request.SetRequestHeader("Authorization", "Bearer " + token);
+        var handler = request.SendWebRequest();
+
+        float startTime = 0f;
+        while (!handler.isDone)
+        {
+            startTime += Time.deltaTime;
+            if (startTime > 10.0f)
+            {
+                break;
+            }
+            yield return null;
+        }
+        if (request.result == UnityWebRequest.Result.Success)
+        {
+            json = request.downloadHandler.text;
+            Debug.Log(json);
+            yield return null;
+        }
+        else
+        {
+            Debug.Log("eror. getdata");
+            yield return null;
+        }
+
+        yield return null;
+    }
 }
