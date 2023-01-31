@@ -9,6 +9,7 @@ using UnityEngine.SceneManagement;
 using Unity.VisualScripting;
 using Unity.VisualScripting.Antlr3.Runtime;
 using Newtonsoft.Json;
+using Classes;
 
 public class Register : MonoBehaviour
 {
@@ -66,7 +67,7 @@ public class Register : MonoBehaviour
         string username = usernameField.text;
         string password = passwordField.text;
 
-
+        LogOrReg.Registered = true;
 
         Debug.Log($"username: {username}, password: {password}");
 

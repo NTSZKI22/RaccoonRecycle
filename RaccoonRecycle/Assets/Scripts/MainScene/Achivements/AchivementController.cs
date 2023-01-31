@@ -144,10 +144,18 @@ public class AchivementController : MonoBehaviour
 
     void Update()
     {
-        getData();
+        if (gotData || dataScript.registrating)
+        {
+            getData();
+            refreshAchievments();
+            returnData();
+            notifyDot();
+        }
+        else
+        {
+            Debug.Log($"achivContr update  gotdata: {gotData}");
+        }
         refreshAchievments();
-        returnData();
-        notifyDot();
     }
 
     public void getData()
@@ -218,14 +226,12 @@ public class AchivementController : MonoBehaviour
 
     void notifyWindow(int index)
     {
-        
             Debug.Log("notifyWindew   " + index);
             GameObject window = Instantiate(notificationWindow) as GameObject;
             window.transform.SetParent(parent.transform);
             window.SetActive(true);
             window.transform.position = notificationWindow.transform.position;
-            Destroy(window, 3);
-        
+            Destroy(window, 1.5f);
     }
 
     public string[] placeholderStrings(int index)

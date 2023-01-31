@@ -22,6 +22,9 @@ public class OfflineEarning : MonoBehaviour
     public Button button_Confirm;
     public GameObject offlineEarning_Holder;
 
+    bool gotData;
+    bool reg;
+
     int itemLvl_1;
 
     //def value - 10
@@ -33,8 +36,10 @@ public class OfflineEarning : MonoBehaviour
         sellingScript = GameObject.FindGameObjectWithTag("SellingScript").GetComponent<Selling>(); //a scriptet kiveszi az adott objektumb�l mint komponense
         dataScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<DatabaseCommunication>(); //a scriptet kiveszi az adott objektumból mint komponense
 
-        earnedOffline = 1000; //alap érték, később kivehető
-        proceedWithTasks();
+        //earnedOffline = 1000; //alap érték, később kivehető
+        //proceedWithTasks();
+
+
     }
 
 
@@ -123,10 +128,12 @@ public class OfflineEarning : MonoBehaviour
         unlocks[4] = dataScript.giveTrashStatus("Battery");
 
         itemLvl_1 = dataScript.itemLvl_1;
+        reg = dataScript.registrating;
     }
 
     float calculateEarning(float time) //kiszámolja az offline szerzett currency-t
     {
+        earnedOffline = 0;
         for (int i = 1; i < 5; i++)
         {
             if (unlocks[i])
@@ -150,11 +157,15 @@ public class OfflineEarning : MonoBehaviour
     public void proceedWithTasks() //ezzel lehet majd elindítani az offline earning teask-jeit !!hiányoss
     {
         getData(); //megszerzi a szükséges adatokat
-        DateTime time = dataScript.lastSaveTime;
-        calculateEarning(OfflineEarnings(time)); 
-        offlineEarning_Holder.SetActive(true); //láthatóvá teszi az ablakot
-        Debug.Log(earnedOffline);
-        text_Earning.text = sellingScript.convertCurrencyToDisplay(earnedOffline.ToString()); //megjeleníti a szerzett pénzmennyiséget
+        if(reg != true)
+        {
+            DateTime time = dataScript.lastSaveTime;
+            calculateEarning(OfflineEarnings(time));
+            offlineEarning_Holder.SetActive(true); //láthatóvá teszi az ablakot
+            Debug.Log(earnedOffline);
+            text_Earning.text = sellingScript.convertCurrencyToDisplay(earnedOffline.ToString()); //megjeleníti a szerzett pénzmennyiséget
+        }
+        
     }
 
     public void confirmed() //akkor futódik le, ha leokolja az ablakot a játékos
