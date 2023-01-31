@@ -47,11 +47,13 @@ public class Selling : MonoBehaviour
         itemLvl_3 = dataScript.itemLvl_3;
         itemLvl_2 = dataScript.itemLvl_2;
         displayCurrency(); //meghívja a metódust
+        /*
         if (gotData)
         {
             dataScript.loadCurreny(normalCurrency, prestigeCurrency, totalearnings, gemCurrency, normalCurrency_spent, prestigeCurrency_spent);  //a normal, presstigecurrency és totalearnings értékeit visszaadja a datascript-nek
 
         }
+        */
     }
 
     public void giveData()

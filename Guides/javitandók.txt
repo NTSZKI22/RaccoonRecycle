@@ -1,0 +1,4 @@
+eszlelt/javitando hibak:
+regisztrációnál van offline earning
+regisztrált fiókkal kilpés után nem lehet újra bejelentkezni
+ha a játékos regisztrált, akkor rossz a statistics fül

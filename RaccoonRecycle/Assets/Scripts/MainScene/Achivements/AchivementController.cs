@@ -218,15 +218,14 @@ public class AchivementController : MonoBehaviour
 
     void notifyWindow(int index)
     {
-        if (gotData)
-        {
+        
             Debug.Log("notifyWindew   " + index);
             GameObject window = Instantiate(notificationWindow) as GameObject;
             window.transform.SetParent(parent.transform);
             window.SetActive(true);
             window.transform.position = notificationWindow.transform.position;
             Destroy(window, 3);
-        }
+        
     }
 
     public string[] placeholderStrings(int index)
