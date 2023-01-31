@@ -32,7 +32,7 @@ public class Selling : MonoBehaviour
     void Start() //a játék elindulásánál lefut
     {
         dataScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<DatabaseCommunication>(); //a scriptet kiveszi az adott objektumból mint komponense
-        gemCurrency = 0;
+        //gemCurrency = 0;
 
         defaultValue = 10; //alapértelmezett érték beállítása
         multiplier = 1.05f; //a szorzó alap értékének beállítása 5%-os növekedés

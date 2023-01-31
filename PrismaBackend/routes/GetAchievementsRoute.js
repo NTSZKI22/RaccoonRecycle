@@ -14,7 +14,7 @@ module.exports = app => {
         const bearerToken = bearerHeader.split(' ')[1]
         const verified = jwt.verify(bearerToken, jwtKey);
         if(verified){
-            const achievements = await prisma.users.findFirstOrThrow({
+            const achievements = await prisma.users.findFirst({
                 where: {
                     username: verified.username
                 },

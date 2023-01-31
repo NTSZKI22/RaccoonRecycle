@@ -91,6 +91,15 @@ public class DatabaseCommunication : MonoBehaviour
         achivementScript = GameObject.FindGameObjectWithTag("AchivementScript").GetComponent<AchivementController>(); //a scriptet kiveszi az adott objektumb�l mint komponense
         gemshopScript = GameObject.FindGameObjectWithTag("GemshopScript").GetComponent<GemShopBehavior>(); //a scriptet kiveszi az adott objektumb�l mint komponense
 
+        /*
+        achievementProgress = new string[] { "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0" };
+        normalCurrency_spent = 0;
+        prestigeCurrency_spent = 0;
+        gemCurrency = 0;
+        itemLvl_1 = 0;
+        itemLvl_2 = 0;
+        itemLvl_3 = 0;
+        */ 
 
         //ideiglenesen:
         userid = 0;
@@ -99,13 +108,7 @@ public class DatabaseCommunication : MonoBehaviour
         //giveData();
 
         //amig nem kap adatot adatbazisbol
-        achievementProgress = new string[] { "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0" };
-        normalCurrency_spent = 0;
-        prestigeCurrency_spent = 0;
-        gemCurrency = 0;
-        itemLvl_1 = 0;
-        itemLvl_2 = 0;
-        itemLvl_3 = 0;
+        
     }
 
     // Update is called once per frame
@@ -519,7 +522,6 @@ public class DatabaseCommunication : MonoBehaviour
             itemLvl_2 = achievementClass.Achievements[0].itemLvl_2;
             itemLvl_3 = achievementClass.Achievements[0].itemLvl_3;
             achievementProgress = achievementClass.Achievements[0].achievementProgress;
-            yield return null;
         }
         else
         {
