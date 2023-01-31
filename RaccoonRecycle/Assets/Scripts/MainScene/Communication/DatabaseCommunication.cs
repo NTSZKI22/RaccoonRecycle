@@ -99,6 +99,7 @@ public class DatabaseCommunication : MonoBehaviour
         //giveData();
 
         //amig nem kap adatot adatbazisbol
+        /*
         achievementProgress = new string[] { "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0" };
         normalCurrency_spent = 0;
         prestigeCurrency_spent = 0;
@@ -106,6 +107,9 @@ public class DatabaseCommunication : MonoBehaviour
         itemLvl_1 = 0;
         itemLvl_2 = 0;
         itemLvl_3 = 0;
+        */
+
+        //gemCurrency = 10;
     }
 
     // Update is called once per frame
@@ -215,7 +219,7 @@ public class DatabaseCommunication : MonoBehaviour
                 Debug.Log(saveClass.pbUnlocked);
                 Debug.Log(json);
                 giveData();
-                sellingScript.getCurrencieValues();
+                
                 
                 
 
@@ -414,6 +418,7 @@ public class DatabaseCommunication : MonoBehaviour
     public void giveData() //feladata (a j�t�k indul�sakor) az �sszes script met�dus�t megh�vni, amelyik adatot vesz �t a ment�sb�l
     {
         Debug.Log("dc givedata start");
+        sellingScript.getCurrencieValues();
         holderScript.getData();
         holderScript.loadedStart();
 

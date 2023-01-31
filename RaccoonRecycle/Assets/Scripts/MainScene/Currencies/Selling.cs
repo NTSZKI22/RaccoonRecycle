@@ -47,6 +47,11 @@ public class Selling : MonoBehaviour
         dataScript.loadCurreny(normalCurrency, prestigeCurrency, totalearnings, gemCurrency, normalCurrency_spent, prestigeCurrency_spent);  //a normal, presstigecurrency és totalearnings értékeit visszaadja a datascript-nek
     }
 
+    public void giveData()
+    {
+        dataScript.loadCurreny(normalCurrency, prestigeCurrency, totalearnings, gemCurrency, normalCurrency_spent, prestigeCurrency_spent);
+    }
+
     void addCurrency(float n) //metódus, növeli a currencyk mennyiségét
     {
         normalCurrency += n; //a normalcurrency mennyiségét növeli az n értékével
@@ -189,6 +194,7 @@ public class Selling : MonoBehaviour
         gemCurrency = dataScript.gemCurrency;
         normalCurrency_spent = dataScript.normalCurrency_spent;
         prestigeCurrency_spent = dataScript.prestigeCurrency_spent;
+        Debug.Log("getcurrency " + gemCurrency);
     }
 
     public float prestigeEarning() //feladata visszaadni az aktuálisan megkapható prestigecurrency mennyiségét
