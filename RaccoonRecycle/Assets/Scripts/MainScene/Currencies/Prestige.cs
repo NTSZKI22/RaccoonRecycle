@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class Prestige : MonoBehaviour
 {
     Selling sellingScript; //a currency-t kezelõ script
+    HolderBehavior holderScript; //a holderek viselkedését kezelõ script
 
     DatabaseCommunication dataScript; //az adatbázisból megkapott adatokat kezelõ script
 
@@ -20,7 +21,8 @@ public class Prestige : MonoBehaviour
     {
         sellingScript = GameObject.FindGameObjectWithTag("SellingScript").GetComponent<Selling>(); //a scriptet kiveszi az adott objektumból mint komponense
         dataScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<DatabaseCommunication>(); //a scriptet kiveszi az adott objektumból mint komponense
-
+        holderScript = GameObject.FindGameObjectWithTag("WindowBehavior").GetComponent<HolderBehavior>(); //a scriptet kiveszi az adott objektumból mint komponense
+        
     }
 
     // Update is called once per frame
@@ -35,5 +37,6 @@ public class Prestige : MonoBehaviour
         //a kellõ scriptekben megtörténik a feladatok lefutása
         sellingScript.prestigeTasks();
         dataScript.prestigeTasks();
+        //holderScript.defaultStart();
     }
 }

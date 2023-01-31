@@ -50,7 +50,7 @@ public class Selling : MonoBehaviour
         if (gotData && dataScript.login)
         {
             dataScript.loadCurreny(normalCurrency, prestigeCurrency, totalearnings, gemCurrency, normalCurrency_spent, prestigeCurrency_spent);  //a normal, presstigecurrency és totalearnings értékeit visszaadja a datascript-nek
-            Debug.Log("sellingscript data giveback");
+            
         } else if (dataScript.registrating)
         {
             dataScript.loadCurreny(normalCurrency, prestigeCurrency, totalearnings, gemCurrency, normalCurrency_spent, prestigeCurrency_spent);  //a normal, presstigecurrency és totalearnings értékeit visszaadja a datascript-nek

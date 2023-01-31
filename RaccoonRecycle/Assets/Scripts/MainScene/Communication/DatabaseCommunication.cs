@@ -285,10 +285,20 @@ using Newtonsoft.Json;
             if (GameObject.FindWithTag("U1") is not null)
             {
                 form.AddField("pbUnlocked", "" + 1);
+                Debug.Log("pbUnlocked" + 1);
             }
             else
             {
                 form.AddField("pbUnlocked", "" + 0);
+                Debug.Log("pbUnlocked" + 0);
+            }
+            if (PB_Unlocked)
+            {
+            Debug.Log("pbUnlocked"+ 1);
+            }
+            else
+            {
+                Debug.Log("pbUnlocked" + 0);
             }
             form.AddField("pbSoldAmount", "" + PB_soldAmount);
             form.AddField("pbValue", "" + PB_valueLvl);

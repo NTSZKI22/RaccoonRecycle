@@ -151,10 +151,6 @@ public class AchivementController : MonoBehaviour
             returnData();
             notifyDot();
         }
-        else
-        {
-            Debug.Log($"achivContr update  gotdata: {gotData}");
-        }
         refreshAchievments();
     }
 
