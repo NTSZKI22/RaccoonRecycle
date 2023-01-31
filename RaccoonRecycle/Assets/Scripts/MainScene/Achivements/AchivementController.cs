@@ -84,7 +84,7 @@ public class AchivementController : MonoBehaviour
     float normalCurrency_spent;
     float prestigeCurrency_spent;
 
-
+    public bool gotData;
 
     float PB_defValue;
     float BX_defValue;
@@ -96,6 +96,8 @@ public class AchivementController : MonoBehaviour
     {
         dataScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<DatabaseCommunication>(); //a scriptet kiveszi az adott objektumból mint komponense
         sellingScript = GameObject.FindGameObjectWithTag("SellingScript").GetComponent<Selling>(); //a scriptet kiveszi az adott objektumb�l mint komponense
+
+        bool gotData = false;
 
         //testingData();
         PB_defValue = 25;
@@ -214,13 +216,17 @@ public class AchivementController : MonoBehaviour
         }
     }
 
-    void notifyWindow()
+    void notifyWindow(int index)
     {
-        GameObject window = Instantiate(notificationWindow) as GameObject;
-        window.transform.SetParent(parent.transform);
-        window.SetActive(true);
-        window.transform.position = notificationWindow.transform.position;
-        Destroy(window, 3);
+        if (gotData)
+        {
+            Debug.Log("notifyWindew   " + index);
+            GameObject window = Instantiate(notificationWindow) as GameObject;
+            window.transform.SetParent(parent.transform);
+            window.SetActive(true);
+            window.transform.position = notificationWindow.transform.position;
+            Destroy(window, 3);
+        }
     }
 
     public string[] placeholderStrings(int index)
@@ -345,7 +351,7 @@ public class AchivementController : MonoBehaviour
         //Debug.Log($"{a} > {int.Parse(ab[0])}");
         if (a > int.Parse(ab[0]))
         {
-            notifyWindow();
+            notifyWindow(AchNumber);
             achievementProgress[AchNumber] = $"{a}_{ab[1]}";
             //Debug.Log($"{ AchNumber}:    {a}_{ab[1]}");
         }
@@ -370,7 +376,7 @@ public class AchivementController : MonoBehaviour
         string[] ab = achievementProgress[AchNumber].Split("_");
         if (a > int.Parse(ab[0]))
         {
-            notifyWindow();
+            notifyWindow(AchNumber);
             achievementProgress[AchNumber] = $"{a}_{ab[1]}";
             //Debug.Log($"{AchNumber}:    {a}_{ab[1]}");
         }
@@ -394,7 +400,7 @@ public class AchivementController : MonoBehaviour
         string[] ab = achievementProgress[AchNumber].Split("_");
         if (a > int.Parse(ab[0]))
         {
-            notifyWindow();
+            notifyWindow(AchNumber);
             achievementProgress[AchNumber] = $"{a}_{ab[1]}";
           //  Debug.Log($"{AchNumber}:    {a}_{ab[1]}");
         }
@@ -416,7 +422,7 @@ public class AchivementController : MonoBehaviour
             string[] ab = achievementProgress[AchNumber].Split("_");
             if (a > int.Parse(ab[0]))
             {
-                notifyWindow();
+                notifyWindow(AchNumber);
                 achievementProgress[AchNumber] = $"{a}_{ab[1]}";
                // Debug.Log($"{AchNumber}:    {a}_{ab[1]}");
             }
@@ -430,7 +436,7 @@ public class AchivementController : MonoBehaviour
             string[] ab = achievementProgress[AchNumber].Split("_");
             if (1 > int.Parse(ab[0]))
             {
-                notifyWindow();
+                notifyWindow(AchNumber);
                 achievementProgress[AchNumber] = $"{1}_{ab[1]}";
                // Debug.Log($"{AchNumber}:    {1}_{ab[1]}");
             }
@@ -451,7 +457,7 @@ public class AchivementController : MonoBehaviour
         string[] ab = achievementProgress[AchNumber].Split("_");
         if (a > int.Parse(ab[0]))
         {
-            notifyWindow();
+            notifyWindow(AchNumber);
             achievementProgress[AchNumber] = $"{a}_{ab[1]}";
            // Debug.Log($"{AchNumber}:    {a}_{ab[1]}");
         }

@@ -92,6 +92,14 @@ public class DatabaseCommunication : MonoBehaviour
         gemshopScript = GameObject.FindGameObjectWithTag("GemshopScript").GetComponent<GemShopBehavior>(); //a scriptet kiveszi az adott objektumb�l mint komponense
 
 
+        achievementProgress = new string[] { "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0" };
+        normalCurrency_spent = 0;
+        prestigeCurrency_spent = 0;
+        gemCurrency = 0;
+        itemLvl_1 = 0;
+        itemLvl_2 = 0;
+        itemLvl_3 = 0;
+
         //ideiglenesen:
         userid = 0;
         StartCoroutine(getData());
@@ -100,13 +108,7 @@ public class DatabaseCommunication : MonoBehaviour
 
         //amig nem kap adatot adatbazisbol
         /*
-        achievementProgress = new string[] { "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0" };
-        normalCurrency_spent = 0;
-        prestigeCurrency_spent = 0;
-        gemCurrency = 0;
-        itemLvl_1 = 0;
-        itemLvl_2 = 0;
-        itemLvl_3 = 0;
+        
         */
 
         //gemCurrency = 10;
@@ -218,7 +220,7 @@ public class DatabaseCommunication : MonoBehaviour
                 Debug.Log("savedata get");
                 Debug.Log(saveClass.pbUnlocked);
                 Debug.Log(json);
-                giveData();
+              //  giveData();
                 
                 
                 
@@ -255,12 +257,21 @@ public class DatabaseCommunication : MonoBehaviour
                 BY_speedLvl = 0;
                 BY_frequencyLvl = 0;
 
+                achievementProgress = new string[] { "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0" };
+                normalCurrency_spent = 0;
+                prestigeCurrency_spent = 0;
+                gemCurrency = 0;
+                itemLvl_1 = 0;
+                itemLvl_2 = 0;
+                itemLvl_3 = 0;
+
                 break;
         }
     }
     
     public void startSaveData()
     {
+        sellingScript.giveData();
         StartCoroutine(saveData());
     }
 
@@ -322,7 +333,7 @@ public class DatabaseCommunication : MonoBehaviour
         form.AddField("byFrequency", "" + BY_frequencyLvl);
         form.AddField("bySpeed", "" + BY_speedLvl);
         //var request = UnityWebRequest.Post("http://188.166.166.197:18102/api/save", form);
-        var request = UnityWebRequest.Post("http://localhost:18102/api/save", form);
+        var request = UnityWebRequest.Post("http://188.166.166.197:18102/api/save", form);
         request.SetRequestHeader("Authorization", "Bearer " + token);
         var handler = request.SendWebRequest();
 
@@ -419,6 +430,7 @@ public class DatabaseCommunication : MonoBehaviour
     {
         Debug.Log("dc givedata start");
         sellingScript.getCurrencieValues();
+        sellingScript.gotData = true;
         holderScript.getData();
         holderScript.loadedStart();
 
@@ -430,6 +442,8 @@ public class DatabaseCommunication : MonoBehaviour
         sellingScript.getCurrencieValues();
 
         achivementScript.getData();
+        achivementScript.gotData = true;
+
         gemshopScript.getData();
 
         oEarningScript.proceedWithTasks();
@@ -494,8 +508,9 @@ public class DatabaseCommunication : MonoBehaviour
             token = ForgottenPassword.token;
         }
 
+        Debug.Log(token);
         WWWForm form = new WWWForm();
-        var request = UnityWebRequest.Post("http://localhost:18102/api/getAchievements", form);
+        var request = UnityWebRequest.Post("http://188.166.166.197:18102/api/getAchievements", form);
         request.SetRequestHeader("Authorization", "Bearer " + token);
         var handler = request.SendWebRequest();
 
@@ -514,12 +529,15 @@ public class DatabaseCommunication : MonoBehaviour
         if (request.result == UnityWebRequest.Result.Success)
         {
             json = request.downloadHandler.text;
+            Debug.Log(json);
             achievementClass =  JsonConvert.DeserializeObject<AchievementMainClass>(json); //Sikeresen megkapja az adatot backendről
             //Sikeresen deserializáljuk.
 
             normalCurrency_spent = (float)achievementClass.Achievements[0].normalCurrency_spent;
             prestigeCurrency_spent = (float)achievementClass.Achievements[0].prestigeCurrency_spent;
-            gemCurrency = achievementClass.Achievements[0].gemCurrency;
+            gemCurrency = (int)achievementClass.Achievements[0].gemCurrency;
+            Debug.Log("gemcurrency db "+ achievementClass.Achievements[0].gemCurrency);
+            Debug.Log("gemcurrency db "+ gemCurrency);
             itemLvl_1 = achievementClass.Achievements[0].itemLvl_1;
             itemLvl_2 = achievementClass.Achievements[0].itemLvl_2;
             itemLvl_3 = achievementClass.Achievements[0].itemLvl_3;
@@ -531,6 +549,10 @@ public class DatabaseCommunication : MonoBehaviour
             Debug.Log("eror. getdata");
             yield return null;
         }
+
+
+        Debug.Log("getachivement " + gemCurrency);
+        giveData();
     }
 
 
@@ -564,7 +586,7 @@ public class DatabaseCommunication : MonoBehaviour
         string jsonToSend = JsonConvert.SerializeObject(achievementToSend, Formatting.Indented);    
 
         WWWForm form = new WWWForm();
-        var request = UnityWebRequest.Post("http://localhost:18102/api/setAchievements", form);
+        var request = UnityWebRequest.Post("http://188.166.166.197:18102/api/setAchievements", form);
         byte[] arrayToSend = new System.Text.UTF8Encoding().GetBytes(jsonToSend);
         request.uploadHandler = (UploadHandler)new UploadHandlerRaw(arrayToSend);
         request.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();

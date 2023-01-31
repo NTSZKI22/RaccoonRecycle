@@ -28,11 +28,14 @@ public class Selling : MonoBehaviour
     public int itemLvl_2;
     int itemLvl_3;
 
+    public bool gotData;
 
     void Start() //a játék elindulásánál lefut
     {
         dataScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<DatabaseCommunication>(); //a scriptet kiveszi az adott objektumból mint komponense
         gemCurrency = 0;
+        gotData = false;
+
 
         defaultValue = 10; //alapértelmezett érték beállítása
         multiplier = 1.05f; //a szorzó alap értékének beállítása 5%-os növekedés
@@ -44,7 +47,11 @@ public class Selling : MonoBehaviour
         itemLvl_3 = dataScript.itemLvl_3;
         itemLvl_2 = dataScript.itemLvl_2;
         displayCurrency(); //meghívja a metódust
-        dataScript.loadCurreny(normalCurrency, prestigeCurrency, totalearnings, gemCurrency, normalCurrency_spent, prestigeCurrency_spent);  //a normal, presstigecurrency és totalearnings értékeit visszaadja a datascript-nek
+        if (gotData)
+        {
+            dataScript.loadCurreny(normalCurrency, prestigeCurrency, totalearnings, gemCurrency, normalCurrency_spent, prestigeCurrency_spent);  //a normal, presstigecurrency és totalearnings értékeit visszaadja a datascript-nek
+
+        }
     }
 
     public void giveData()
