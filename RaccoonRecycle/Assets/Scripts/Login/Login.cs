@@ -6,6 +6,7 @@ using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System;
+using Classes;
 
 public class Login : MonoBehaviour
 {
@@ -35,6 +36,8 @@ public class Login : MonoBehaviour
     {
         string username = usernameField.text; //felhasználónév változó egyenlő lesz a felhasználónév mező értékével.
         string password = passwordField.text; //jelszó változó egyenlő lesz a jelszó mező értékével.
+
+        LogOrReg.LoggedIn = true;
 
         WWWForm form = new WWWForm(); //létrehozunk egy body felépítést a kérésünknek.
         form.AddField("username", username); //hozzáadjuk a bodyhoz az aUsername mezőt és a username értéket hozzá rendeljük.

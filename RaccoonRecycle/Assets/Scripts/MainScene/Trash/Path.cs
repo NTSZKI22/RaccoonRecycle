@@ -61,5 +61,10 @@ public class Path : MonoBehaviour
             incomeScript.showIncome(propertiesScript.value(), other.gameObject.transform.position);
             Destroy(gameObject); //törli a szemét objektumot
         }
+
+        if (other.gameObject.tag == "Collider_Prestige")
+        {
+            Destroy(gameObject); //törli a szemét objektumot
+        }
     }
 }

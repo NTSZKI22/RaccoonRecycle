@@ -9,6 +9,7 @@ using UnityEngine.SceneManagement;
 using Unity.VisualScripting;
 using Unity.VisualScripting.Antlr3.Runtime;
 using Newtonsoft.Json;
+using Classes;
 
 public class Register : MonoBehaviour
 {
@@ -66,7 +67,7 @@ public class Register : MonoBehaviour
         string username = usernameField.text;
         string password = passwordField.text;
 
-
+        LogOrReg.Registered = true;
 
         Debug.Log($"username: {username}, password: {password}");
 
@@ -76,8 +77,8 @@ public class Register : MonoBehaviour
         form.AddField("username", username);
 
 
-        //var request = UnityWebRequest.Post("http://188.166.166.197:18102/api/register", form);
-        var request = UnityWebRequest.Post("http://localhost:18102/api/register", form);
+        var request = UnityWebRequest.Post("http://188.166.166.197:18102/api/register", form);
+        //var request = UnityWebRequest.Post("http://localhost:18102/api/register", form);
         var handler = request.SendWebRequest();
 
         float startTime = 0f;

@@ -35,6 +35,7 @@ TagManager:
   - U2
   - U3
   - U4
+  - Collider_Prestige
   layers:
   - Default
   - TransparentFX

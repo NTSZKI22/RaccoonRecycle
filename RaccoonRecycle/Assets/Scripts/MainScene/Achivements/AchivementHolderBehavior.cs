@@ -46,11 +46,8 @@ public class AchivementHolderBehavior : MonoBehaviour
     {
         getAchievementProgress();
         maxolt();
-        if (!max)
-        {
-            toAble();
-            showText();
-        }
+        toAble();
+        showText();
         
         
     }
@@ -85,7 +82,15 @@ public class AchivementHolderBehavior : MonoBehaviour
     {
         string[] st = achivementText.Split(" ");
         int c = int.Parse(st[0]);
-        st[c] = placeholders[b];
+        if (b == placeholders.Length)
+        {
+            st[c] = placeholders[b-1];
+        }
+        else
+        {
+            st[c] = placeholders[b];
+        }
+        
         string kiir = "";
         for (int i = 1; i < st.Length; i++)
         {
@@ -97,7 +102,15 @@ public class AchivementHolderBehavior : MonoBehaviour
         }
         else
         {
-            text_Achiv_Reward.text = rewards[b].ToString();
+            if (b == placeholders.Length)
+            {
+                text_Achiv_Reward.text = rewards[b - 1].ToString();
+            }
+            else
+            {
+                text_Achiv_Reward.text = rewards[b].ToString();
+            }
+            
         }
         if (max)
         {

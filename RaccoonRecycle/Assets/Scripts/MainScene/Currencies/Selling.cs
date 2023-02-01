@@ -5,19 +5,19 @@ using UnityEngine.UI;
 
 public class Selling : MonoBehaviour
 {
-    DatabaseCommunication dataScript; //az adatbázisból megkapott adatokat kezelõ script
-    Properties propertiesScript; //az adott szemetek tulajdonságait kezelõ script
+    DatabaseCommunication dataScript; //az adatbï¿½zisbï¿½l megkapott adatokat kezelï¿½ script
+    Properties propertiesScript; //az adott szemetek tulajdonsï¿½gait kezelï¿½ script
 
-    float normalCurrency; //az alap currenciet tartalmazó változó
-    float prestigeCurrency; //a prestige currenciet tartalmazó változó
-    float totalearnings; //a játék kezdete vagy utolsó prestige óta szerzett normal currency
+    float normalCurrency; //az alap currenciet tartalmazï¿½ vï¿½ltozï¿½
+    float prestigeCurrency; //a prestige currenciet tartalmazï¿½ vï¿½ltozï¿½
+    float totalearnings; //a jï¿½tï¿½k kezdete vagy utolsï¿½ prestige ï¿½ta szerzett normal currency
 
-    public Text ncDisplay; //a megjelenítésre használt mezöt tartalmazó változó
-    public Text pcDisplay; //megjelenítésre használt mezõt tartalmazó változó
+    public Text ncDisplay; //a megjelenï¿½tï¿½sre hasznï¿½lt mezï¿½t tartalmazï¿½ vï¿½ltozï¿½
+    public Text pcDisplay; //megjelenï¿½tï¿½sre hasznï¿½lt mezï¿½t tartalmazï¿½ vï¿½ltozï¿½
 
-    //egyenlõre nem fixek, teszteléshez:
-    public float defaultValue; //a szemetek alapértelmezett értéke
-    float multiplier; //a szemetek értékéhez használt szorzó
+    //egyenlï¿½re nem fixek, tesztelï¿½shez:
+    public float defaultValue; //a szemetek alapï¿½rtelmezett ï¿½rtï¿½ke
+    float multiplier; //a szemetek ï¿½rtï¿½kï¿½hez hasznï¿½lt szorzï¿½
 
     int gemCurrency;
     float normalCurrency_spent;
@@ -28,36 +28,52 @@ public class Selling : MonoBehaviour
     public int itemLvl_2;
     int itemLvl_3;
 
+    public bool gotData;
 
-    void Start() //a játék elindulásánál lefut
+    void Start() //a jï¿½tï¿½k elindulï¿½sï¿½nï¿½l lefut
     {
-        dataScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<DatabaseCommunication>(); //a scriptet kiveszi az adott objektumból mint komponense
-        //gemCurrency = 0;
+        dataScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<DatabaseCommunication>(); //a scriptet kiveszi az adott objektumbï¿½l mint komponense
+        gemCurrency = 0;
+        gotData = false;
 
-        defaultValue = 10; //alapértelmezett érték beállítása
-        multiplier = 1.05f; //a szorzó alap értékének beállítása 5%-os növekedés
+
+        defaultValue = 10; //alapï¿½rtelmezett ï¿½rtï¿½k beï¿½llï¿½tï¿½sa
+        multiplier = 1.05f; //a szorzï¿½ alap ï¿½rtï¿½kï¿½nek beï¿½llï¿½tï¿½sa 5%-os nï¿½vekedï¿½s
 
     }
 
-    void Update() //minden képfrissítésnél lefut
+    void Update() //minden kï¿½pfrissï¿½tï¿½snï¿½l lefut
     {
         itemLvl_3 = dataScript.itemLvl_3;
         itemLvl_2 = dataScript.itemLvl_2;
-        displayCurrency(); //meghívja a metódust
-        dataScript.loadCurreny(normalCurrency, prestigeCurrency, totalearnings, gemCurrency, normalCurrency_spent, prestigeCurrency_spent);  //a normal, presstigecurrency és totalearnings értékeit visszaadja a datascript-nek
+        displayCurrency(); //meghï¿½vja a metï¿½dust
+        if (gotData && dataScript.login)
+        {
+            dataScript.loadCurreny(normalCurrency, prestigeCurrency, totalearnings, gemCurrency, normalCurrency_spent, prestigeCurrency_spent);  //a normal, presstigecurrency ï¿½s totalearnings ï¿½rtï¿½keit visszaadja a datascript-nek
+            
+        } else if (dataScript.registrating)
+        {
+            dataScript.loadCurreny(normalCurrency, prestigeCurrency, totalearnings, gemCurrency, normalCurrency_spent, prestigeCurrency_spent);  //a normal, presstigecurrency ï¿½s totalearnings ï¿½rtï¿½keit visszaadja a datascript-nek
+
+        }
     }
 
-    void addCurrency(float n) //metódus, növeli a currencyk mennyiségét
+    public void giveData()
     {
-        normalCurrency += n; //a normalcurrency mennyiségét növeli az n értékével
-        totalearnings += n; //a totalearnigs mennyiségét növeli az n értékével
+        dataScript.loadCurreny(normalCurrency, prestigeCurrency, totalearnings, gemCurrency, normalCurrency_spent, prestigeCurrency_spent);
     }
 
-    void displayCurrency() //metódus, feladata a currencyk mennyiségének megjelenítése bizonyos objektumokon keresztül
+    void addCurrency(float n) //metï¿½dus, nï¿½veli a currencyk mennyisï¿½gï¿½t
     {
-        ncDisplay.text = convertCurrencyToDisplay(normalCurrency.ToString()); //ncdisplay étékét az átalakítottt normalcurrency-vé állítja
-        pcDisplay.text = convertCurrencyToDisplay(prestigeCurrency.ToString()); //pcdisplay étékét az átalakítottt prestigecurrency-vé állítja
-        gcDisplay.text = convertCurrencyToDisplay(gemCurrency.ToString()); //pcdisplay étékét az átalakítottt prestigecurrency-vé állítja
+        normalCurrency += n; //a normalcurrency mennyisï¿½gï¿½t nï¿½veli az n ï¿½rtï¿½kï¿½vel
+        totalearnings += n; //a totalearnigs mennyisï¿½gï¿½t nï¿½veli az n ï¿½rtï¿½kï¿½vel
+    }
+
+    void displayCurrency() //metï¿½dus, feladata a currencyk mennyisï¿½gï¿½nek megjelenï¿½tï¿½se bizonyos objektumokon keresztï¿½l
+    {
+        ncDisplay.text = convertCurrencyToDisplay(normalCurrency.ToString()); //ncdisplay ï¿½tï¿½kï¿½t az ï¿½talakï¿½tottt normalcurrency-vï¿½ ï¿½llï¿½tja
+        pcDisplay.text = convertCurrencyToDisplay(prestigeCurrency.ToString()); //pcdisplay ï¿½tï¿½kï¿½t az ï¿½talakï¿½tottt prestigecurrency-vï¿½ ï¿½llï¿½tja
+        gcDisplay.text = convertCurrencyToDisplay(gemCurrency.ToString()); //pcdisplay ï¿½tï¿½kï¿½t az ï¿½talakï¿½tottt prestigecurrency-vï¿½ ï¿½llï¿½tja
     }
 
     //public methods: 
@@ -67,12 +83,12 @@ public class Selling : MonoBehaviour
         gemCurrency += reward;
     }
 
-    public void normalSelling() //metódus, más scriptek és objektumok által is meghívható, mely a default seller által történõ eladáskor fut le
+    public void normalSelling() //metï¿½dus, mï¿½s scriptek ï¿½s objektumok ï¿½ltal is meghï¿½vhatï¿½, mely a default seller ï¿½ltal tï¿½rtï¿½nï¿½ eladï¿½skor fut le
     {
-        addCurrency(defaultValue); //a szemetek alap értékét átadva meghívjuk az addCurrency-t
+        addCurrency(defaultValue); //a szemetek alap ï¿½rtï¿½kï¿½t ï¿½tadva meghï¿½vjuk az addCurrency-t
     }
 
-    public void soldTrash(float amount) //bármilyen fix szemét eladásakor hívódik, majd fut le, növelli a normalcurrency értékét
+    public void soldTrash(float amount) //bï¿½rmilyen fix szemï¿½t eladï¿½sakor hï¿½vï¿½dik, majd fut le, nï¿½velli a normalcurrency ï¿½rtï¿½kï¿½t
     {
         switch (itemLvl_2)
         {
@@ -85,113 +101,114 @@ public class Selling : MonoBehaviour
         }
     }
 
-    public void increaseMoney(float amount) //bármilyen fix szemét eladásakor hívódik, majd fut le, növelli a normalcurrency értékét
+    public void increaseMoney(float amount) //bï¿½rmilyen fix szemï¿½t eladï¿½sakor hï¿½vï¿½dik, majd fut le, nï¿½velli a normalcurrency ï¿½rtï¿½kï¿½t
     {
-        addCurrency(amount);  //a megkapott mennyiséget átadva meghívjuk az addCurrency-t
+        addCurrency(amount);  //a megkapott mennyisï¿½get ï¿½tadva meghï¿½vjuk az addCurrency-t
     }
 
-    public bool isEnoughNormalCurrency(float n) //metódus, meghívásával igaz v hamis értéket ad vissza arról, hogy van-e ellég normalcurrency a fejlesztésre
+    public bool isEnoughNormalCurrency(float n) //metï¿½dus, meghï¿½vï¿½sï¿½val igaz v hamis ï¿½rtï¿½ket ad vissza arrï¿½l, hogy van-e ellï¿½g normalcurrency a fejlesztï¿½sre
     {
-        if (normalCurrency > n || normalCurrency == n) //ha több vagy egyenlõ
+        if (normalCurrency > n || normalCurrency == n) //ha tï¿½bb vagy egyenlï¿½
         {
             return true; //igaz
         }
         return false; //hamis
     }
 
-    public bool isEnoughPrestigeCurrency(float n) //metódus, meghívásával igaz v hamis értéket ad vissza arról, hogy van-e ellég prestigecurrency a fejlesztésre
+    public bool isEnoughPrestigeCurrency(float n) //metï¿½dus, meghï¿½vï¿½sï¿½val igaz v hamis ï¿½rtï¿½ket ad vissza arrï¿½l, hogy van-e ellï¿½g prestigecurrency a fejlesztï¿½sre
     {
-        if (prestigeCurrency > n || prestigeCurrency == n) //ha több vagy egyenlõ
+        if (prestigeCurrency > n || prestigeCurrency == n) //ha tï¿½bb vagy egyenlï¿½
         {
             return true; //igaz
         }
         return false; //hamis
     }
 
-    public bool isEnoughGemCurrency(float n) //metódus, meghívásával igaz v hamis értéket ad vissza arról, hogy van-e ellég prestigecurrency a fejlesztésre
+    public bool isEnoughGemCurrency(float n) //metï¿½dus, meghï¿½vï¿½sï¿½val igaz v hamis ï¿½rtï¿½ket ad vissza arrï¿½l, hogy van-e ellï¿½g prestigecurrency a fejlesztï¿½sre
     {
-        if (gemCurrency > n || gemCurrency == n) //ha több vagy egyenlõ
+        if (gemCurrency > n || gemCurrency == n) //ha tï¿½bb vagy egyenlï¿½
         {
             return true; //igaz
         }
         return false; //hamis
     }
 
-    public string convertCurrencyToDisplay(string nc) //metódus, meghívásával megjeleníthetõ állapotba lehet alakítani a currency-k mennyiségét, kér egy string nc-t, mely a birtokolt currency szöveggé alakítva
+    public string convertCurrencyToDisplay(string nc) //metï¿½dus, meghï¿½vï¿½sï¿½val megjelenï¿½thetï¿½ ï¿½llapotba lehet alakï¿½tani a currency-k mennyisï¿½gï¿½t, kï¿½r egy string nc-t, mely a birtokolt currency szï¿½veggï¿½ alakï¿½tva
     {
-        string[] endings = { "", "", "K", "M", "B", "T", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "N", "O", "P", "Q", "R", "S" }; //tömb, tartalmazza a rövidítéseket, melyek utalnak a birtokolt pénzmennyiség értékére
-        if (nc.Contains(",")) //ha vesszõt tartalmaz az nc
+        string[] endings = { "", "", "K", "M", "B", "T", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "N", "O", "P", "Q", "R", "S" }; //tï¿½mb, tartalmazza a rï¿½vidï¿½tï¿½seket, melyek utalnak a birtokolt pï¿½nzmennyisï¿½g ï¿½rtï¿½kï¿½re
+        if (nc.Contains(",")) //ha vesszï¿½t tartalmaz az nc
         {
-            if (nc.Split(",")[0].Length > 4) //tizedesvesszõnél elválasztva a 0. fele ha nagyobb mint 4
+            if (nc.Split(",")[0].Length > 4) //tizedesvesszï¿½nï¿½l elvï¿½lasztva a 0. fele ha nagyobb mint 4
             {
-                switch (nc.Split(",")[0].Length % 3) //az elsõ fél hosszának hárommal osztva adott maradéka alapján
+                switch (nc.Split(",")[0].Length % 3) //az elsï¿½ fï¿½l hosszï¿½nak hï¿½rommal osztva adott maradï¿½ka alapjï¿½n
                 {
-                    case 0: //ha a maradék 0
-                        return nc.Substring(0, 3) + "." + nc.Substring(3, 1) + " " + endings[(nc.Split(",")[0].Length) / 3]; //visszaadott formátum
-                    case 1: //ha a maradék 1
-                        return nc.Substring(0, 1) + "." + nc.Substring(1, 2) + " " + endings[(nc.Split(",")[0].Length + 2) / 3]; //visszaadott formátum
-                    case 2: //ha a maradék 2
-                        return nc.Substring(0, 2) + "." + nc.Substring(2, 2) + " " + endings[(nc.Split(",")[0].Length + 2) / 3]; //visszaadott formátum
-                    default: return nc; //alapértelmezett visszatérési érték
+                    case 0: //ha a maradï¿½k 0
+                        return nc.Substring(0, 3) + "." + nc.Substring(3, 1) + " " + endings[(nc.Split(",")[0].Length) / 3]; //visszaadott formï¿½tum
+                    case 1: //ha a maradï¿½k 1
+                        return nc.Substring(0, 1) + "." + nc.Substring(1, 2) + " " + endings[(nc.Split(",")[0].Length + 2) / 3]; //visszaadott formï¿½tum
+                    case 2: //ha a maradï¿½k 2
+                        return nc.Substring(0, 2) + "." + nc.Substring(2, 2) + " " + endings[(nc.Split(",")[0].Length + 2) / 3]; //visszaadott formï¿½tum
+                    default: return nc; //alapï¿½rtelmezett visszatï¿½rï¿½si ï¿½rtï¿½k
                 }
             }
-            else //tizedesvesszõnél elválasztva a 0. fele ha nem nagyobb mint 4
+            else //tizedesvesszï¿½nï¿½l elvï¿½lasztva a 0. fele ha nem nagyobb mint 4
             {
-                return nc.Split(",")[0]; //visszadaja az elválasztott elsõ felét
+                return nc.Split(",")[0]; //visszadaja az elvï¿½lasztott elsï¿½ felï¿½t
             }
         }
         else
         {
-            if (nc.Split(".")[0].Length > 4) //tizedesvesszõnél elválasztva a 0. fele ha nagyobb mint 4
+            if (nc.Split(".")[0].Length > 4) //tizedesvesszï¿½nï¿½l elvï¿½lasztva a 0. fele ha nagyobb mint 4
             {
-                switch (nc.Split(".")[0].Length % 3) //az elsõ fél hosszának hárommal osztva adott maradéka alapján
+                switch (nc.Split(".")[0].Length % 3) //az elsï¿½ fï¿½l hosszï¿½nak hï¿½rommal osztva adott maradï¿½ka alapjï¿½n
                 {
-                    case 0: //ha a maradék 0
-                        return nc.Substring(0, 3) + "." + nc.Substring(3, 1) + " " + endings[(nc.Split(".")[0].Length) / 3]; //visszaadott formátum
-                    case 1: //ha a maradék 1
-                        return nc.Substring(0, 1) + "." + nc.Substring(1, 2) + " " + endings[(nc.Split(".")[0].Length + 2) / 3]; //visszaadott formátum
-                    case 2: //ha a maradék 2
-                        return nc.Substring(0, 2) + "." + nc.Substring(2, 2) + " " + endings[(nc.Split(".")[0].Length + 2) / 3]; //visszaadott formátum
-                    default: return nc; //alapértelmezett visszatérési érték
+                    case 0: //ha a maradï¿½k 0
+                        return nc.Substring(0, 3) + "." + nc.Substring(3, 1) + " " + endings[(nc.Split(".")[0].Length) / 3]; //visszaadott formï¿½tum
+                    case 1: //ha a maradï¿½k 1
+                        return nc.Substring(0, 1) + "." + nc.Substring(1, 2) + " " + endings[(nc.Split(".")[0].Length + 2) / 3]; //visszaadott formï¿½tum
+                    case 2: //ha a maradï¿½k 2
+                        return nc.Substring(0, 2) + "." + nc.Substring(2, 2) + " " + endings[(nc.Split(".")[0].Length + 2) / 3]; //visszaadott formï¿½tum
+                    default: return nc; //alapï¿½rtelmezett visszatï¿½rï¿½si ï¿½rtï¿½k
                 }
             }
-            else //tizedesvesszõnél elválasztva a 0. fele ha nem nagyobb mint 4
+            else //tizedesvesszï¿½nï¿½l elvï¿½lasztva a 0. fele ha nem nagyobb mint 4
             {
-                return nc.Split(".")[0]; //visszadaja az elválasztott elsõ felét
+                return nc.Split(".")[0]; //visszadaja az elvï¿½lasztott elsï¿½ felï¿½t
             }
         }
         
     }
 
-    public void boughtUpgradeNormal(float n) //metódus, meghívva és átadva neki az n-t, levonja az n mennyiségét a normalcurrency-bõl
+    public void boughtUpgradeNormal(float n) //metï¿½dus, meghï¿½vva ï¿½s ï¿½tadva neki az n-t, levonja az n mennyisï¿½gï¿½t a normalcurrency-bï¿½l
     {
-        normalCurrency -= n; //normalcurrency-bõl kivonja az n értékét
+        normalCurrency -= n; //normalcurrency-bï¿½l kivonja az n ï¿½rtï¿½kï¿½t
         normalCurrency_spent += n;
     }
 
-    public void boughtUpgradePrestige(float n) //metódus, meghívva és átadva neki az n-t, levonja az n mennyiségét a prestigecurrency-bõl
+    public void boughtUpgradePrestige(float n) //metï¿½dus, meghï¿½vva ï¿½s ï¿½tadva neki az n-t, levonja az n mennyisï¿½gï¿½t a prestigecurrency-bï¿½l
     {
-        prestigeCurrency -= n; //pretigecurrency-bõl kivonja az n értékét
+        prestigeCurrency -= n; //pretigecurrency-bï¿½l kivonja az n ï¿½rtï¿½kï¿½t
         prestigeCurrency_spent += n;
     }
 
-    public void boughtGemshop(int n) //metódus, meghívva és átadva neki az n-t, levonja az n mennyiségét a prestigecurrency-bõl
+    public void boughtGemshop(int n) //metï¿½dus, meghï¿½vva ï¿½s ï¿½tadva neki az n-t, levonja az n mennyisï¿½gï¿½t a prestigecurrency-bï¿½l
     {
-        gemCurrency -= n; //pretigecurrency-bõl kivonja az n értékét
+        gemCurrency -= n; //pretigecurrency-bï¿½l kivonja az n ï¿½rtï¿½kï¿½t
     }
 
-    public void getCurrencieValues() //metódus, feladata megszerezni a normal es prestige currency elmentett mennyiségét
+    public void getCurrencieValues() //metï¿½dus, feladata megszerezni a normal es prestige currency elmentett mennyisï¿½gï¿½t
     {
-        //a változóknak megadja az adatbázisból megszerzett változók értékeit
+        //a vï¿½ltozï¿½knak megadja az adatbï¿½zisbï¿½l megszerzett vï¿½ltozï¿½k ï¿½rtï¿½keit
         normalCurrency = dataScript.normalCurrency;
         prestigeCurrency = dataScript.prestigeCurrency;
         totalearnings = dataScript.totalEarnings;
         gemCurrency = dataScript.gemCurrency;
         normalCurrency_spent = dataScript.normalCurrency_spent;
         prestigeCurrency_spent = dataScript.prestigeCurrency_spent;
+        Debug.Log("getcurrency " + gemCurrency);
     }
 
-    public float prestigeEarning() //feladata visszaadni az aktuálisan megkapható prestigecurrency mennyiségét
+    public float prestigeEarning() //feladata visszaadni az aktuï¿½lisan megkaphatï¿½ prestigecurrency mennyisï¿½gï¿½t
     {
         switch (itemLvl_3)
         {
@@ -203,7 +220,7 @@ public class Selling : MonoBehaviour
 
     }
 
-    public void prestigeTasks() //feladata a prestige során elvégezendõ feladatokat végrehajtani
+    public void prestigeTasks() //feladata a prestige sorï¿½n elvï¿½gezendï¿½ feladatokat vï¿½grehajtani
     {
         prestigeCurrency += prestigeEarning();
         totalearnings = 0;

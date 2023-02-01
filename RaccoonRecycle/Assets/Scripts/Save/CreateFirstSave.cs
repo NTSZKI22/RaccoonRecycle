@@ -22,7 +22,8 @@ public class CreateFirstSave : MonoBehaviour
         Debug.Log(username);
         WWWForm form = new WWWForm();
         form.AddField("username", username);
-        var request = UnityWebRequest.Post("http://127.0.0.1:18102/api/save", form);
+        //var request = UnityWebRequest.Post("http://127.0.0.1:18102/api/save", form);
+        var request = UnityWebRequest.Post("http://188.166.166.197:18102/api/save", form);
         var handler = request.SendWebRequest();
 
         float startTime = 0f;
