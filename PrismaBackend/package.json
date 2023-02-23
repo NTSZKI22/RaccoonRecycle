@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "jest --coverage --runInBand --detectOpenHandles",
+    "test": "jest --coverage --runInBand --forceExit",
     "dev": "nodemon server.js",
     "pm": "pm2 start server.js --force"
   },

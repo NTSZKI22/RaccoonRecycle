@@ -12,7 +12,7 @@ module.exports = app => {
         const bearerHeader = req.headers['authorization']
         const bearerToken = bearerHeader.split(' ')[1]
         const verified = jwt.verify(bearerToken, jwtKey);
-        if (verified) {  //postot használunk mivel a kérés küldésekor a bodyban szeretnénk küldeni az adatokat.
+        if (verified) {
             const onlinePlayers = await prisma.users.findMany({
                 where: {
                     isOnline: true
@@ -26,7 +26,10 @@ module.exports = app => {
             //when someone register, we create a save data, so there is no need to check if there is a save with this username or not.
             //ha valaki regisztrál akkor csinálunk egy alap mentést, így nincs értelme ellenőrizni, hogy van e mentése az adott illetőnek. 
             //plusz ez a kérés akkor történik, ha valaki sikeresen bejelentkezik, így a felhasználónlv is valós, emiatt azt sem kell ellenőrizni.
-            res.send(onlinePlayers)//elküldjük a mentést.
+            res.status(200).send(onlinePlayers)//elküldjük a játékosokat.
+        }
+        else{
+            res.status(422).send("")
         }
     })
 

@@ -8,21 +8,31 @@ const prisma = new PrismaClient()
 app.use(cors({
   origin: '*'
 }))
+const jwt = require('jsonwebtoken')
+const jwtKey = process.env.JWTKEY
+var bodyParser = require('body-parser')
+var jsonParser = bodyParser.json()
+var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
-    require('./routes/LoginRoute.js')(app)
-    require('./routes/RegisterRoute')(app)
-    require('./routes/GetSaveRoute')(app)
-    require('./routes/MailSender')(app)
-    require('./routes/SaveRoute')(app)
-    require('./routes/PasswordChange')(app)
-    require('./routes/UpdateUserRoute')(app)
-    require('./routes/ListOnlineUsersRoute')(app)
-    require('./routes/GetSaveIDRoute')(app)
-    require('./routes/SaveRoute') (app)
-    require('./routes/GetAchievementsRoute')(app)
-    require('./routes/SetAchievementsRoute')(app)
+require('./routes/LoginRoute.js')(app)
+require('./routes/RegisterRoute')(app)
+require('./routes/GetSaveRoute')(app)
+require('./routes/MailSender')(app)
+require('./routes/SaveRoute')(app)
+require('./routes/PasswordChange')(app)
+require('./routes/UpdateUserRoute')(app)
+require('./routes/ListOnlineUsersRoute')(app)
+require('./routes/GetSaveIDRoute')(app)
+require('./routes/SaveRoute')(app)
+require('./routes/GetAchievementsRoute')(app)
+require('./routes/SetAchievementsRoute')(app)
+
+//TODO WEBLOGIN
+//TODO GETTINGSAVE
+module.exports = app; 
+
+app.listen(port, () => {
+  console.log(`API: API is running on port: ${port}`);
+});
 
 
-    app.listen(port, () => {
-        console.log(`API: API is running on port: ${port}`);
-      });
