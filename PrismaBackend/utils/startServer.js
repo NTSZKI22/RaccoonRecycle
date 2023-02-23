@@ -1,9 +1,9 @@
 const app = require('../server');
 
-function startServer() {
-  const port = process.env.PORT || 3000;
+function startServer(portnumber) {
+  const port = portnumber || 3000;
 
-  app.listen(3000, () => {
+  app.listen(portnumber, () => {
     console.log(`API: API is running on port: 3000`);
   });
 }

@@ -1,34 +1,37 @@
-const { PrismaClient } = require('@prisma/client')
-const prisma = new PrismaClient()
-const jwt = require('jsonwebtoken')
-const jwtKey = process.env.JWTKEY
-var bodyParser = require('body-parser')
-var jsonParser = bodyParser.json()
-var urlencodedParser = bodyParser.urlencoded({ extended: false })
+const { PrismaClient } = require("@prisma/client");
+const prisma = new PrismaClient();
+const jwt = require("jsonwebtoken");
+const jwtKey = process.env.JWTKEY;
+var bodyParser = require("body-parser");
+var jsonParser = bodyParser.json();
+var urlencodedParser = bodyParser.urlencoded({ extended: false });
 //ez a sor felett csak importok találhatóak.
 
-module.exports = app => {
-    app.post("/api/updateuser", urlencodedParser, async (req, res) => {
-        const bearerHeader = req.headers['authorization']
-        const bearerToken = bearerHeader.split(' ')[1]
-        const verified = jwt.verify(bearerToken, jwtKey)  //postot használunk mivel a kérés küldésekor a bodyban szeretnénk küldeni az adatokat.
-        if (verified) {
-            var userAccount = await prisma.users.findFirst({ where: { username: verified.username } }) // keresünk egy accountot a bodyban kapott username alapján.
-            //lementjük az adatbázisba a frissített fiókot.
-            res.json({message: 'Info: Successful save!'}) //küldünk egy választ a kérőnek.
-            await prisma.users.update({
-                where: {
-                    username: "" + req.body.username
-                },
-                data: {
-                    isOnline: false
-                }
-            })
+module.exports = (app) => {
+  app.post("/api/updateuser", urlencodedParser, async (req, res) => {
+    if (req.headers["authorization"]) {
+      const bearerHeader = req.headers["authorization"];
+      const bearerToken = bearerHeader.split(" ")[1];
+      console.log(bearerToken)
+      const verified = jwt.verify(bearerToken, jwtKey, //postot használunk mivel a kérés küldésekor a bodyban szeretnénk küldeni az adatokat.
+      async (err, decoded) => {
+        if (err) {
+          return res.status(401).json({});
+        } else {
+            console.log(decoded)
+          await prisma.users.update({
+            where: {
+              username: "" + decoded.username,
+            },
+            data: {
+              isOnline: false,
+            },
+          });
+          return res.status(200).json({ message: "Info: Successful save!" });
         }
-        else{
-            res.json({message: "Bad Token!"},498)
-        }
-
-    })
-
-}
+      });
+    } else {
+      return res.status(401).json({ message: "Bad Token!" });
+    }
+  });
+};

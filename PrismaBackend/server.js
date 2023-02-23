@@ -31,7 +31,7 @@ require('./routes/SetAchievementsRoute')(app)
 //TODO GETTINGSAVE
 module.exports = app; 
 
-app.listen(port, () => {
+app.listen(/*port*/ Math.floor(Math.random() * (4444 - 3333 + 1) + 3333), () => {
   console.log(`API: API is running on port: ${port}`);
 });
 

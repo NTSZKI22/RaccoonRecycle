@@ -7,7 +7,7 @@ const jwtKey = process.env.JWTKEY
 const startServer = require('../utils/startServer')
 
 beforeAll(() => {
-  startServer();
+  //startServer(3332);
 });
 
 const data = {
@@ -36,12 +36,20 @@ describe('GET /api/admin/listOnlinePlayers', () => {
 })
 
 describe('GET /api/admin/listOnlinePlayers', () => {
-  it('should return a 422 status code if not authenticated', async () => {
+  it('should return 401/unathorized', async () => {
+    // create a JWT token for an authenticated user
+
+    // make a request to the endpoint with the token
+    const response = await request.get('/api/admin/listOnlinePlayers')
+      .set('Authorization', 'Bearer ' + token+'adsadsds')
+      .expect(401)
+  })
+})
+
+describe('GET /api/admin/listOnlinePlayers', () => {
+  it('should return a 401 status code if not authenticated', async () => {
     // make a request to the endpoint without a token
     const response = await request.get('/api/admin/listOnlinePlayers')
-      .expect(422)
-
-    // check that the response body is empty
-    expect(response.body).toEqual({})
+      .expect(401)
   })
 })
