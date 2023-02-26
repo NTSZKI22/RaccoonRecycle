@@ -1,6 +1,8 @@
 using Classes;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using Unity.VisualScripting;
 using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEditor;
 using UnityEngine;
@@ -11,6 +13,13 @@ public class QuitBehavior : MonoBehaviour
     private static string username;
     private static string token;
 
+    private DatabaseCommunication dbComm;
+
+
+    void Start()
+    {
+        dbComm = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<DatabaseCommunication>(); //a scriptet kiveszi az adott objektumból mint komponense
+    }
 
     void Update()
     {
@@ -19,15 +28,21 @@ public class QuitBehavior : MonoBehaviour
             //some logic goes here for when A is pressed
             if (Input.GetKey(KeyCode.F4))
             {
-                StartCoroutine(ChangeStatus());
                 Close();
             }
         }
     }
 
+    private void OnApplicationPause(bool pause)
+    {
+        StartCoroutine(ChangeStatus());
+        StartCoroutine(dbComm.saveData());
+    }
+
     private void OnApplicationQuit()
     {
         StartCoroutine(ChangeStatus());
+        StartCoroutine(dbComm.saveData());
     }
 
     private IEnumerator ChangeStatus()
@@ -74,7 +89,8 @@ public class QuitBehavior : MonoBehaviour
         }
         if (request.result == UnityWebRequest.Result.Success)
         {
-            Debug.Log(request.downloadHandler);
+            StartCoroutine(dbComm.saveData());
+            Application.Quit();
         }
         else
         {
@@ -85,6 +101,7 @@ public class QuitBehavior : MonoBehaviour
 
     public void Close()
     {
+        StartCoroutine(ChangeStatus());
         Application.Quit();
     }
 }
