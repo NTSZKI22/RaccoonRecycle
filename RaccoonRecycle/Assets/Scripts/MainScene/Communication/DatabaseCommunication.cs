@@ -8,16 +8,16 @@ using System.Security.Cryptography.X509Certificates;
 using Newtonsoft.Json.Bson;
 using System;
 using Newtonsoft.Json;
+using System.Diagnostics;
 
     public class DatabaseCommunication : MonoBehaviour
     {
-        Selling sellingScript; //a currency-t kezel� script
-        UpgradeButton pbUpgradeScripts; //a petbottle fejleszt�s�t kezel� script
-        UpgradeButton bxUpgradeScripts; //a box fejleszt�s�t kezel� script
-        UpgradeButton glUpgradeScripts; //a glass fejleszt�s�t kezel� script
-        UpgradeButton byUpgradeScripts; //a battery fejleszt�s�t kezel� script
-        HolderBehavior holderScript; //a holderek viselked�s�t kezel� script
-        GettingProgress progressScript; // a feloldott halad�st jelzi vissza
+        Selling sellingScript; 
+        UpgradeButton pbUpgradeScripts; 
+        UpgradeButton bxUpgradeScripts; 
+        UpgradeButton glUpgradeScripts; 
+        UpgradeButton byUpgradeScripts; 
+        HolderBehavior holderScript; 
         OfflineEarning oEarningScript;
         AchivementController achivementScript;
         GemShopBehavior gemshopScript;
@@ -25,18 +25,14 @@ using Newtonsoft.Json;
         OfflineEarning offlineEarning = new OfflineEarning(); // az offline eltöltött órákat adja vissza
 
         private static string username;
-
         private static string token;
-
         private string json;
-
         private string saveId;
 
         public SaveClass saveClass;
         public AchievementMainClass achievementClass;
 
         public string id;
-
         int userid;
 
         public float normalCurrency;
@@ -67,7 +63,6 @@ using Newtonsoft.Json;
         public int BY_speedLvl;
         public int BY_frequencyLvl;
 
-        //uj adatok:
         public float normalCurrency_spent;
         public float prestigeCurrency_spent;
         public int gemCurrency;
@@ -89,15 +84,12 @@ using Newtonsoft.Json;
             glUpgradeScripts = GameObject.FindGameObjectWithTag("GlassU").GetComponent<UpgradeButton>(); //a scriptet kiveszi az adott objektumb�l mint komponense
             byUpgradeScripts = GameObject.FindGameObjectWithTag("BatteryU").GetComponent<UpgradeButton>(); //a scriptet kiveszi az adott objektumb�l mint komponense
             holderScript = GameObject.FindGameObjectWithTag("WindowBehavior").GetComponent<HolderBehavior>(); //a scriptet kiveszi az adott objektumb�l mint komponense
-            progressScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<GettingProgress>(); //a scriptet kiveszi az adott objektumb�l mint komponense
             oEarningScript = GameObject.FindGameObjectWithTag("OfflineEarningsScript").GetComponent<OfflineEarning>(); //a scriptet kiveszi az adott objektumb�l mint komponense
             achivementScript = GameObject.FindGameObjectWithTag("AchivementScript").GetComponent<AchivementController>(); //a scriptet kiveszi az adott objektumb�l mint komponense
             gemshopScript = GameObject.FindGameObjectWithTag("GemshopScript").GetComponent<GemShopBehavior>(); //a scriptet kiveszi az adott objektumb�l mint komponense
 
             registrating = LogOrReg.Registered;
             login = LogOrReg.LoggedIn;
-
-            Debug.Log($"Log or reg: {login} {registrating}");
 
             achievementProgress = new string[] { "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0" };
             normalCurrency_spent = 0;
@@ -107,22 +99,13 @@ using Newtonsoft.Json;
             itemLvl_2 = 0;
             itemLvl_3 = 0;
 
-            //ideiglenesen:
             userid = 0;
             StartCoroutine(getData());
-            // StartCoroutine(getID());
-            //giveData();
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
         }
 
         public IEnumerator getData()
         {
-            //adatok lek�r�se
+            //adatok lekérése
             switch (userid)
             {
                 case 0:
@@ -157,8 +140,6 @@ using Newtonsoft.Json;
                     request.SetRequestHeader("Authorization", "Bearer " + token);
                     var handler = request.SendWebRequest();
 
-
-
                     float startTime = 0f;
                     while (!handler.isDone)
                     {
@@ -178,11 +159,10 @@ using Newtonsoft.Json;
                     }
                     else
                     {
-                        Debug.Log("eror. getdata");
                         yield return null;
                     }
 
-                    //adatok be�ll�t�sa
+                    //adatok beállítása
                     id = saveClass.usersId;
                     normalCurrency = saveClass.normalCurrency;
                     prestigeCurrency = saveClass.prestigeCurrency;
@@ -214,16 +194,11 @@ using Newtonsoft.Json;
 
                     lastSaveTime = DateTime.Parse(saveClass.lastSaveDate, null, System.Globalization.DateTimeStyles.RoundtripKind);
 
-                    //lastSaveTime.AddHours(1);
-
-
+                /*
                     Debug.Log("savedata get");
                     Debug.Log(saveClass.pbUnlocked);
                     Debug.Log(json);
-                    //  giveData();
-
-
-
+                */
 
                     break;
 
@@ -285,20 +260,10 @@ using Newtonsoft.Json;
             if (GameObject.FindWithTag("U1") is not null)
             {
                 form.AddField("pbUnlocked", "" + 1);
-                Debug.Log("pbUnlocked" + 1);
             }
             else
             {
                 form.AddField("pbUnlocked", "" + 0);
-                Debug.Log("pbUnlocked" + 0);
-            }
-            if (PB_Unlocked)
-            {
-            Debug.Log("pbUnlocked"+ 1);
-            }
-            else
-            {
-                Debug.Log("pbUnlocked" + 0);
             }
             form.AddField("pbSoldAmount", "" + PB_soldAmount);
             form.AddField("pbValue", "" + PB_valueLvl);
@@ -306,7 +271,7 @@ using Newtonsoft.Json;
             form.AddField("pbSpeed", "" + PB_speedLvl);
             if (GameObject.FindWithTag("U2") is not null)
             {
-                Debug.Log("jo");
+                //Debug.Log("jo");
                 form.AddField("bxUnlocked", "" + 1);
             }
             else
@@ -331,7 +296,7 @@ using Newtonsoft.Json;
             form.AddField("glSpeed", "" + GL_speedLvl);
             if (GameObject.FindWithTag("U4") is not null)
             {
-                Debug.Log("jo");
+                //Debug.Log("jo");
                 form.AddField("byUnlocked", "" + 1);
             }
             else
@@ -342,7 +307,6 @@ using Newtonsoft.Json;
             form.AddField("byValue", "" + BY_valueLvl);
             form.AddField("byFrequency", "" + BY_frequencyLvl);
             form.AddField("bySpeed", "" + BY_speedLvl);
-            //var request = UnityWebRequest.Post("http://188.166.166.197:18102/api/save", form);
             var request = UnityWebRequest.Post("http://188.166.166.197:18102/api/save", form);
             request.SetRequestHeader("Authorization", "Bearer " + token);
             var handler = request.SendWebRequest();
@@ -359,20 +323,19 @@ using Newtonsoft.Json;
             }
             if (request.result == UnityWebRequest.Result.Success)
             {
-                Debug.Log("Sikerült!");
+                //Debug.Log("Sikerült!");
                 StartCoroutine(saveAchievements());
                 yield return null;
             }
             else
             {
-                Debug.Log("error. " + request.downloadHandler.ToString());
+                //Debug.Log("error. " + request.downloadHandler.ToString());
             }
             yield return null;
         }
 
-        public void loadCurreny(float nc, float pc, float te, int gc, float ncs, float pcs) //m�s scriptek �tadj�k neki ezzel a currency-k �rt�k�t
+        public void loadCurreny(float nc, float pc, float te, int gc, float ncs, float pcs) //currencyk értékének frissitése
         {
-            //a megadott �rt�kekre �ll�tja a v�ltoz�kat
             normalCurrency = nc;
             prestigeCurrency = pc;
             totalEarnings = te;
@@ -381,7 +344,7 @@ using Newtonsoft.Json;
             prestigeCurrency_spent = pcs;
         }
 
-        public void earningIncrease(string type, float n) //feladata a megkapott szem�tt�pus �sszbev�tel�t n-nel n�velni
+        public void earningIncrease(string type, float n) //adott szeméttípus összbevételét n-nel növeli
         {
             switch (type)
             {
@@ -392,9 +355,8 @@ using Newtonsoft.Json;
             }
         }
 
-        public void upgrade(int type, string property) //feladata a megkapott szem�tt�pus �s annak tulajdons�ga alapj�n a megfelel� szintet n�velni
+        public void upgrade(int type, string property) //adott szeméttípus és tulajdonsás alapján a megfelelő szintet növelni
         {
-            Debug.Log($"upgrade unlock {type}  {property}");
             switch (type)
             {
                 case 1:
@@ -403,7 +365,7 @@ using Newtonsoft.Json;
                         case "value": PB_valueLvl++; break;
                         case "speed": PB_speedLvl++; break;
                         case "frequency": PB_frequencyLvl++; break;
-                        default: Debug.Log("Property hiba"); break; //ki�rja, ha rossz adatot kapott, mint property
+                        //default: Debug.Log("Property hiba"); break;
                     }
                     break;
                 case 2:
@@ -412,7 +374,7 @@ using Newtonsoft.Json;
                         case "value": BX_valueLvl++; break;
                         case "speed": BX_speedLvl++; break;
                         case "frequency": BX_frequencyLvl++; break;
-                        default: Debug.Log("Property hiba"); break; //ki�rja, ha rossz adatot kapott, mint property
+                        //default: Debug.Log("Property hiba"); break;
                     }
                     break;
                 case 3:
@@ -421,7 +383,7 @@ using Newtonsoft.Json;
                         case "value": GL_valueLvl++; break;
                         case "speed": GL_speedLvl++; break;
                         case "frequency": GL_frequencyLvl++; break;
-                        default: Debug.Log("Property hiba"); break; //ki�rja, ha rossz adatot kapott, mint property
+                        //default: Debug.Log("Property hiba"); break;
                     }
                     break;
                 case 4:
@@ -430,33 +392,26 @@ using Newtonsoft.Json;
                         case "value": BY_valueLvl++; break;
                         case "speed": BY_speedLvl++; break;
                         case "frequency": BY_frequencyLvl++; break;
-                        default: Debug.Log("Property hiba"); break; //ki�rja, ha rossz adatot kapott, mint property
+                        //default: Debug.Log("Property hiba"); break;
                     }
                     break;
-                default: Debug.Log("Type hiba"); break; //ki�rja, ha rossz adatot kapott, mint type
+                //default: Debug.Log("Type hiba"); break;
             }
         }
 
-        public void giveData() //feladata (a j�t�k indul�sakor) az �sszes script met�dus�t megh�vni, amelyik adatot vesz �t a ment�sb�l
+        public void giveData() //játék indításakor kiosztja a kapott adatokat
         {
-            Debug.Log("dc givedata start");
             sellingScript.getCurrencieValues();
             sellingScript.gotData = true;
             holderScript.getData();
             holderScript.loadedStart();
-
             pbUpgradeScripts.getLevels();
             bxUpgradeScripts.getLevels();
             glUpgradeScripts.getLevels();
             byUpgradeScripts.getLevels();
-
-            sellingScript.getCurrencieValues();
-
             achivementScript.getData();
             achivementScript.gotData = true;
-
             gemshopScript.getData();
-
             oEarningScript.proceedWithTasks();
         }
 
@@ -529,13 +484,11 @@ using Newtonsoft.Json;
                 token = ForgottenPassword.token;
             }
 
-            Debug.Log(token);
+            //Debug.Log(token);
             WWWForm form = new WWWForm();
             var request = UnityWebRequest.Post("http://188.166.166.197:18102/api/getAchievements", form);
             request.SetRequestHeader("Authorization", "Bearer " + token);
             var handler = request.SendWebRequest();
-
-
 
             float startTime = 0f;
             while (!handler.isDone)
@@ -550,15 +503,12 @@ using Newtonsoft.Json;
             if (request.result == UnityWebRequest.Result.Success)
             {
                 json = request.downloadHandler.text;
-                Debug.Log(json);
+                //Debug.Log(json);
                 achievementClass = JsonConvert.DeserializeObject<AchievementMainClass>(json); //Sikeresen megkapja az adatot backendről
                 //Sikeresen deserializáljuk.
-
                 normalCurrency_spent = (float)achievementClass.Achievements[0].normalCurrency_spent;
                 prestigeCurrency_spent = (float)achievementClass.Achievements[0].prestigeCurrency_spent;
                 gemCurrency = (int)achievementClass.Achievements[0].gemCurrency;
-                Debug.Log("gemcurrency db " + achievementClass.Achievements[0].gemCurrency);
-                Debug.Log("gemcurrency db " + gemCurrency);
                 itemLvl_1 = achievementClass.Achievements[0].itemLvl_1;
                 itemLvl_2 = achievementClass.Achievements[0].itemLvl_2;
                 itemLvl_3 = achievementClass.Achievements[0].itemLvl_3;
@@ -567,16 +517,12 @@ using Newtonsoft.Json;
             }
             else
             {
-                Debug.Log("eror. getdata");
+                //Debug.Log("eror. getdata");
                 yield return null;
             }
-
-
-            Debug.Log("getachivement " + gemCurrency);
             login = true;
             giveData();
         }
-
 
         public IEnumerator saveAchievements()
         {
@@ -629,12 +575,12 @@ using Newtonsoft.Json;
             if (request.result == UnityWebRequest.Result.Success)
             {
                 json = request.downloadHandler.text;
-                Debug.Log(json);
+                //Debug.Log(json);
                 yield return null;
             }
             else
             {
-                Debug.Log("eror. getdata");
+                //Debug.Log("eror. savedata");
                 yield return null;
             }
 

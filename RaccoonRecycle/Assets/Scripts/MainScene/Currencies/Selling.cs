@@ -5,19 +5,17 @@ using UnityEngine.UI;
 
 public class Selling : MonoBehaviour
 {
-    DatabaseCommunication dataScript; //az adatb�zisb�l megkapott adatokat kezel� script
-    Properties propertiesScript; //az adott szemetek tulajdons�gait kezel� script
+    DatabaseCommunication dataScript;
+    Properties propertiesScript;
 
-    float normalCurrency; //az alap currenciet tartalmaz� v�ltoz�
-    float prestigeCurrency; //a prestige currenciet tartalmaz� v�ltoz�
-    float totalearnings; //a j�t�k kezdete vagy utols� prestige �ta szerzett normal currency
+    float normalCurrency;
+    float prestigeCurrency;
+    float totalearnings;
 
-    public Text ncDisplay; //a megjelen�t�sre haszn�lt mez�t tartalmaz� v�ltoz�
-    public Text pcDisplay; //megjelen�t�sre haszn�lt mez�t tartalmaz� v�ltoz�
+    public Text ncDisplay;
+    public Text pcDisplay;
 
-    //egyenl�re nem fixek, tesztel�shez:
-    public float defaultValue; //a szemetek alap�rtelmezett �rt�ke
-    float multiplier; //a szemetek �rt�k�hez haszn�lt szorz�
+    public float defaultValue;
 
     int gemCurrency;
     float normalCurrency_spent;
@@ -30,31 +28,27 @@ public class Selling : MonoBehaviour
 
     public bool gotData;
 
-    void Start() //a j�t�k elindul�s�n�l lefut
+    void Start()
     {
-        dataScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<DatabaseCommunication>(); //a scriptet kiveszi az adott objektumb�l mint komponense
+        dataScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<DatabaseCommunication>();
         gemCurrency = 0;
         gotData = false;
 
-
-        defaultValue = 10; //alap�rtelmezett �rt�k be�ll�t�sa
-        multiplier = 1.05f; //a szorz� alap �rt�k�nek be�ll�t�sa 5%-os n�veked�s
-
+        defaultValue = 15;
     }
 
-    void Update() //minden k�pfriss�t�sn�l lefut
+    void Update()
     {
         itemLvl_3 = dataScript.itemLvl_3;
         itemLvl_2 = dataScript.itemLvl_2;
-        displayCurrency(); //megh�vja a met�dust
+        displayCurrency();
         if (gotData && dataScript.login)
         {
-            dataScript.loadCurreny(normalCurrency, prestigeCurrency, totalearnings, gemCurrency, normalCurrency_spent, prestigeCurrency_spent);  //a normal, presstigecurrency �s totalearnings �rt�keit visszaadja a datascript-nek
+            giveData();
             
         } else if (dataScript.registrating)
         {
-            dataScript.loadCurreny(normalCurrency, prestigeCurrency, totalearnings, gemCurrency, normalCurrency_spent, prestigeCurrency_spent);  //a normal, presstigecurrency �s totalearnings �rt�keit visszaadja a datascript-nek
-
+            giveData();
         }
     }
 
@@ -63,32 +57,30 @@ public class Selling : MonoBehaviour
         dataScript.loadCurreny(normalCurrency, prestigeCurrency, totalearnings, gemCurrency, normalCurrency_spent, prestigeCurrency_spent);
     }
 
-    void addCurrency(float n) //met�dus, n�veli a currencyk mennyis�g�t
+    void addCurrency(float n)
     {
-        normalCurrency += n; //a normalcurrency mennyis�g�t n�veli az n �rt�k�vel
-        totalearnings += n; //a totalearnigs mennyis�g�t n�veli az n �rt�k�vel
+        normalCurrency += n;
+        totalearnings += n;
     }
 
-    void displayCurrency() //met�dus, feladata a currencyk mennyis�g�nek megjelen�t�se bizonyos objektumokon kereszt�l
+    void displayCurrency()
     {
-        ncDisplay.text = convertCurrencyToDisplay(normalCurrency.ToString()); //ncdisplay �t�k�t az �talak�tottt normalcurrency-v� �ll�tja
-        pcDisplay.text = convertCurrencyToDisplay(prestigeCurrency.ToString()); //pcdisplay �t�k�t az �talak�tottt prestigecurrency-v� �ll�tja
-        gcDisplay.text = convertCurrencyToDisplay(gemCurrency.ToString()); //pcdisplay �t�k�t az �talak�tottt prestigecurrency-v� �ll�tja
+        ncDisplay.text = convertCurrencyToDisplay(normalCurrency.ToString());
+        pcDisplay.text = convertCurrencyToDisplay(prestigeCurrency.ToString());
+        gcDisplay.text = convertCurrencyToDisplay(gemCurrency.ToString());
     }
-
-    //public methods: 
 
     public void claimedAchievement(int reward)
     {
         gemCurrency += reward;
     }
 
-    public void normalSelling() //met�dus, m�s scriptek �s objektumok �ltal is megh�vhat�, mely a default seller �ltal t�rt�n� elad�skor fut le
+    public void normalSelling()
     {
-        addCurrency(defaultValue); //a szemetek alap �rt�k�t �tadva megh�vjuk az addCurrency-t
+        addCurrency(defaultValue);
     }
 
-    public void soldTrash(float amount) //b�rmilyen fix szem�t elad�sakor h�v�dik, majd fut le, n�velli a normalcurrency �rt�k�t
+    public void soldTrash(float amount)
     {
         switch (itemLvl_2)
         {
@@ -101,114 +93,113 @@ public class Selling : MonoBehaviour
         }
     }
 
-    public void increaseMoney(float amount) //b�rmilyen fix szem�t elad�sakor h�v�dik, majd fut le, n�velli a normalcurrency �rt�k�t
+    public void increaseMoney(float amount)
     {
-        addCurrency(amount);  //a megkapott mennyis�get �tadva megh�vjuk az addCurrency-t
+        addCurrency(amount);
     }
 
-    public bool isEnoughNormalCurrency(float n) //met�dus, megh�v�s�val igaz v hamis �rt�ket ad vissza arr�l, hogy van-e ell�g normalcurrency a fejleszt�sre
+    public bool isEnoughNormalCurrency(float n)
     {
-        if (normalCurrency > n || normalCurrency == n) //ha t�bb vagy egyenl�
+        if (!(normalCurrency < n))
         {
-            return true; //igaz
+            return true;
         }
-        return false; //hamis
+        return false;
     }
 
-    public bool isEnoughPrestigeCurrency(float n) //met�dus, megh�v�s�val igaz v hamis �rt�ket ad vissza arr�l, hogy van-e ell�g prestigecurrency a fejleszt�sre
+    public bool isEnoughPrestigeCurrency(float n)
     {
-        if (prestigeCurrency > n || prestigeCurrency == n) //ha t�bb vagy egyenl�
+        if ( !(prestigeCurrency < n) )
         {
-            return true; //igaz
+            return true;
         }
-        return false; //hamis
+        return false;
     }
 
-    public bool isEnoughGemCurrency(float n) //met�dus, megh�v�s�val igaz v hamis �rt�ket ad vissza arr�l, hogy van-e ell�g prestigecurrency a fejleszt�sre
+    public bool isEnoughGemCurrency(float n)
     {
-        if (gemCurrency > n || gemCurrency == n) //ha t�bb vagy egyenl�
+        if (!(gemCurrency < n))
         {
-            return true; //igaz
+            return true; 
         }
-        return false; //hamis
+        return false; 
     }
 
-    public string convertCurrencyToDisplay(string nc) //met�dus, megh�v�s�val megjelen�thet� �llapotba lehet alak�tani a currency-k mennyis�g�t, k�r egy string nc-t, mely a birtokolt currency sz�vegg� alak�tva
+    public string convertCurrencyToDisplay(string nc) 
     {
-        string[] endings = { "", "", "K", "M", "B", "T", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "N", "O", "P", "Q", "R", "S" }; //t�mb, tartalmazza a r�vid�t�seket, melyek utalnak a birtokolt p�nzmennyis�g �rt�k�re
-        if (nc.Contains(",")) //ha vessz�t tartalmaz az nc
+        string[] endings = { "", "", "K", "M", "B", "T", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "N", "O", "P", "Q", "R", "S" }; 
+        if (nc.Contains(","))
         {
-            if (nc.Split(",")[0].Length > 4) //tizedesvessz�n�l elv�lasztva a 0. fele ha nagyobb mint 4
+            if (nc.Split(",")[0].Length > 4)
             {
-                switch (nc.Split(",")[0].Length % 3) //az els� f�l hossz�nak h�rommal osztva adott marad�ka alapj�n
+                switch (nc.Split(",")[0].Length % 3)
                 {
-                    case 0: //ha a marad�k 0
-                        return nc.Substring(0, 3) + "." + nc.Substring(3, 1) + " " + endings[(nc.Split(",")[0].Length) / 3]; //visszaadott form�tum
-                    case 1: //ha a marad�k 1
-                        return nc.Substring(0, 1) + "." + nc.Substring(1, 2) + " " + endings[(nc.Split(",")[0].Length + 2) / 3]; //visszaadott form�tum
-                    case 2: //ha a marad�k 2
-                        return nc.Substring(0, 2) + "." + nc.Substring(2, 2) + " " + endings[(nc.Split(",")[0].Length + 2) / 3]; //visszaadott form�tum
-                    default: return nc; //alap�rtelmezett visszat�r�si �rt�k
+                    case 0:
+                        return nc.Substring(0, 3) + "." + nc.Substring(3, 1) + " " + endings[(nc.Split(",")[0].Length) / 3];
+                    case 1: 
+                        return nc.Substring(0, 1) + "." + nc.Substring(1, 2) + " " + endings[(nc.Split(",")[0].Length + 2) / 3];
+                    case 2: 
+                        return nc.Substring(0, 2) + "." + nc.Substring(2, 2) + " " + endings[(nc.Split(",")[0].Length + 2) / 3];
+                    default: return nc; 
                 }
             }
-            else //tizedesvessz�n�l elv�lasztva a 0. fele ha nem nagyobb mint 4
+            else 
             {
-                return nc.Split(",")[0]; //visszadaja az elv�lasztott els� fel�t
+                return nc.Split(",")[0];
             }
         }
-        else
+        else if(nc.Contains("."))
         {
-            if (nc.Split(".")[0].Length > 4) //tizedesvessz�n�l elv�lasztva a 0. fele ha nagyobb mint 4
+            if (nc.Split(".")[0].Length > 4)
             {
-                switch (nc.Split(".")[0].Length % 3) //az els� f�l hossz�nak h�rommal osztva adott marad�ka alapj�n
+                switch (nc.Split(".")[0].Length % 3)
                 {
-                    case 0: //ha a marad�k 0
-                        return nc.Substring(0, 3) + "." + nc.Substring(3, 1) + " " + endings[(nc.Split(".")[0].Length) / 3]; //visszaadott form�tum
-                    case 1: //ha a marad�k 1
-                        return nc.Substring(0, 1) + "." + nc.Substring(1, 2) + " " + endings[(nc.Split(".")[0].Length + 2) / 3]; //visszaadott form�tum
-                    case 2: //ha a marad�k 2
-                        return nc.Substring(0, 2) + "." + nc.Substring(2, 2) + " " + endings[(nc.Split(".")[0].Length + 2) / 3]; //visszaadott form�tum
-                    default: return nc; //alap�rtelmezett visszat�r�si �rt�k
+                    case 0:
+                        return nc.Substring(0, 3) + "." + nc.Substring(3, 1) + " " + endings[(nc.Split(".")[0].Length) / 3];
+                    case 1:
+                        return nc.Substring(0, 1) + "." + nc.Substring(1, 2) + " " + endings[(nc.Split(".")[0].Length + 2) / 3];
+                    case 2: 
+                        return nc.Substring(0, 2) + "." + nc.Substring(2, 2) + " " + endings[(nc.Split(".")[0].Length + 2) / 3];
+                    default: return nc;
                 }
             }
-            else //tizedesvessz�n�l elv�lasztva a 0. fele ha nem nagyobb mint 4
+            else 
             {
-                return nc.Split(".")[0]; //visszadaja az elv�lasztott els� fel�t
+                return nc.Split(".")[0]; 
             }
         }
-        
+        return nc;
+
     }
 
-    public void boughtUpgradeNormal(float n) //met�dus, megh�vva �s �tadva neki az n-t, levonja az n mennyis�g�t a normalcurrency-b�l
+    public void boughtUpgradeNormal(float n)
     {
-        normalCurrency -= n; //normalcurrency-b�l kivonja az n �rt�k�t
+        normalCurrency -= n;
         normalCurrency_spent += n;
     }
 
-    public void boughtUpgradePrestige(float n) //met�dus, megh�vva �s �tadva neki az n-t, levonja az n mennyis�g�t a prestigecurrency-b�l
+    public void boughtUpgradePrestige(float n)
     {
-        prestigeCurrency -= n; //pretigecurrency-b�l kivonja az n �rt�k�t
+        prestigeCurrency -= n;
         prestigeCurrency_spent += n;
     }
 
-    public void boughtGemshop(int n) //met�dus, megh�vva �s �tadva neki az n-t, levonja az n mennyis�g�t a prestigecurrency-b�l
+    public void boughtGemshop(int n)
     {
-        gemCurrency -= n; //pretigecurrency-b�l kivonja az n �rt�k�t
+        gemCurrency -= n;
     }
 
-    public void getCurrencieValues() //met�dus, feladata megszerezni a normal es prestige currency elmentett mennyis�g�t
+    public void getCurrencieValues()
     {
-        //a v�ltoz�knak megadja az adatb�zisb�l megszerzett v�ltoz�k �rt�keit
         normalCurrency = dataScript.normalCurrency;
         prestigeCurrency = dataScript.prestigeCurrency;
         totalearnings = dataScript.totalEarnings;
         gemCurrency = dataScript.gemCurrency;
         normalCurrency_spent = dataScript.normalCurrency_spent;
         prestigeCurrency_spent = dataScript.prestigeCurrency_spent;
-        Debug.Log("getcurrency " + gemCurrency);
     }
 
-    public float prestigeEarning() //feladata visszaadni az aktu�lisan megkaphat� prestigecurrency mennyis�g�t
+    public float prestigeEarning()
     {
         switch (itemLvl_3)
         {
@@ -216,11 +207,9 @@ public class Selling : MonoBehaviour
             case 2: return totalearnings / 100 * 2;
             default: return totalearnings / 100;
         }
-        return totalearnings / 100;
-
     }
 
-    public void prestigeTasks() //feladata a prestige sor�n elv�gezend� feladatokat v�grehajtani
+    public void prestigeTasks()
     {
         prestigeCurrency += prestigeEarning();
         totalearnings = 0;

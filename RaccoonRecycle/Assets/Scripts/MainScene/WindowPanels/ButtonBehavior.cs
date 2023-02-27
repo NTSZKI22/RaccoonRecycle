@@ -10,7 +10,6 @@ public class ButtonBehavior : MonoBehaviour
     //használt scriptek változói
     Selling sellingScript; //a currency-t kezelõ script
     HolderBehavior holderScript; //a holderek viselkedését kezelõ script
-    GettingProgress progressScript; // a feloldott haladást jelzi vissza
 
     //minden szemétfajtához tartozó gomb, felirat és ár
     //gomb -> megnyomásával feloldható a futószalag, felirat -> kiírja az árat, cost -> megadja az árat
@@ -35,7 +34,6 @@ public class ButtonBehavior : MonoBehaviour
     {
         sellingScript = GameObject.FindGameObjectWithTag("SellingScript").GetComponent<Selling>(); //a scriptet kiveszi az adott objektumból mint komponense
         holderScript = GameObject.FindGameObjectWithTag("WindowBehavior").GetComponent<HolderBehavior>(); //a scriptet kiveszi az adott objektumból mint komponense
-        progressScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<GettingProgress>(); //a scriptet kiveszi az adott objektumból mint komponense
         dataScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<DatabaseCommunication>(); //a scriptet kiveszi az adott objektumból mint komponense
 
         defaultStart(); //alapértelmezett elindulás
@@ -69,9 +67,9 @@ public class ButtonBehavior : MonoBehaviour
     void defaultStart() //alap értékállítás bizonyos változóknak
     {
         cost_UnlockPB = 50;
-        cost_UnlockBX = 10000;
-        cost_UnlockGL = 150000;
-        cost_UnlockBY = 2000000;
+        cost_UnlockBX = 1000;
+        cost_UnlockGL = 15000;
+        cost_UnlockBY = 200000;
     }
 
     void toAble() //feladata meghatározni, hogy a gomb elérhetõ legyen e

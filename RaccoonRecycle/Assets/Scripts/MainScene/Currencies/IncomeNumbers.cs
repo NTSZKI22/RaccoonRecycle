@@ -5,24 +5,21 @@ using UnityEngine.UI;
 
 public class IncomeNumbers : MonoBehaviour
 {
+    Selling sellingScript;
+
     public Text text_Minta;
     public GameObject IncomeHolder;
 
-    Selling sellingScript; //a currency-t kezelõ script
-
     bool isOn;
-
     int itemLvl_2;
 
-    // Start is called before the first frame update
     void Start()
     {
-        sellingScript = GameObject.FindGameObjectWithTag("SellingScript").GetComponent<Selling>(); //a scriptet kiveszi az adott objektumból mint komponense
+        sellingScript = GameObject.FindGameObjectWithTag("SellingScript").GetComponent<Selling>();
 
         isOn = true;
     }
 
-    // Update is called once per frame
     void Update()
     {
         itemLvl_2 = sellingScript.itemLvl_2;
@@ -43,7 +40,6 @@ public class IncomeNumbers : MonoBehaviour
     {
         switch (itemLvl_2)
         {
-            case 0: amount = amount; break;
             case 1: amount = amount * 1.25f; break;
             case 2: amount = amount * 1.5f; break;
             case 3: amount = amount * 1.75f; break;
