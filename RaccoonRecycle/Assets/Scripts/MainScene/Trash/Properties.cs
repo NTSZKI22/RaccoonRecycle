@@ -4,125 +4,108 @@ using UnityEngine;
 
 public class Properties : MonoBehaviour
 {
-    DatabaseCommunication dataScript; //az adatbázisból megkapott adatokat kezelõ script
+    DatabaseCommunication dataScript;
 
-    //alap értékei a bizonyos tulajdonságoknak
-    float defValue; //minél nagyobb annál többet ért
-    float defSpeed; //minél nagyobb annál gyorsabb
-    float defFrequency; //minél kisebb annál gyorsabb
+    float defValue;
+    float defSpeed;
+    float defFrequency;
 
-    int valueLvl; //érték szintje
-    int speedLvl; //gyorsaság szintje
-    int frequencylvl; //gyakoriság szintje
+    int valueLvl;
+    int speedLvl;
+    int frequencylvl;
 
-    float multiplierPos; //pozitív szorzó
-    float multiplierNeg; //negatív szorzó
+    float multiplierPos;
+    float multiplierNeg;
 
-
-    // Start is called before the first frame update
     void Start()
     {
-        dataScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<DatabaseCommunication>(); //a scriptet kiveszi az adott objektumból mint komponense
+        dataScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<DatabaseCommunication>();
 
-        //alap érték megadása a következõ változóknak
-        multiplierPos = 1.02f; //2%-os növekedés
-        multiplierNeg = 0.98f; //2%-os csökkenés
+        multiplierPos = 1.02f;
+        multiplierNeg = 0.98f;
 
-        defProperties(); //alap értéket határoz meg az elemnek, amin van
-
-        
+        defProperties();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        getLevels(); //elkéri a szintjeit a különbözõ tulajdonságoknak folyamatos, hátha közben valamit fejlesztettek
+        getLevels();
     }
 
-    public void defProperties() //megadja a tulajdonságok alapértelmezett értékét
+    public void defProperties()
     {
-        if (this.gameObject.tag == "PetBottle") //ha az objektum petbottle tag-gel rendelkezik
+        if (this.gameObject.tag == "PetBottle")
         {
-            
-            //alap értékeket ad
-            
             defSpeed = 200; 
             defValue = 25;
             defFrequency = 2;
         }
-        if (gameObject.tag == "Box") //ha az objektum box tag-gel rendelkezik
+        if (gameObject.tag == "Box")
         {
-            //alap értékeket ad
             defSpeed = 100;
             defValue = 50;
             defFrequency = 3;
         }
-        if (gameObject.tag == "Glass") //ha az objektum glass tag-gel rendelkezik
+        if (gameObject.tag == "Glass")
         {
-            //alap értékeket ad
             defSpeed = 90;
             defValue = 100;
             defFrequency = 4;
         }
-        if (gameObject.tag == "Battery") //ha az objektum battery tag-gel rendelkezik
+        if (gameObject.tag == "Battery")
         {
-            //alap értékeket ad
             defSpeed = 80;
             defValue = 200;
             defFrequency = 6;
         }
     }
 
-    void getLevels() //adatbázisból elkért a változók értékét beállítja
+    void getLevels()
     {
-        if (gameObject.tag == "PetBottle") //ha az objektum petbottle tag-gel rendelkezik
+        if (gameObject.tag == "PetBottle")
         {
-            //a változók értéke a hozzá tartozó adat lesz
             speedLvl = dataScript.PB_speedLvl;
             valueLvl = dataScript.PB_valueLvl;
             frequencylvl = dataScript.PB_frequencyLvl;
         }
-        if (gameObject.tag == "Box") //ha az objektum box tag-gel rendelkezik
+        if (gameObject.tag == "Box")
         {
-            //a változók értéke a hozzá tartozó adat lesz
             speedLvl = dataScript.BX_speedLvl;
             valueLvl = dataScript.BX_valueLvl;
             frequencylvl = dataScript.BX_frequencyLvl;
         }
-        if (gameObject.tag == "Glass") //ha az objektum glass tag-gel rendelkezik
+        if (gameObject.tag == "Glass")
         {
-            //a változók értéke a hozzá tartozó adat lesz
             speedLvl = dataScript.GL_speedLvl;
             valueLvl = dataScript.GL_valueLvl;
             frequencylvl = dataScript.GL_frequencyLvl;
         }
-        if (gameObject.tag == "Battery") //ha az objektum battery tag-gel rendelkezik
+        if (gameObject.tag == "Battery")
         {
-            //a változók értéke a hozzá tartozó adat lesz
             speedLvl = dataScript.BY_speedLvl;
             valueLvl = dataScript.BY_valueLvl;
             frequencylvl = dataScript.BY_frequencyLvl;
         }
     }
 
-    public float value() //visszaadja a tényleges értéket
+    public float value()
     {
-        return defValue * Mathf.Pow(multiplierPos, valueLvl); //alapérték * szorzó ^ szint képlet értékét visszaadja
+        return defValue * Mathf.Pow(multiplierPos, valueLvl);
     }
 
-    public float valueDef() //visszaadja a tényleges értéket
+    public float valueDef()
     {
-        return defValue; //alapérték
+        return defValue;
     }
 
-    public float speed() //visszaadja a tényleges sepességét
+    public float speed()
     {
-        return defSpeed * Mathf.Pow(multiplierPos, speedLvl); //alapérték * szorzó ^ szint képlet értékét visszaadja
+        return defSpeed * Mathf.Pow(multiplierPos, speedLvl);
     }
 
-    public float frequency() //visszaadja a tényleges létrehozásának gyakoriságát
+    public float frequency()
     {
-        return defFrequency * Mathf.Pow(multiplierNeg, frequencylvl); //alapérték * szorzó ^ szint képlet értékét visszaadja
+        return defFrequency * Mathf.Pow(multiplierNeg, frequencylvl);
     }
 
 }

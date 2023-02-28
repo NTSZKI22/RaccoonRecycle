@@ -8,15 +8,14 @@ public class OfflineEarning : MonoBehaviour
 {
     float earnedOffline;
 
-    DatabaseCommunication dataScript; //az adatbázisból megkapott adatokat kezelő script
-    Selling sellingScript; //a currency-t kezel� script
+    DatabaseCommunication dataScript;
+    Selling sellingScript;
 
     float[] values = new float[5];
     float[] frequencies = new float[5];
     bool[] unlocks = new bool[5];
 
-    float multiplierPos = 1.02f; //2%-os növekedés
-    float multiplierNeg = 0.98f; //2%-os csökkenés
+    float multiplierPos = 1.02f;
 
     public Text text_Earning;
     public Button button_Confirm;
@@ -27,21 +26,11 @@ public class OfflineEarning : MonoBehaviour
 
     int itemLvl_1;
 
-    //def value - 10
-    //pb - 25, bx - 50, gl - 100, by - 200 -> value
-    //pb - 2, bx - 3, gl - 4, by - 6 -> frequency
-
     void Start()
     {
-        sellingScript = GameObject.FindGameObjectWithTag("SellingScript").GetComponent<Selling>(); //a scriptet kiveszi az adott objektumb�l mint komponense
-        dataScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<DatabaseCommunication>(); //a scriptet kiveszi az adott objektumból mint komponense
-
-        //earnedOffline = 1000; //alap érték, később kivehető
-        //proceedWithTasks();
-
-
+        sellingScript = GameObject.FindGameObjectWithTag("SellingScript").GetComponent<Selling>();
+        dataScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<DatabaseCommunication>();
     }
-
 
     public float OfflineEarnings(DateTime lastSaveDate)
     {
@@ -55,62 +44,48 @@ public class OfflineEarning : MonoBehaviour
             case 0:
                 if (offlineHours.Value.TotalHours > 0.25)
                 {
-                    Debug.Log("offline 600f");
                     return 600f;
                 }
                 else
                 {
                     float offlineSeconds = (float)offlineHours.Value.TotalSeconds;
-                    Debug.Log($"offline {offlineSeconds}");
                     return offlineSeconds;
                 }
-                return 0f;
             case 1:
                 if (offlineHours.Value.TotalHours > 0.5)
                 {
-                    Debug.Log("offline 1800f");
                     return 1800f;
                 }
                 else
                 {
                     float offlineSeconds = (float)offlineHours.Value.TotalSeconds;
-                    Debug.Log($"offline {offlineSeconds}");
                     return offlineSeconds;
                 }
-                return 0f;
             case 2:
                 if (offlineHours.Value.TotalHours > 1)
                 {
-                    Debug.Log("offline 3600f");
                     return 3600f;
                 }
                 else
                 {
                     float offlineSeconds = (float)offlineHours.Value.TotalSeconds;
-                    Debug.Log($"offline {offlineSeconds}");
                     return offlineSeconds;
                 }
-                return 0f;
             case 3:
                 if (offlineHours.Value.TotalHours > 1.5)
                 {
-                    Debug.Log("offline 5400f");
                     return 5400f;
                 }
                 else
                 {
                     float offlineSeconds = (float)offlineHours.Value.TotalSeconds;
-                    Debug.Log($"offline {offlineSeconds}");
                     return offlineSeconds;
                 }
-                return 0f;
         }
-
         return 0f;
-
     }
 
-    public void getData() //megszerzi az adatokat a datascriptből
+    public void getData()
     {
         values[1] = 25 * Mathf.Pow(multiplierPos, dataScript.PB_valueLvl);
         values[2] = 50 * Mathf.Pow(multiplierPos, dataScript.BX_valueLvl);
@@ -131,7 +106,7 @@ public class OfflineEarning : MonoBehaviour
         reg = dataScript.registrating;
     }
 
-    float calculateEarning(float time) //kiszámolja az offline szerzett currency-t
+    float calculateEarning(float time)
     {
         earnedOffline = 0;
         for (int i = 1; i < 5; i++)
@@ -154,22 +129,21 @@ public class OfflineEarning : MonoBehaviour
         return earnedOffline;
     }
 
-    public void proceedWithTasks() //ezzel lehet majd elindítani az offline earning teask-jeit !!hiányoss
+    public void proceedWithTasks()
     {
-        getData(); //megszerzi a szükséges adatokat
+        getData();
         if(reg != true)
         {
             DateTime time = dataScript.lastSaveTime;
             calculateEarning(OfflineEarnings(time));
-            offlineEarning_Holder.SetActive(true); //láthatóvá teszi az ablakot
+            offlineEarning_Holder.SetActive(true);
             Debug.Log(earnedOffline);
-            text_Earning.text = sellingScript.convertCurrencyToDisplay(earnedOffline.ToString()); //megjeleníti a szerzett pénzmennyiséget
+            text_Earning.text = sellingScript.convertCurrencyToDisplay(earnedOffline.ToString());
         }
-        
     }
 
-    public void confirmed() //akkor futódik le, ha leokolja az ablakot a játékos
+    public void confirmed()
     {
-        sellingScript.increaseMoney(earnedOffline); //megkapja a keresett pénzmennyiséget
+        sellingScript.increaseMoney(earnedOffline);
     }
 }

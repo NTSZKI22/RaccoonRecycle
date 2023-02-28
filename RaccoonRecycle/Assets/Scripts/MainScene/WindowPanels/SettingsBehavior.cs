@@ -32,15 +32,13 @@ public class SettingsBehavior : MonoBehaviour
 
     void Start()
     {
-        incomeScript = GameObject.FindGameObjectWithTag("SellingScript").GetComponent<IncomeNumbers>(); //a scriptet kiveszi az adott objektumból mint komponense
+        incomeScript = GameObject.FindGameObjectWithTag("SellingScript").GetComponent<IncomeNumbers>();
         isFullScreen = true;
         isOnDisplay = true;
 
         resolutions = Screen.resolutions;
 
         Screen.SetResolution(1920, 1080, Screen.fullScreen);
-
-        
 
         int currentResolutionIndex = 0;
         for (int i = 0; i < resolutions.Length; i++)
@@ -50,8 +48,6 @@ public class SettingsBehavior : MonoBehaviour
             {
                 options.Add(option);
             }
-            
-            
         }
 
         int s = 0;
@@ -70,18 +66,13 @@ public class SettingsBehavior : MonoBehaviour
         resolutionsDropdown.AddOptions(options);
         resolutionsDropdown.value = currentResolutionIndex;
         resolutionsDropdown.RefreshShownValue();
-
-        
     }
 
     
     public void setResolution()
     {
-        //Resolution resolution = resolutions[resolutionsDropdown.value]
-        //Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
         string[] res = options[resolutionsDropdown.value].Split("x");
         Screen.SetResolution(int.Parse(res[0]), int.Parse(res[1]), Screen.fullScreen);
-
     }
 
     public void SetVolume(float volume)
@@ -102,5 +93,4 @@ public class SettingsBehavior : MonoBehaviour
         Debug.Log(isOnDisplay);
         incomeScript.toggleOn(isOnDisplay);
     }
-
 }

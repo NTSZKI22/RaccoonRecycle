@@ -5,14 +5,10 @@ using UnityEngine.UI;
 
 public class ButtonBehavior : MonoBehaviour
 {
-    DatabaseCommunication dataScript; //az adatbázisból megkapott adatokat kezelõ script
+    DatabaseCommunication dataScript;
+    Selling sellingScript;
+    HolderBehavior holderScript;
 
-    //használt scriptek változói
-    Selling sellingScript; //a currency-t kezelõ script
-    HolderBehavior holderScript; //a holderek viselkedését kezelõ script
-
-    //minden szemétfajtához tartozó gomb, felirat és ár
-    //gomb -> megnyomásával feloldható a futószalag, felirat -> kiírja az árat, cost -> megadja az árat
     public Button button_UnlockPB;
     public Text text_UnlockPB;
     float cost_UnlockPB;
@@ -29,16 +25,14 @@ public class ButtonBehavior : MonoBehaviour
     public Text text_UnlockBY;
     float cost_UnlockBY;
 
-    // Start is called before the first frame update
     void Start()
     {
-        sellingScript = GameObject.FindGameObjectWithTag("SellingScript").GetComponent<Selling>(); //a scriptet kiveszi az adott objektumból mint komponense
-        holderScript = GameObject.FindGameObjectWithTag("WindowBehavior").GetComponent<HolderBehavior>(); //a scriptet kiveszi az adott objektumból mint komponense
-        dataScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<DatabaseCommunication>(); //a scriptet kiveszi az adott objektumból mint komponense
+        sellingScript = GameObject.FindGameObjectWithTag("SellingScript").GetComponent<Selling>();
+        holderScript = GameObject.FindGameObjectWithTag("WindowBehavior").GetComponent<HolderBehavior>();
+        dataScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<DatabaseCommunication>();
 
-        defaultStart(); //alapértelmezett elindulás
+        defaultStart();
 
-        //a feljebb megadott gombok 'gomb' komponensére click listener kerül, kattintáskor a megfelelõ kód fut le
         Button btn_UPB = button_UnlockPB.GetComponent<Button>();
         btn_UPB.onClick.AddListener(unlockPB);
         
@@ -51,20 +45,18 @@ public class ButtonBehavior : MonoBehaviour
         Button btn_UBY = button_UnlockBY.GetComponent<Button>();
         btn_UBY.onClick.AddListener(unlockBY);
 
-        //a feliratok tartalmát az árra változtatja, mely elõtte konverzión esik át
         text_UnlockPB.text = sellingScript.convertCurrencyToDisplay(cost_UnlockPB.ToString());
         text_UnlockBX.text = sellingScript.convertCurrencyToDisplay(cost_UnlockBX.ToString());
         text_UnlockGL.text = sellingScript.convertCurrencyToDisplay(cost_UnlockGL.ToString());
         text_UnlockBY.text = sellingScript.convertCurrencyToDisplay(cost_UnlockBY.ToString());
     }
 
-    // Update is called once per frame
     void Update()
     {
-       toAble(); //gombok használhatósága
+       toAble();
     }
 
-    void defaultStart() //alap értékállítás bizonyos változóknak
+    void defaultStart()
     {
         cost_UnlockPB = 50;
         cost_UnlockBX = 1000;
@@ -72,40 +64,39 @@ public class ButtonBehavior : MonoBehaviour
         cost_UnlockBY = 200000;
     }
 
-    void toAble() //feladata meghatározni, hogy a gomb elérhetõ legyen e
+    void toAble()
     {
-        //gomb elérhetõségét állítja, mely függ attól, hogy van-e elég pénze a feloldásra
         button_UnlockPB.interactable = sellingScript.isEnoughNormalCurrency(cost_UnlockPB);
         button_UnlockBX.interactable = sellingScript.isEnoughPrestigeCurrency(cost_UnlockBX);
         button_UnlockGL.interactable = sellingScript.isEnoughPrestigeCurrency(cost_UnlockGL);
         button_UnlockBY.interactable = sellingScript.isEnoughPrestigeCurrency(cost_UnlockBY);
     }
 
-    void unlockPB() //petpalack feloldása
+    void unlockPB()
     {
-        holderScript.petbottleUnlock(); //a szügséges objektumok láthatósága változik
-        sellingScript.boughtUpgradeNormal(cost_UnlockPB); //a feloldás ára levonásra kerül az egyenlegrõl
+        holderScript.petbottleUnlock();
+        sellingScript.boughtUpgradeNormal(cost_UnlockPB);
         dataScript.refreshTrashStatus("PetBottle", true);
     }
 
-    void unlockBX() //doboz feloldása
+    void unlockBX()
     {
-        holderScript.boxUnlock(); //a szügséges objektumok láthatósága változik
-        sellingScript.boughtUpgradePrestige(cost_UnlockBX); //a feloldás ára levonásra kerül az egyenlegrõl
+        holderScript.boxUnlock();
+        sellingScript.boughtUpgradePrestige(cost_UnlockBX);
         dataScript.refreshTrashStatus("Box", true);
     }
 
-    void unlockGL() //üveg feloldása
+    void unlockGL()
     {
-        holderScript.glassUnlock(); //a szügséges objektumok láthatósága változik
-        sellingScript.boughtUpgradePrestige(cost_UnlockGL); //a feloldás ára levonásra kerül az egyenlegrõl
+        holderScript.glassUnlock();
+        sellingScript.boughtUpgradePrestige(cost_UnlockGL);
         dataScript.refreshTrashStatus("Glass", true);
     }
 
-    void unlockBY() //elem feloldása
+    void unlockBY()
     {
-        holderScript.batteryUnlock(); //a szügséges objektumok láthatósága változik
-        sellingScript.boughtUpgradePrestige(cost_UnlockBY); //a feloldás ára levonásra kerül az egyenlegrõl
+        holderScript.batteryUnlock();
+        sellingScript.boughtUpgradePrestige(cost_UnlockBY);
         dataScript.refreshTrashStatus("Battery", true);
     }
 }

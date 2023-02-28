@@ -5,11 +5,8 @@ using UnityEngine.UI;
 
 public class GemShopBehavior : MonoBehaviour
 {
-    Selling sellingScript; //a currency-t kezelõ script
-                           //isEnoughGemCurrency
-                           //boughtGemshop
-
-    DatabaseCommunication dataScript; //az adatbázisból megkapott adatokat kezelõ script
+    Selling sellingScript;
+    DatabaseCommunication dataScript;
 
     public Text text_Item_Text_1;
     public Text text_Item_Cost_1;
@@ -35,34 +32,28 @@ public class GemShopBehavior : MonoBehaviour
     int[] cost_3 = new int[] { 155, 275 };
     string[] details_3 = new string[] { "0 -> 50%", "50% -> 100%"};
 
-
-    // Start is called before the first frame update
     void Start()
     {
-        sellingScript = GameObject.FindGameObjectWithTag("SellingScript").GetComponent<Selling>(); //a scriptet kiveszi az adott objektumból mint komponense
-        dataScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<DatabaseCommunication>(); //a scriptet kiveszi az adott objektumból mint komponense
+        sellingScript = GameObject.FindGameObjectWithTag("SellingScript").GetComponent<Selling>();
+        dataScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<DatabaseCommunication>();
 
         text_Item_Text_1.text = "Offline earning upgrade";
         Button btn_Buy_1 = button_Item_Buy_1.GetComponent<Button>();
         btn_Buy_1.onClick.AddListener(bought1);
 
-        itemLvl_1 = 0;
-
         text_Item_Text_2.text = "Increase value by";
         Button btn_Buy_2 = button_Item_Buy_2.GetComponent<Button>();
         btn_Buy_2.onClick.AddListener(bought2);
-
-        itemLvl_2 = 0;
-
+        
         text_Item_Text_3.text = "Pestige earning booster";
         Button btn_Buy_3 = button_Item_Buy_3.GetComponent<Button>();
         btn_Buy_3.onClick.AddListener(bought3);
 
+        itemLvl_1 = 0;
+        itemLvl_2 = 0;
         itemLvl_3 = 0;
-
     }
 
-    // Update is called once per frame
     void Update()
     {
         showText();

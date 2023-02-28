@@ -15,17 +15,15 @@ public class QuitBehavior : MonoBehaviour
 
     private DatabaseCommunication dbComm;
 
-
     void Start()
     {
-        dbComm = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<DatabaseCommunication>(); //a scriptet kiveszi az adott objektumból mint komponense
+        dbComm = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<DatabaseCommunication>();
     }
 
     void Update()
     {
         if (Input.GetKey(KeyCode.LeftAlt) || Input.GetKey(KeyCode.RightAlt))
         {
-            //some logic goes here for when A is pressed
             if (Input.GetKey(KeyCode.F4))
             {
                 Close();
