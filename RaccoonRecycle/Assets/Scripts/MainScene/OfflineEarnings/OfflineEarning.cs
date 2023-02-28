@@ -10,12 +10,13 @@ public class OfflineEarning : MonoBehaviour
 
     DatabaseCommunication dataScript;
     Selling sellingScript;
+    FixData fixDataScript;
 
     float[] values = new float[5];
     float[] frequencies = new float[5];
     bool[] unlocks = new bool[5];
 
-    float multiplierPos = 1.02f;
+    float multiplierPos;
 
     public Text text_Earning;
     public Button button_Confirm;
@@ -25,11 +26,15 @@ public class OfflineEarning : MonoBehaviour
     bool reg;
 
     int itemLvl_1;
+    int itemLvl_2;
 
     void Start()
     {
         sellingScript = GameObject.FindGameObjectWithTag("SellingScript").GetComponent<Selling>();
         dataScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<DatabaseCommunication>();
+        fixDataScript = GameObject.FindGameObjectWithTag("FixData").GetComponent<FixData>();
+
+        multiplierPos = fixDataScript.multiplierPos;
     }
 
     public float OfflineEarnings(DateTime lastSaveDate)
@@ -87,22 +92,25 @@ public class OfflineEarning : MonoBehaviour
 
     public void getData()
     {
-        values[1] = 25 * Mathf.Pow(multiplierPos, dataScript.PB_valueLvl);
-        values[2] = 50 * Mathf.Pow(multiplierPos, dataScript.BX_valueLvl);
-        values[3] = 100 * Mathf.Pow(multiplierPos, dataScript.GL_valueLvl);
-        values[4] = 200 * Mathf.Pow(multiplierPos, dataScript.BY_valueLvl);
+        itemLvl_1 = dataScript.itemLvl_1;
+        itemLvl_1 = dataScript.itemLvl_2;
 
-        frequencies[1] = 2 * Mathf.Pow(multiplierPos, dataScript.PB_frequencyLvl);
-        frequencies[2] = 3 * Mathf.Pow(multiplierPos, dataScript.BX_frequencyLvl);
-        frequencies[3] = 4 * Mathf.Pow(multiplierPos, dataScript.GL_frequencyLvl);
-        frequencies[4] = 6 * Mathf.Pow(multiplierPos, dataScript.BY_frequencyLvl);
+        values[1] = fixDataScript.PB_defValue * Mathf.Pow(multiplierPos, dataScript.PB_valueLvl) * fixDataScript.gemshopValueMultiplier(itemLvl_2);
+        values[2] = fixDataScript.BX_defValue * Mathf.Pow(multiplierPos, dataScript.BX_valueLvl) * fixDataScript.gemshopValueMultiplier(itemLvl_2);
+        values[3] = fixDataScript.GL_defValue * Mathf.Pow(multiplierPos, dataScript.GL_valueLvl) * fixDataScript.gemshopValueMultiplier(itemLvl_2);
+        values[4] = fixDataScript.BY_defValue * Mathf.Pow(multiplierPos, dataScript.BY_valueLvl) * fixDataScript.gemshopValueMultiplier(itemLvl_2);
+
+        frequencies[1] = fixDataScript.PB_defFrequency * Mathf.Pow(multiplierPos, dataScript.PB_frequencyLvl);
+        frequencies[2] = fixDataScript.BX_defFrequency * Mathf.Pow(multiplierPos, dataScript.BX_frequencyLvl);
+        frequencies[3] = fixDataScript.GL_defFrequency * Mathf.Pow(multiplierPos, dataScript.GL_frequencyLvl);
+        frequencies[4] = fixDataScript.BY_defFrequency * Mathf.Pow(multiplierPos, dataScript.BY_frequencyLvl);
 
         unlocks[1] = dataScript.giveTrashStatus("PetBottle");
         unlocks[2] = dataScript.giveTrashStatus("Box");
         unlocks[3] = dataScript.giveTrashStatus("Glass");
         unlocks[4] = dataScript.giveTrashStatus("Battery");
 
-        itemLvl_1 = dataScript.itemLvl_1;
+        
         reg = dataScript.registrating;
     }
 
@@ -113,17 +121,11 @@ public class OfflineEarning : MonoBehaviour
         {
             if (unlocks[i])
             {
-                earnedOffline += time / frequencies[i] * values[i] * 0.7f;
+                earnedOffline += (time / frequencies[i]) * values[i] * fixDataScript.multiplierOffline;
             }
             else
             {
-                switch (i)
-                {
-                    case 1: earnedOffline += time / 2 * 10 * 0.7f; break;
-                    case 2: earnedOffline += time / 3 * 10 * 0.7f; break;
-                    case 3: earnedOffline += time / 4 * 10 * 0.7f; break;
-                    case 4: earnedOffline += time / 6 * 10 * 0.7f; break;
-                }
+                earnedOffline += (time / frequencies[i]) * fixDataScript.defaultValue * fixDataScript.multiplierOffline;
             }
         }
         return earnedOffline;
@@ -137,7 +139,6 @@ public class OfflineEarning : MonoBehaviour
             DateTime time = dataScript.lastSaveTime;
             calculateEarning(OfflineEarnings(time));
             offlineEarning_Holder.SetActive(true);
-            Debug.Log(earnedOffline);
             text_Earning.text = sellingScript.convertCurrencyToDisplay(earnedOffline.ToString());
         }
     }

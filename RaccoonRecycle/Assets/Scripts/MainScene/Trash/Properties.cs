@@ -5,6 +5,7 @@ using UnityEngine;
 public class Properties : MonoBehaviour
 {
     DatabaseCommunication dataScript;
+    FixData fixDataScript;
 
     float defValue;
     float defSpeed;
@@ -20,9 +21,10 @@ public class Properties : MonoBehaviour
     void Start()
     {
         dataScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<DatabaseCommunication>();
+        fixDataScript = GameObject.FindGameObjectWithTag("FixData").GetComponent<FixData>();
 
-        multiplierPos = 1.02f;
-        multiplierNeg = 0.98f;
+        multiplierPos = fixDataScript.multiplierPos;
+        multiplierNeg = fixDataScript.multiplierNeg;
 
         defProperties();
     }
@@ -34,30 +36,9 @@ public class Properties : MonoBehaviour
 
     public void defProperties()
     {
-        if (this.gameObject.tag == "PetBottle")
-        {
-            defSpeed = 200; 
-            defValue = 25;
-            defFrequency = 2;
-        }
-        if (gameObject.tag == "Box")
-        {
-            defSpeed = 100;
-            defValue = 50;
-            defFrequency = 3;
-        }
-        if (gameObject.tag == "Glass")
-        {
-            defSpeed = 90;
-            defValue = 100;
-            defFrequency = 4;
-        }
-        if (gameObject.tag == "Battery")
-        {
-            defSpeed = 80;
-            defValue = 200;
-            defFrequency = 6;
-        }
+        defSpeed = fixDataScript.giveTrashProperties(gameObject.tag, "Speed");
+        defValue = fixDataScript.giveTrashProperties(gameObject.tag, "Value");
+        defFrequency = fixDataScript.giveTrashProperties(gameObject.tag, "Frequency");
     }
 
     void getLevels()

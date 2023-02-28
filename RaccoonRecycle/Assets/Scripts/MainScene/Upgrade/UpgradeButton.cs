@@ -7,6 +7,7 @@ public class UpgradeButton : MonoBehaviour
 {
     Selling sellingScript;
     DatabaseCommunication dataScript;
+    FixData fixDataScript;
 
     float multiplier;
     int trashType;
@@ -35,12 +36,13 @@ public class UpgradeButton : MonoBehaviour
     public Text text_SpeedLvl;
     public Text text_FrequencyLvl;
 
-    int maxLevel = 75;
+    int maxLevel;
 
     void Start()
     {
         sellingScript = GameObject.FindGameObjectWithTag("SellingScript").GetComponent<Selling>();
         dataScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<DatabaseCommunication>();
+        fixDataScript = GameObject.FindGameObjectWithTag("FixData").GetComponent<FixData>();
 
         switch (gameObject.tag)
         {
@@ -73,37 +75,11 @@ public class UpgradeButton : MonoBehaviour
 
     void defaultStart()
     {
-        multiplier = 1.07f;
-
-        switch (trashType) 
-        {
-            case 0: Debug.Log("Tag hiba"); break;
-            case 1:
-                ValueDefCost = 50;
-                SpeedDefCost = 25;
-                FrequencyDefCost = 15;
-                break;
-            case 2:
-                ValueDefCost = 100;
-                SpeedDefCost = 50;
-                FrequencyDefCost = 30;
-                break;
-            case 3:
-                ValueDefCost = 200;
-                SpeedDefCost = 100;
-                FrequencyDefCost = 60;
-                break;
-            case 4:
-                ValueDefCost = 400;
-                SpeedDefCost = 200;
-                FrequencyDefCost = 120;
-                break;
-            default: Debug.Log("Default értékek");
-                ValueDefCost = 40;
-                SpeedDefCost = 20;
-                FrequencyDefCost = 10;
-                break;
-        }
+        maxLevel = fixDataScript.maxLevel;
+        multiplier = fixDataScript.multiplierPos;
+        ValueDefCost = fixDataScript.giveUpgradeProperties(gameObject.tag, "Value");
+        SpeedDefCost = fixDataScript.giveUpgradeProperties(gameObject.tag, "Speed");
+        FrequencyDefCost = fixDataScript.giveUpgradeProperties(gameObject.tag, "Frequency");
     }
 
     public void getLevels()

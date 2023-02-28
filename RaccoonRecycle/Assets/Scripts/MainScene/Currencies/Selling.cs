@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class Selling : MonoBehaviour
 {
     DatabaseCommunication dataScript;
-    Properties propertiesScript;
+    FixData fixDataScript;
 
     float normalCurrency;
     float prestigeCurrency;
@@ -31,10 +31,11 @@ public class Selling : MonoBehaviour
     void Start()
     {
         dataScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<DatabaseCommunication>();
+        fixDataScript = GameObject.FindGameObjectWithTag("FixData").GetComponent<FixData>();
         gemCurrency = 0;
         gotData = false;
 
-        defaultValue = 15;
+        defaultValue = fixDataScript.defaultValue;
     }
 
     void Update()
@@ -82,15 +83,7 @@ public class Selling : MonoBehaviour
 
     public void soldTrash(float amount)
     {
-        switch (itemLvl_2)
-        {
-            case 0: addCurrency(amount); break;
-            case 1: addCurrency(amount*1.25f); break;
-            case 2: addCurrency(amount*1.5f); break;
-            case 3: addCurrency(amount*1.75f); break;
-            case 4: addCurrency(amount*2f); break;
-            case 5: addCurrency(amount*2.25f); break;
-        }
+        addCurrency(amount* fixDataScript.gemshopValueMultiplier(itemLvl_2));
     }
 
     public void increaseMoney(float amount)
@@ -201,12 +194,7 @@ public class Selling : MonoBehaviour
 
     public float prestigeEarning()
     {
-        switch (itemLvl_3)
-        {
-            case 1: return totalearnings / 100 * 1.5f;
-            case 2: return totalearnings / 100 * 2;
-            default: return totalearnings / 100;
-        }
+        return ( totalearnings / fixDataScript.prestigeDivide * fixDataScript.gemshopPrestigeMultiplier(itemLvl_3));
     }
 
     public void prestigeTasks()

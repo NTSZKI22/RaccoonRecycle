@@ -7,35 +7,44 @@ public class GemShopBehavior : MonoBehaviour
 {
     Selling sellingScript;
     DatabaseCommunication dataScript;
+    FixData fixDataScript;
 
     public Text text_Item_Text_1;
     public Text text_Item_Cost_1;
     public Text text_Item_Details_1;
     public Button button_Item_Buy_1;
     int itemLvl_1;
-    int[] cost_1 = new int[] { 100, 225, 325 };
-    string[] details_1 = new string[] { "15 min -> 30 min", "30 min -> 1 hr", "1 hr -> 1,5 hr" };
+    int[] cost_1;
+    string[] details_1;
 
     public Text text_Item_Text_2;
     public Text text_Item_Cost_2;
     public Text text_Item_Details_2;
     public Button button_Item_Buy_2;
     int itemLvl_2;
-    int[] cost_2 = new int[] { 85, 175, 225, 260, 340 };
-    string[] details_2 = new string[] { "0 -> 25%", "25% -> 50%", "50% -> 75%", "75% -> 100%", "100% -> 125%" };
+    int[] cost_2;
+    string[] details_2;
 
     public Text text_Item_Text_3;
     public Text text_Item_Cost_3;
     public Text text_Item_Details_3;
     public Button button_Item_Buy_3;
     int itemLvl_3;
-    int[] cost_3 = new int[] { 155, 275 };
-    string[] details_3 = new string[] { "0 -> 50%", "50% -> 100%"};
+    int[] cost_3;
+    string[] details_3;
 
     void Start()
     {
         sellingScript = GameObject.FindGameObjectWithTag("SellingScript").GetComponent<Selling>();
         dataScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<DatabaseCommunication>();
+        fixDataScript = GameObject.FindGameObjectWithTag("FixData").GetComponent<FixData>();
+
+        cost_1 = fixDataScript.cost_1;
+        cost_2 = fixDataScript.cost_2;
+        cost_3 = fixDataScript.cost_3;
+        details_1 = fixDataScript.details_1;
+        details_2 = fixDataScript.details_2;
+        details_3 = fixDataScript.details_3;
 
         text_Item_Text_1.text = "Offline earning upgrade";
         Button btn_Buy_1 = button_Item_Buy_1.GetComponent<Button>();
@@ -71,7 +80,8 @@ public class GemShopBehavior : MonoBehaviour
     {
         if(itemLvl_1 == cost_1.Length){
             text_Item_Cost_1.text = "Maxed out";
-            text_Item_Details_1.text = "1,5 hr";
+            string[] st = details_1[itemLvl_1 - 1].Split(" -> ");
+            text_Item_Details_1.text = $"{st[1]}";
         }else
         {
             text_Item_Cost_1.text = cost_1[itemLvl_1].ToString();
@@ -81,7 +91,8 @@ public class GemShopBehavior : MonoBehaviour
         if (itemLvl_2 == cost_2.Length)
         {
             text_Item_Cost_2.text = "Maxed out";
-            text_Item_Details_2.text = "125%";
+            string[] st = details_1[itemLvl_2 - 1].Split(" -> ");
+            text_Item_Details_1.text = $"{st[1]}";
         }
         else
         {
@@ -92,7 +103,8 @@ public class GemShopBehavior : MonoBehaviour
         if (itemLvl_3 == cost_3.Length)
         {
             text_Item_Cost_3.text = "Maxed out";
-            text_Item_Details_3.text = "100%";
+            string[] st = details_1[itemLvl_3 - 1].Split(" -> ");
+            text_Item_Details_1.text = $"{st[1]}";
         }
         else
         {

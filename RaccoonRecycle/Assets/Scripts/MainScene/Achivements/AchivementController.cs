@@ -7,37 +7,13 @@ public class AchivementController : MonoBehaviour
 {
     DatabaseCommunication dataScript; 
     Selling sellingScript;
+    FixData fixDataScript;
 
-    int[] requirements7 = new int[] { 100, 1000, 10000, 100000, 1000000, 10000000, 100000000 };
+    int[] requirements7;
 
-    string[] achievementTexts = new string[]
-    {
-        "2 Earn x Raccoins in total",
-        "2 Have c Racoonium",
-        "2 Spend x Raccoins",
-        "2 Spend x Racoonium",
-        "3 Reach level y with any upgrades",
-        "5 Reach a total of z level with upgrades",
-        "0 Max out any upgrade",
-        "0 Max out the Petbottle refinery",
-        "0 Max out the Box refinery",
-        "0 Max out the Glass refinery",
-        "0 Max out the Battery refinery",
-        "0 Unlock Petbottle refinery",
-        "0 Unlock Box refinery",
-        "0 Unlock Glass refinery",
-        "0 Unlock Battery refinery",
-        "2 Earn x Raccoins in total with PetBottles",
-        "2 Earn x Raccoins in total with Boxes",
-        "2 Earn x Raccoins in total with Glasses",
-        "2 Earn x Raccoins in total with Batteries",
-        "6 Upgrade the Petbottles value to n Raccoins",
-        "6 Upgrade the Boxes value to n Raccoins",
-        "6 Upgrade the Glasses value to n Raccoins",
-        "6 Upgrade the Battery value to n Raccoins"
-    };
+    string[] achievementTexts;
 
-    string[] achievementProgress = new string[] { "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0" };
+    string[] achievementProgress;
 
     public GameObject notificationDot;
     public Text notificationNumber;
@@ -45,7 +21,6 @@ public class AchivementController : MonoBehaviour
     public GameObject notificationWindow;
     public GameObject parent;
 
-    //database-bol
     float normalCurrency;
     float prestigeCurrency;
     float totalEarnings;
@@ -83,19 +58,26 @@ public class AchivementController : MonoBehaviour
     float BX_defValue;
     float GL_defValue;
     float BY_defValue;
-    
+
+    float multiplier;
 
     void Start()
     {
-        dataScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<DatabaseCommunication>(); //a scriptet kiveszi az adott objektumból mint komponense
-        sellingScript = GameObject.FindGameObjectWithTag("SellingScript").GetComponent<Selling>(); //a scriptet kiveszi az adott objektumb�l mint komponense
+        dataScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<DatabaseCommunication>();
+        sellingScript = GameObject.FindGameObjectWithTag("SellingScript").GetComponent<Selling>();
+        fixDataScript = GameObject.FindGameObjectWithTag("FixData").GetComponent<FixData>();
 
         gotData = false;
 
-        PB_defValue = 25;
-        BX_defValue = 50;
-        GL_defValue = 100;
-        BY_defValue = 200;
+        PB_defValue = fixDataScript.PB_defValue;
+        BX_defValue = fixDataScript.BX_defValue;
+        GL_defValue = fixDataScript.GL_defValue;
+        BY_defValue = fixDataScript.BY_defValue;
+        multiplier = fixDataScript.multiplierPos;
+
+        requirements7 = fixDataScript.requirements7;
+        achievementTexts = fixDataScript.achievementTexts;
+        achievementProgress = fixDataScript.achievementProgress;
     }
 
     void Update()
@@ -359,7 +341,7 @@ public class AchivementController : MonoBehaviour
 
     void Achievement_value(int AchNumber, int[] requirements, int control, float defValue)  //achnumber -> achievment száma, requirements -> számok amikre ellenőrzi, control -> szintje a value-nak, defValue-> alap értéke a szemétnek
     {
-        float value = defValue * Mathf.Pow(1.02f, control);
+        float value = defValue * Mathf.Pow(multiplier, control);
         int a = 0;
         for (int i = 0; i < requirements.Length; i++)
         {

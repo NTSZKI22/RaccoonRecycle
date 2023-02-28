@@ -7,6 +7,7 @@ public class Statistics : MonoBehaviour
 {
     DatabaseCommunication dataScript;
     Selling sellingScript;
+    FixData fixDataScript;
 
     public Text text_Nc; 
     public Text text_Pc; 
@@ -32,8 +33,9 @@ public class Statistics : MonoBehaviour
     {
         dataScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<DatabaseCommunication>();
         sellingScript = GameObject.FindGameObjectWithTag("SellingScript").GetComponent<Selling>();
+        fixDataScript = GameObject.FindGameObjectWithTag("FixData").GetComponent<FixData>();
 
-        multiplier = 1.02f;
+        multiplier = fixDataScript.multiplierPos;
     }
 
     void Update()
@@ -44,30 +46,22 @@ public class Statistics : MonoBehaviour
 
     void displayData()
     {
-        float szorzo = 1;
-        switch (itemLvl_2)
-        {
-            case 1: szorzo = 1.25f; break;
-            case 2: szorzo = 1.5f; break;
-            case 3: szorzo = 1.75f; break;
-            case 4: szorzo = 2f; break;
-            case 5: szorzo = 2.25f; break;
-        }
+        float szorzo = fixDataScript.gemshopValueMultiplier(itemLvl_2);
 
         text_Nc.text = sellingScript.convertCurrencyToDisplay(dataScript.normalCurrency.ToString());
         text_Pc.text = sellingScript.convertCurrencyToDisplay(dataScript.prestigeCurrency.ToString());
         text_Te.text = sellingScript.convertCurrencyToDisplay(dataScript.totalEarnings.ToString());
 
-        text_PBValue.text = sellingScript.convertCurrencyToDisplay((25 * Mathf.Pow(multiplier, dataScript.PB_valueLvl) * szorzo).ToString());
+        text_PBValue.text = sellingScript.convertCurrencyToDisplay((fixDataScript.PB_defValue * Mathf.Pow(multiplier, dataScript.PB_valueLvl) * szorzo).ToString());
         text_PBEarnings.text = sellingScript.convertCurrencyToDisplay(dataScript.PB_soldAmount.ToString());
 
-        text_BXValue.text = sellingScript.convertCurrencyToDisplay((50 * Mathf.Pow(multiplier, dataScript.BX_valueLvl) * szorzo).ToString());
+        text_BXValue.text = sellingScript.convertCurrencyToDisplay((fixDataScript.BX_defValue * Mathf.Pow(multiplier, dataScript.BX_valueLvl) * szorzo).ToString());
         text_BXEarnings.text = sellingScript.convertCurrencyToDisplay(dataScript.BX_soldAmount.ToString());
 
-        text_GLValue.text = sellingScript.convertCurrencyToDisplay((100 * Mathf.Pow(multiplier, dataScript.GL_valueLvl) * szorzo).ToString());
+        text_GLValue.text = sellingScript.convertCurrencyToDisplay((fixDataScript.GL_defValue * Mathf.Pow(multiplier, dataScript.GL_valueLvl) * szorzo).ToString());
         text_GLEarnings.text = sellingScript.convertCurrencyToDisplay(dataScript.GL_soldAmount.ToString());
 
-        text_BYValue.text = sellingScript.convertCurrencyToDisplay((200 * Mathf.Pow(multiplier, dataScript.BY_valueLvl) * szorzo).ToString());
+        text_BYValue.text = sellingScript.convertCurrencyToDisplay((fixDataScript.BY_defValue * Mathf.Pow(multiplier, dataScript.BY_valueLvl) * szorzo).ToString());
         text_BYEarnings.text = sellingScript.convertCurrencyToDisplay(dataScript.BY_soldAmount.ToString());
     }
 }

@@ -8,6 +8,7 @@ public class ButtonBehavior : MonoBehaviour
     DatabaseCommunication dataScript;
     Selling sellingScript;
     HolderBehavior holderScript;
+    FixData fixDataScript;
 
     public Button button_UnlockPB;
     public Text text_UnlockPB;
@@ -30,8 +31,12 @@ public class ButtonBehavior : MonoBehaviour
         sellingScript = GameObject.FindGameObjectWithTag("SellingScript").GetComponent<Selling>();
         holderScript = GameObject.FindGameObjectWithTag("WindowBehavior").GetComponent<HolderBehavior>();
         dataScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<DatabaseCommunication>();
+        fixDataScript = GameObject.FindGameObjectWithTag("FixData").GetComponent<FixData>();
 
-        defaultStart();
+        cost_UnlockPB = fixDataScript.cost_UnlockPB;
+        cost_UnlockBX = fixDataScript.cost_UnlockBX;
+        cost_UnlockGL = fixDataScript.cost_UnlockGL;
+        cost_UnlockBY = fixDataScript.cost_UnlockBY;
 
         Button btn_UPB = button_UnlockPB.GetComponent<Button>();
         btn_UPB.onClick.AddListener(unlockPB);
@@ -54,14 +59,6 @@ public class ButtonBehavior : MonoBehaviour
     void Update()
     {
        toAble();
-    }
-
-    void defaultStart()
-    {
-        cost_UnlockPB = 50;
-        cost_UnlockBX = 1000;
-        cost_UnlockGL = 15000;
-        cost_UnlockBY = 200000;
     }
 
     void toAble()

@@ -36,6 +36,7 @@ TagManager:
   - U3
   - U4
   - Collider_Prestige
+  - FixData
   layers:
   - Default
   - TransparentFX
