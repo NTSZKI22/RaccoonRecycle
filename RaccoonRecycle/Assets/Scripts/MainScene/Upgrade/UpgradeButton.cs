@@ -3,59 +3,58 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UpgradeButton : MonoBehaviour //kezel mimndent, ami az upgrade gombok lenyomásakor történik
+public class UpgradeButton : MonoBehaviour
 {
-    Selling sellingScript; //a currency-t kezelõ script
-    DatabaseCommunication dataScript; //az adatbázisból megkapott adatokat kezelõ script
+    Selling sellingScript;
+    DatabaseCommunication dataScript;
+    FixData fixDataScript;
 
-    float multiplier; //értékszámításokhoz a szorzó
-    int trashType; //a szemét típusa 1-petbottle, 2-box, 3-glass, 4-battery
+    float multiplier;
+    int trashType;
 
-    int ValueCostLvl; //érték árának szintje
-    int SpeedCostLvl; //sebesség árának szintje
-    int FrequencyCostLvl; //gyakoriság árának szintje
+    int ValueCostLvl;
+    int SpeedCostLvl;
+    int FrequencyCostLvl;
 
-    float ValueDefCost; //érték alap ára
-    float SpeedDefCost; //gyorsaság alap ára
-    float FrequencyDefCost; //gyakoriság alap ára
+    float ValueDefCost;
+    float SpeedDefCost;
+    float FrequencyDefCost;
 
-    float ValueCost; //érték ára - számított érték
-    float SpeedCost; //gyorsaság ára - számított érték
-    float FrequencyCost; //gyakoriság ára - számított érték
+    float ValueCost;
+    float SpeedCost;
+    float FrequencyCost;
 
-    public Button button_Value; //érték fejlesztéséhez tartozó gmb
-    public Button button_Speed; //gyorsaság fejlesztéséhez tartozó gomb
-    public Button button_Frequency; //gyakoriság fejlesztéséhez tartozó gomb
+    public Button button_Value;
+    public Button button_Speed;
+    public Button button_Frequency;
 
-    public Text text_Value; //érték árának megjelenítéséhez használt szöveg
-    public Text text_Speed; //gyorsaság megjelenítéséhez használt szöveg
-    public Text text_Frequency; //gyakoriság megjelenítéséhez használt szöveg
+    public Text text_Value;
+    public Text text_Speed;
+    public Text text_Frequency;
 
-    public Text text_ValueLvl; //érték szintjének megjelenítéséhez használt szöveg
-    public Text text_SpeedLvl; //gyorsaság szintjének megjelenítéséhez használt szöveg
-    public Text text_FrequencyLvl; //gyakoriság szintjének megjelenítéséhez használt szöveg
+    public Text text_ValueLvl;
+    public Text text_SpeedLvl;
+    public Text text_FrequencyLvl;
 
-    int maxLevel = 75; //maximum szint, ami elérhetõ egy tulajdonság folyamatos fejlesztésével
+    int maxLevel;
 
-    // Start is called before the first frame update
     void Start()
     {
-        sellingScript = GameObject.FindGameObjectWithTag("SellingScript").GetComponent<Selling>(); //a scriptet kiveszi az adott objektumból mint komponense
-        dataScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<DatabaseCommunication>(); //a scriptet kiveszi az adott objektumból mint komponense
+        sellingScript = GameObject.FindGameObjectWithTag("SellingScript").GetComponent<Selling>();
+        dataScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<DatabaseCommunication>();
+        fixDataScript = GameObject.FindGameObjectWithTag("FixData").GetComponent<FixData>();
 
-        //az aktuális objektum tag-je alapján(melyen a script van), meghatározza a trashtype értékét
         switch (gameObject.tag)
         {
             case "PetBottleU": trashType = 1; break;
             case "BoxU": trashType = 2; break;
             case "GlassU": trashType = 3; break;
             case "BatteryU": trashType = 4; break;
-            default: trashType = 0; Debug.Log("TrashType 0!"); break; //ha a tag egyik opcióval se egyezik alap értékként 0-át állítunk valamint logoljuk
+            default: trashType = 0; Debug.Log("TrashType 0!"); break;
         }
 
-        defaultStart(); //elindítja a defaultstart-ot
+        defaultStart();
 
-        //a feljebb megadott gombok 'gomb' komponensére click listener kerül, kattintáskor a megfelelõ kód fut le
         Button btn_UV = button_Value.GetComponent<Button>();
         btn_UV.onClick.AddListener(value);
 
@@ -66,55 +65,25 @@ public class UpgradeButton : MonoBehaviour //kezel mimndent, ami az upgrade gomb
         btn_UF.onClick.AddListener(frequency);
     }
 
-    // Update is called once per frame
     void Update()
     {
-        calculateCost(); //elindítja a calculatecost-t
-        displayCost(); //elindítja a displaycast-t
-        displayLevel(); //elindítja a displayLevel-t
-        toAble(); //elindítja a toAble-t
-
+        calculateCost();
+        displayCost();
+        displayLevel();
+        toAble(); 
     }
 
-    void defaultStart() //azon adatokat definiálja, melyeket nem válaszként várunk az adatbázisból
+    void defaultStart()
     {
-        multiplier = 1.07f; // szorzó értéke 7%-os növekedés
-
-        //trashtype értékétõl függõen lesznek az tulajdonságok alap árai beállítva
-        switch (trashType) 
-        {
-            case 0: Debug.Log("Tag hiba"); break;
-            case 1:
-                ValueDefCost = 50;
-                SpeedDefCost = 25;
-                FrequencyDefCost = 15;
-                break;
-            case 2:
-                ValueDefCost = 100;
-                SpeedDefCost = 50;
-                FrequencyDefCost = 30;
-                break;
-            case 3:
-                ValueDefCost = 200;
-                SpeedDefCost = 100;
-                FrequencyDefCost = 60;
-                break;
-            case 4:
-                ValueDefCost = 400;
-                SpeedDefCost = 200;
-                FrequencyDefCost = 120;
-                break;
-            default: Debug.Log("Default értékek");
-                ValueDefCost = 40;
-                SpeedDefCost = 20;
-                FrequencyDefCost = 10;
-                break;
-        }
+        maxLevel = fixDataScript.maxLevel;
+        multiplier = fixDataScript.multiplierPos;
+        ValueDefCost = fixDataScript.giveUpgradeProperties(gameObject.tag, "Value");
+        SpeedDefCost = fixDataScript.giveUpgradeProperties(gameObject.tag, "Speed");
+        FrequencyDefCost = fixDataScript.giveUpgradeProperties(gameObject.tag, "Frequency");
     }
 
-    public void getLevels()  //a szintek értékét szerzi meg a datascript-bõl
+    public void getLevels()
     {
-        //trashtype értéke alapján állítja be a value, speed, frequency értékeit
         switch (trashType)
         {
             case 0: Debug.Log("Tag hiba"); break;
@@ -147,107 +116,80 @@ public class UpgradeButton : MonoBehaviour //kezel mimndent, ami az upgrade gomb
         }
     }
 
-    void toAble() //feladata meghatározni, hogy a gomb elérhetõ legyen e
+    void toAble()
     {
-        //elõször megvizsgálja, hogy elérte-e a maximum szintet, ha igen hamisra állítja az interakciót
-        //ha nem, a gomb elérhetõségét állítja, mely függ attól, hogy van-e elég pénze a feloldásra
-        if(ValueCostLvl <= maxLevel)
+        switch (ValueCostLvl <= maxLevel)
         {
-            button_Value.interactable = sellingScript.isEnoughNormalCurrency(ValueCost);
-        }
-        else
-        {
-            button_Value.interactable = false;
+            case true: button_Value.interactable = sellingScript.isEnoughNormalCurrency(ValueCost); break;
+            case false: button_Value.interactable = false; break;
         }
 
-        if(SpeedCostLvl <= maxLevel)
+        switch (SpeedCostLvl <= maxLevel)
         {
-            button_Speed.interactable = sellingScript.isEnoughNormalCurrency(SpeedCost);
-        }
-        else
-        {
-            button_Speed.interactable = false;
+            case true: button_Speed.interactable = sellingScript.isEnoughNormalCurrency(SpeedCost); break;
+            case false: button_Speed.interactable = false; break;
         }
 
-        if (FrequencyCostLvl <= maxLevel)
+        switch (FrequencyCostLvl <= maxLevel)
         {
-            button_Frequency.interactable = sellingScript.isEnoughNormalCurrency(FrequencyCost);
-        }
-        else
-        {
-            button_Frequency.interactable = false;
+            case true: button_Frequency.interactable = sellingScript.isEnoughNormalCurrency(FrequencyCost); break;
+            case false: button_Frequency.interactable = false; break;
         }
     }
 
-    void calculateCost() //feldata kiszámolni a fejleszthetõ tulajdonságok árait
+    void calculateCost()
     {
-        //ár = alap érték * szorzó^szint
         ValueCost = ValueDefCost * Mathf.Pow(multiplier, ValueCostLvl);
         SpeedCost = SpeedDefCost * Mathf.Pow(multiplier, SpeedCostLvl);
         FrequencyCost = FrequencyDefCost * Mathf.Pow(multiplier, FrequencyCostLvl);
     }
 
-    void displayCost() // feldata megjeleníteni a kiszámolt árakat
+    void displayCost()
     {
-        //az értékeket megjeleníthetõ fomába állítjuk, majd azt megkapja a text komponense
         text_Value.text = sellingScript.convertCurrencyToDisplay(ValueCost.ToString());
         text_Speed.text = sellingScript.convertCurrencyToDisplay(SpeedCost.ToString());
         text_Frequency.text = sellingScript.convertCurrencyToDisplay(FrequencyCost.ToString());
     }
 
-    void displayLevel() // feldata megjeleníteni a kiszámolt árakat
+    void displayLevel()
     {
-        //az értékeket megjeleníthetõ fomába állítjuk, majd azt megkapja a text komponense
-        if (ValueCostLvl <= maxLevel)
+        switch (ValueCostLvl <= maxLevel)
         {
-            text_ValueLvl.text = $"Lvl {ValueCostLvl}";
-        }
-        else
-        {
-            text_ValueLvl.text = "Max level";
-        }
-
-        if (SpeedCostLvl <= maxLevel)
-        {
-            text_SpeedLvl.text = $"Lvl {SpeedCostLvl}";
-        }
-        else
-        {
-            text_SpeedLvl.text = "Max level";
-        }
-
-        if (FrequencyCostLvl <= maxLevel)
-        {
-            text_FrequencyLvl.text = $"Lvl {FrequencyCostLvl}";
-        }
-        else
-        {
-            text_FrequencyLvl.text = "Max level";
+            case true: text_ValueLvl.text = $"Lvl {ValueCostLvl}"; break;
+            case false: text_ValueLvl.text = "Max level"; break;
         }
         
+        switch (SpeedCostLvl <= maxLevel)
+        {
+            case true: text_SpeedLvl.text = $"Lvl {SpeedCostLvl}"; break;
+            case false: text_ValueLvl.text = "Max level"; break;
+        }
+
+        switch (FrequencyCostLvl <= maxLevel)
+        {
+            case true: text_FrequencyLvl.text = $"Lvl {FrequencyCostLvl}"; break;
+            case false: text_ValueLvl.text = "Max level"; break;
+        }
     }
 
-    void value() //érték gomb lenyomásakor fut le
+    void value()
     {
-        ValueCostLvl++; //az ár szintjét növeli eggyel
-        sellingScript.boughtUpgradeNormal(ValueCost); //az árat levonja a normalcurrency egyenlegbõl
-
-        dataScript.upgrade(trashType, "value"); //datascript upgrade-ját futtatja le, átadva neki a trashtype-ot és egy stringet (jelenleg: value)
+        ValueCostLvl++;
+        sellingScript.boughtUpgradeNormal(ValueCost);
+        dataScript.upgrade(trashType, "value");
     }
 
-    void speed() //gyorsaság gomb lenyomásakor fut le
+    void speed()
     {
-        SpeedCostLvl++; //az ár szintjét növeli eggyel
-        sellingScript.boughtUpgradeNormal(SpeedCost); //az árat levonja a normalcurrency egyenlegbõl
-
-        dataScript.upgrade(trashType, "speed"); //datascript upgrade-ját futtatja le, átadva neki a trashtype-ot és egy stringet (jelenleg: speed)
+        SpeedCostLvl++;
+        sellingScript.boughtUpgradeNormal(SpeedCost);
+        dataScript.upgrade(trashType, "speed");
     }
 
-    void frequency()//gyakoriság gomb lenyomásakor fut le
+    void frequency()
     {
-        FrequencyCostLvl++; //az ár szintjét növeli eggyel
-        sellingScript.boughtUpgradeNormal(FrequencyCost); //az árat levonja a normalcurrency egyenlegbõl
-
-        dataScript.upgrade(trashType, "frequency"); //datascript upgrade-ját futtatja le, átadva neki a trashtype-ot és egy stringet (jelenleg: frequency)
+        FrequencyCostLvl++;
+        sellingScript.boughtUpgradeNormal(FrequencyCost);
+        dataScript.upgrade(trashType, "frequency");
     }
 }

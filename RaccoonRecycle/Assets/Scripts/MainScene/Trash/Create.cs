@@ -4,52 +4,43 @@ using UnityEngine;
 
 public class Create : MonoBehaviour
 {
-    Properties propertiesScript; //tulajdonságokat taralmazó scripthez a változó
+    Properties propertiesScript;
 
-    public Rigidbody2D trashPrefab; //pbulikus változó a létrehozni kívánt szemétnek
-    public GameObject parent; //publikus változó a szemét szülõobjektumához
+    public Rigidbody2D trashPrefab;
+    public GameObject parent;
     
-    //ideiglenes változók a szemét mûködéséhez
     float frequency;
     float speed;
 
-    private Vector2 location; //vector2 változó egy helyzethez
-    private Rigidbody2D rb; //fizikával rendelkezõ objektum változó
+    private Vector2 location;
+    private Rigidbody2D rb;
 
-    void Start() //metódus lefut a játék indulásakor
+    void Start()
     {
-         //location változó megkapja a Generator objektum helyzetét adatként
-        propertiesScript = trashPrefab.GetComponent<Properties>(); //a tulajdonságokat tartalmazó script az aktuális trashprefab
+        propertiesScript = trashPrefab.GetComponent<Properties>();
         
-        Spawn(); //meghívja a spawn metódust
-        StartCoroutine(Flow()); //meghívja a flow metódust
-
+        Spawn();
+        StartCoroutine(Flow());
     }
 
-    void Update() //minden képrissitésnél lefut
+    private void Spawn()
     {
-
-    }
-
-    private void Spawn() //metódus, lefutásával létrehoz szemét objektumokat
-    {
-        location = GameObject.Find("Generator").transform.position; //a location a generátor objektum poziciója
-        Rigidbody2D rb = Instantiate(trashPrefab) as Rigidbody2D; //létrehoz egy rigidbody2d-t a trashPrefab-ból
-        propertiesScript.defProperties(); //elindítja a defProperties metódust
-        frequency = propertiesScript.frequency(); //a frequency a propertiesScript.frequency által adott érték 
-        speed = propertiesScript.speed(); // a gyorsaság a propertiesScript.speed által adott érték
-        rb.transform.position = location; // rb helyzete a generator helyzete lesz
-        rb.transform.SetParent(parent.transform); //rb szülõ objektumát beállítja
-        rb.velocity = new Vector2(speed, 0); //rb mozgása: megindul ebbe az irányba
+        location = GameObject.Find("Generator").transform.position;
+        Rigidbody2D rb = Instantiate(trashPrefab) as Rigidbody2D;
+        propertiesScript.defProperties();
+        frequency = propertiesScript.frequency();
+        speed = propertiesScript.speed();
+        rb.transform.position = location;
+        rb.transform.SetParent(parent.transform);
+        rb.velocity = new Vector2(speed, 0);
     }
     
-    IEnumerator Flow() //metódus, lefutásával folyamatos a szemetek létrehozása
+    IEnumerator Flow()
     {
-        while (true) //végtelen ciklus
+        while (true)
         {
-            yield return new WaitForSeconds(frequency); //vár annyi másodpercet, amennyi frequency értéke
-            Spawn(); //meghívja a spawn metódust
+            yield return new WaitForSeconds(frequency);
+            Spawn();
         }
-
     }
 }

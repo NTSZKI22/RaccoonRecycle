@@ -5,13 +5,13 @@ using UnityEngine.UI;
 
 public class SliderBehavior : MonoBehaviour
 {
-    DatabaseCommunication dataScript; //az adatbázisból megkapott adatokat kezelõ script
+    DatabaseCommunication dataScript;
 
     public GameObject parent;
     public Slider scrollSlider;
 
-    public GameObject machinery; //def -75, -42
-    public GameObject windows; //def -50
+    public GameObject machinery;
+    public GameObject windows;
 
     public GameObject alap;
 
@@ -34,16 +34,12 @@ public class SliderBehavior : MonoBehaviour
     bool GL_Unlocked;
     bool BY_Unlocked;
 
-    int progress;
-
-    // Start is called before the first frame update
     void Start()
     {
-        dataScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<DatabaseCommunication>(); //a scriptet kiveszi az adott objektumból mint komponense
+        dataScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<DatabaseCommunication>();
 
         machineDefPos = machinery.transform.position.x;
         windowsDefPos = windows.transform.position.x;
-        Debug.Log(locationDefMach);
 
         RectTransform rt = (RectTransform)alap.transform;
         screenWidth2 = rt.rect.width;
@@ -52,7 +48,6 @@ public class SliderBehavior : MonoBehaviour
         scrollSlider.maxValue = 666;
     }
 
-    // Update is called once per frame
     void Update()
     {
         PB_Unlocked = dataScript.giveTrashStatus("PetBottle");
@@ -63,86 +58,45 @@ public class SliderBehavior : MonoBehaviour
         setMaxValue();
         machinery.transform.position = new Vector2(machineDefPos - scrollSlider.value, machinery.transform.position.y);
         windows.transform.position = new Vector2(windowsDefPos - scrollSlider.value , windows.transform.position.y);
+    }
 
+    void selectMax(GameObject marker)
+    {
+        switch (marker.transform.position.x > screenWidth)
+        {
+            case true:
+                scrollSlider.interactable = true;
+                scrollSlider.maxValue = ((marker.transform.position.x - screenWidth2) / 2);
+                break;
+            case false: scrollSlider.interactable = false; break;
+        }
     }
 
     void setMaxValue()
     {
-        if(PB_Unlocked == false)
+        screenWidth = Screen.currentResolution.width;
+        if (PB_Unlocked == false)
         {
-            progress = 0;
+            scrollSlider.interactable = false;
         }
         else
         {
             if(BX_Unlocked == false)
             {
-                progress = 1;
+                selectMax(marker1);
             }
             else
             {
                 if(GL_Unlocked == false)
                 {
-                    progress = 2;
+                    selectMax(marker2);
                 }
                 else
                 {
-                    if(BY_Unlocked == false)
-                    {
-                        progress = 3;
-                    }
-                    else
-                    {
-                        progress = 4;
-                    }
+                    selectMax(marker3);
                 }
             }
-
         }
 
-
-
-        screenWidth = Screen.currentResolution.width;
-        switch (progress)
-        {
-            case 0: 
-                scrollSlider.interactable = false;  
-                break;
-            case 1: 
-                if(marker1.transform.position.x > screenWidth)
-                {
-                    scrollSlider.interactable = true;
-                    scrollSlider.maxValue = ((marker1.transform.position.x - screenWidth2)/2);
-                }
-                else
-                {
-                    scrollSlider.interactable = false;
-                }
-                break;
-            case 2:
-                if (marker2.transform.position.x > screenWidth)
-                {
-                    scrollSlider.interactable = true;
-                    scrollSlider.maxValue = ((marker2.transform.position.x - screenWidth2)/2);
-                }
-                else
-                {
-                    scrollSlider.interactable = false;
-                }
-                break;
-            case 3:
-            case 4:
-                if (marker3.transform.position.x > screenWidth)
-                {
-                    scrollSlider.interactable = true;
-                    scrollSlider.maxValue = ((marker3.transform.position.x - screenWidth2)/2);
-                }
-                else
-                {
-                    scrollSlider.interactable = false;
-                }
-                break;
-            default: scrollSlider.interactable = true; break;
-        }
     }
-
 }

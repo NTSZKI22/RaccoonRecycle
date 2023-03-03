@@ -8,15 +8,15 @@ public class OfflineEarning : MonoBehaviour
 {
     float earnedOffline;
 
-    DatabaseCommunication dataScript; //az adatbázisból megkapott adatokat kezelő script
-    Selling sellingScript; //a currency-t kezel� script
+    DatabaseCommunication dataScript;
+    Selling sellingScript;
+    FixData fixDataScript;
 
     float[] values = new float[5];
     float[] frequencies = new float[5];
     bool[] unlocks = new bool[5];
 
-    float multiplierPos = 1.02f; //2%-os növekedés
-    float multiplierNeg = 0.98f; //2%-os csökkenés
+    float multiplierPos;
 
     public Text text_Earning;
     public Button button_Confirm;
@@ -26,22 +26,16 @@ public class OfflineEarning : MonoBehaviour
     bool reg;
 
     int itemLvl_1;
-
-    //def value - 10
-    //pb - 25, bx - 50, gl - 100, by - 200 -> value
-    //pb - 2, bx - 3, gl - 4, by - 6 -> frequency
+    int itemLvl_2;
 
     void Start()
     {
-        sellingScript = GameObject.FindGameObjectWithTag("SellingScript").GetComponent<Selling>(); //a scriptet kiveszi az adott objektumb�l mint komponense
-        dataScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<DatabaseCommunication>(); //a scriptet kiveszi az adott objektumból mint komponense
+        sellingScript = GameObject.FindGameObjectWithTag("SellingScript").GetComponent<Selling>();
+        dataScript = GameObject.FindGameObjectWithTag("DatabaseCommunication").GetComponent<DatabaseCommunication>();
+        fixDataScript = GameObject.FindGameObjectWithTag("FixData").GetComponent<FixData>();
 
-        //earnedOffline = 1000; //alap érték, később kivehető
-        //proceedWithTasks();
-
-
+        multiplierPos = fixDataScript.multiplierPos;
     }
-
 
     public float OfflineEarnings(DateTime lastSaveDate)
     {
@@ -55,121 +49,102 @@ public class OfflineEarning : MonoBehaviour
             case 0:
                 if (offlineHours.Value.TotalHours > 0.25)
                 {
-                    Debug.Log("offline 600f");
                     return 600f;
                 }
                 else
                 {
                     float offlineSeconds = (float)offlineHours.Value.TotalSeconds;
-                    Debug.Log($"offline {offlineSeconds}");
                     return offlineSeconds;
                 }
-                return 0f;
             case 1:
                 if (offlineHours.Value.TotalHours > 0.5)
                 {
-                    Debug.Log("offline 1800f");
                     return 1800f;
                 }
                 else
                 {
                     float offlineSeconds = (float)offlineHours.Value.TotalSeconds;
-                    Debug.Log($"offline {offlineSeconds}");
                     return offlineSeconds;
                 }
-                return 0f;
             case 2:
                 if (offlineHours.Value.TotalHours > 1)
                 {
-                    Debug.Log("offline 3600f");
                     return 3600f;
                 }
                 else
                 {
                     float offlineSeconds = (float)offlineHours.Value.TotalSeconds;
-                    Debug.Log($"offline {offlineSeconds}");
                     return offlineSeconds;
                 }
-                return 0f;
             case 3:
                 if (offlineHours.Value.TotalHours > 1.5)
                 {
-                    Debug.Log("offline 5400f");
                     return 5400f;
                 }
                 else
                 {
                     float offlineSeconds = (float)offlineHours.Value.TotalSeconds;
-                    Debug.Log($"offline {offlineSeconds}");
                     return offlineSeconds;
                 }
-                return 0f;
         }
-
         return 0f;
-
     }
 
-    public void getData() //megszerzi az adatokat a datascriptből
+    public void getData()
     {
-        values[1] = 25 * Mathf.Pow(multiplierPos, dataScript.PB_valueLvl);
-        values[2] = 50 * Mathf.Pow(multiplierPos, dataScript.BX_valueLvl);
-        values[3] = 100 * Mathf.Pow(multiplierPos, dataScript.GL_valueLvl);
-        values[4] = 200 * Mathf.Pow(multiplierPos, dataScript.BY_valueLvl);
+        itemLvl_1 = dataScript.itemLvl_1;
+        itemLvl_1 = dataScript.itemLvl_2;
 
-        frequencies[1] = 2 * Mathf.Pow(multiplierPos, dataScript.PB_frequencyLvl);
-        frequencies[2] = 3 * Mathf.Pow(multiplierPos, dataScript.BX_frequencyLvl);
-        frequencies[3] = 4 * Mathf.Pow(multiplierPos, dataScript.GL_frequencyLvl);
-        frequencies[4] = 6 * Mathf.Pow(multiplierPos, dataScript.BY_frequencyLvl);
+        values[1] = fixDataScript.PB_defValue * Mathf.Pow(multiplierPos, dataScript.PB_valueLvl) * fixDataScript.gemshopValueMultiplier(itemLvl_2);
+        values[2] = fixDataScript.BX_defValue * Mathf.Pow(multiplierPos, dataScript.BX_valueLvl) * fixDataScript.gemshopValueMultiplier(itemLvl_2);
+        values[3] = fixDataScript.GL_defValue * Mathf.Pow(multiplierPos, dataScript.GL_valueLvl) * fixDataScript.gemshopValueMultiplier(itemLvl_2);
+        values[4] = fixDataScript.BY_defValue * Mathf.Pow(multiplierPos, dataScript.BY_valueLvl) * fixDataScript.gemshopValueMultiplier(itemLvl_2);
+
+        frequencies[1] = fixDataScript.PB_defFrequency * Mathf.Pow(multiplierPos, dataScript.PB_frequencyLvl);
+        frequencies[2] = fixDataScript.BX_defFrequency * Mathf.Pow(multiplierPos, dataScript.BX_frequencyLvl);
+        frequencies[3] = fixDataScript.GL_defFrequency * Mathf.Pow(multiplierPos, dataScript.GL_frequencyLvl);
+        frequencies[4] = fixDataScript.BY_defFrequency * Mathf.Pow(multiplierPos, dataScript.BY_frequencyLvl);
 
         unlocks[1] = dataScript.giveTrashStatus("PetBottle");
         unlocks[2] = dataScript.giveTrashStatus("Box");
         unlocks[3] = dataScript.giveTrashStatus("Glass");
         unlocks[4] = dataScript.giveTrashStatus("Battery");
 
-        itemLvl_1 = dataScript.itemLvl_1;
+        
         reg = dataScript.registrating;
     }
 
-    float calculateEarning(float time) //kiszámolja az offline szerzett currency-t
+    float calculateEarning(float time)
     {
         earnedOffline = 0;
         for (int i = 1; i < 5; i++)
         {
             if (unlocks[i])
             {
-                earnedOffline += time / frequencies[i] * values[i] * 0.7f;
+                earnedOffline += (time / frequencies[i]) * values[i] * fixDataScript.multiplierOffline;
             }
             else
             {
-                switch (i)
-                {
-                    case 1: earnedOffline += time / 2 * 10 * 0.7f; break;
-                    case 2: earnedOffline += time / 3 * 10 * 0.7f; break;
-                    case 3: earnedOffline += time / 4 * 10 * 0.7f; break;
-                    case 4: earnedOffline += time / 6 * 10 * 0.7f; break;
-                }
+                earnedOffline += (time / frequencies[i]) * fixDataScript.defaultValue * fixDataScript.multiplierOffline;
             }
         }
         return earnedOffline;
     }
 
-    public void proceedWithTasks() //ezzel lehet majd elindítani az offline earning teask-jeit !!hiányoss
+    public void proceedWithTasks()
     {
-        getData(); //megszerzi a szükséges adatokat
+        getData();
         if(reg != true)
         {
             DateTime time = dataScript.lastSaveTime;
             calculateEarning(OfflineEarnings(time));
-            offlineEarning_Holder.SetActive(true); //láthatóvá teszi az ablakot
-            Debug.Log(earnedOffline);
-            text_Earning.text = sellingScript.convertCurrencyToDisplay(earnedOffline.ToString()); //megjeleníti a szerzett pénzmennyiséget
+            offlineEarning_Holder.SetActive(true);
+            text_Earning.text = sellingScript.convertCurrencyToDisplay(earnedOffline.ToString());
         }
-        
     }
 
-    public void confirmed() //akkor futódik le, ha leokolja az ablakot a játékos
+    public void confirmed()
     {
-        sellingScript.increaseMoney(earnedOffline); //megkapja a keresett pénzmennyiséget
+        sellingScript.increaseMoney(earnedOffline);
     }
 }

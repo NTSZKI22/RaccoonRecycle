@@ -6,11 +6,10 @@ using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    private AudioSource audioSorce; //az sfx forrása
+    private AudioSource audioSorce;
     void Start()
     {
-        audioSorce = gameObject.GetComponent<AudioSource>();//elkérjük az audió forrás komponensünket
+        audioSorce = gameObject.GetComponent<AudioSource>();
     }
 
     void OnTriggerEnter2D(Collider2D collision)

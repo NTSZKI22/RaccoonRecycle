@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class AchivementHolderBehavior : MonoBehaviour
 {
-    Selling sellingScript; //a currency-t kezelõ script
+    Selling sellingScript; 
     AchivementController achivementScript;
 
     public Text text_Achiv_Text;
@@ -21,14 +21,12 @@ public class AchivementHolderBehavior : MonoBehaviour
 
     int a;
     int b;
-
     bool max;
 
-    // Start is called before the first frame update
     void Start()
     {
-        sellingScript = GameObject.FindGameObjectWithTag("SellingScript").GetComponent<Selling>(); //a scriptet kiveszi az adott objektumból mint komponense
-        achivementScript =GameObject.FindGameObjectWithTag("AchivementScript").GetComponent<AchivementController>(); //a scriptet kiveszi az adott objektumból mint komponense
+        sellingScript = GameObject.FindGameObjectWithTag("SellingScript").GetComponent<Selling>();
+        achivementScript =GameObject.FindGameObjectWithTag("AchivementScript").GetComponent<AchivementController>();
 
         rewards = achivementScript.rewardArray(AchivementNumber);
         placeholders = achivementScript.placeholderStrings(AchivementNumber);
@@ -41,21 +39,17 @@ public class AchivementHolderBehavior : MonoBehaviour
         btn_Claim.onClick.AddListener(Claimed);
     }
 
-    // Update is called once per frame
     void Update()
     {
         getAchievementProgress();
         maxolt();
         toAble();
         showText();
-        
-        
     }
 
     void getAchievementProgress()
     {
-        string progress = achivementScript.Achivement_Status(AchivementNumber);
-        string[] st = progress.Split("_");
+        string[] st = achivementScript.Achivement_Status(AchivementNumber).Split("_");
         a = int.Parse(st[0]);
         b = int.Parse(st[1]);
     }
@@ -68,49 +62,39 @@ public class AchivementHolderBehavior : MonoBehaviour
 
     void toAble()
     {
-        if (a!=0 && (a > b || a == b))
+        switch (a != 0 && (a > b || a == b))
         {
-            button_Achiv_Claim.interactable = true;
-        }
-        else
-        {
-            button_Achiv_Claim.interactable = false;
+            case true: button_Achiv_Claim.interactable = true; break;
+            case false: button_Achiv_Claim.interactable = false; break;
         }
     }
 
     void showText()
     {
         string[] st = achivementText.Split(" ");
-        int c = int.Parse(st[0]);
-        if (b == placeholders.Length)
+        int aa = int.Parse(st[0]);
+        switch (b == placeholders.Length)
         {
-            st[c] = placeholders[b-1];
+            case true: st[aa] = placeholders[b - 1]; break;
+            case false: st[aa] = placeholders[b]; break;
         }
-        else
-        {
-            st[c] = placeholders[b];
-        }
-        
+
         string kiir = "";
         for (int i = 1; i < st.Length; i++)
         {
             kiir += $"{st[i]} ";
         }
-        if (c == 0)
+        if (aa == 0)
         {
             text_Achiv_Reward.text = rewards[0].ToString();
         }
         else
         {
-            if (b == placeholders.Length)
+            switch (b == placeholders.Length)
             {
-                text_Achiv_Reward.text = rewards[b - 1].ToString();
+                case true: st[aa] = placeholders[b - 1].ToString(); break;
+                case false: st[aa] = placeholders[b].ToString(); break;
             }
-            else
-            {
-                text_Achiv_Reward.text = rewards[b].ToString();
-            }
-            
         }
         if (max)
         {
