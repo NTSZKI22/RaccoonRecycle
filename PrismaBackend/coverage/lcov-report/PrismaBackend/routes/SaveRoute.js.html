@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">36% </span>
+                <span class="strong">33.33% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>9/25</span>
+                <span class='fraction'>8/24</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">42.85% </span>
+                <span class="strong">40% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>9/21</span>
+                <span class='fraction'>8/20</span>
             </div>
         
             
@@ -124,17 +124,15 @@
 <a name='L59'></a><a href='#L59'>59</a>
 <a name='L60'></a><a href='#L60'>60</a>
 <a name='L61'></a><a href='#L61'>61</a>
-<a name='L62'></a><a href='#L62'>62</a>
-<a name='L63'></a><a href='#L63'>63</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
+<a name='L62'></a><a href='#L62'>62</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">10x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -192,22 +190,21 @@ const prisma = new PrismaClient()
 const jwt = require('jsonwebtoken')
 const jwtKey = process.env.JWTKEY
 var bodyParser = require('body-parser')
-var jsonParser = bodyParser.json()
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 &nbsp;
 module.exports = app =&gt; {
-    app.post("/api/save", urlencodedParser, <span class="fstat-no" title="function not covered" >as</span>ync (req, res) =&gt; {
+    app.post('/api/save', urlencodedParser, <span class="fstat-no" title="function not covered" >as</span>ync (req, res) =&gt; {
         const bearerHeader = <span class="cstat-no" title="statement not covered" >req.headers['authorization']</span>
         const bearerToken = <span class="cstat-no" title="statement not covered" >bearerHeader.split(' ')[1]</span>
 <span class="cstat-no" title="statement not covered" >        console.log(req.body.pbUnlocked,req.body.bxUnlocked,req.body.glUnlocked,req.body.byUnlocked)</span>
-        const verified = <span class="cstat-no" title="statement not covered" >jwt.verify(bearerToken, jwtKey) </span> //post-ot használunk, mivel szeretnénk adatot kérni a szervertől a /authorize aloldalon.
+        const verified = <span class="cstat-no" title="statement not covered" >jwt.verify(bearerToken, jwtKey)</span>
 <span class="cstat-no" title="statement not covered" >        if (verified) {</span>
-            var pbu, bxu, glu, byu;
+            var pbu, bxu, glu, byu
 <span class="cstat-no" title="statement not covered" >            if(req.body.pbUnlocked != 0){<span class="cstat-no" title="statement not covered" >pbu = true}</span></span>
 <span class="cstat-no" title="statement not covered" >            if(req.body.bxUnlocked != 0){<span class="cstat-no" title="statement not covered" >bxu = true}</span></span>
 <span class="cstat-no" title="statement not covered" >            if(req.body.byUnlocked != 0){<span class="cstat-no" title="statement not covered" >byu = true}</span></span>
 <span class="cstat-no" title="statement not covered" >            if(req.body.glUnlocked != 0){<span class="cstat-no" title="statement not covered" >glu = true}</span></span>
-            const updatedSave = <span class="cstat-no" title="statement not covered" >await prisma.saves.update({</span>
+<span class="cstat-no" title="statement not covered" >            await prisma.saves.update({</span>
                 where: {
                     usersId: req.body.id
                 },
@@ -241,10 +238,10 @@ module.exports = app =&gt; {
                     bySpeed: parseInt(req.body.bySpeed)
                 }
             })
-<span class="cstat-no" title="statement not covered" >            res.json({message: 'Info: The saving was successful!'})</span>
+<span class="cstat-no" title="statement not covered" >            return res.json({message: 'Info: The saving was successful!'})</span>
         }
         else {
-<span class="cstat-no" title="statement not covered" >            res.json({message: 'Bad Token!'},498)</span>
+<span class="cstat-no" title="statement not covered" >            return res.json({message: 'Bad Token!'},498)</span>
         }
 &nbsp;
     })
@@ -256,7 +253,7 @@ module.exports = app =&gt; {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-02-23T15:21:40.806Z
+                at 2023-03-03T16:58:04.634Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

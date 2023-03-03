@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">47.82% </span>
+                <span class="strong">50% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>11/23</span>
+                <span class='fraction'>10/20</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">47.82% </span>
+                <span class="strong">50% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>11/23</span>
+                <span class='fraction'>10/20</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line medium'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -142,25 +142,18 @@
 <a name='L77'></a><a href='#L77'>77</a>
 <a name='L78'></a><a href='#L78'>78</a>
 <a name='L79'></a><a href='#L79'>79</a>
-<a name='L80'></a><a href='#L80'>80</a>
-<a name='L81'></a><a href='#L81'>81</a>
-<a name='L82'></a><a href='#L82'>82</a>
-<a name='L83'></a><a href='#L83'>83</a>
-<a name='L84'></a><a href='#L84'>84</a>
-<a name='L85'></a><a href='#L85'>85</a>
-<a name='L86'></a><a href='#L86'>86</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
+<a name='L80'></a><a href='#L80'>80</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -224,11 +217,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -236,16 +224,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
 const bcrypt = require('bcrypt')
-const saltRounds = 8;
-var bodyParser = require('body-parser');
-const jwt = require('jsonwebtoken');
-const jwtKey = process.env.JWTKEY;
-var jsonParser = bodyParser.json()
+const saltRounds = 8
+var bodyParser = require('body-parser')
+const jwt = require('jsonwebtoken')
+const jwtKey = process.env.JWTKEY
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
-let hash;
+var hash
 &nbsp;
 module.exports = app =&gt; {
-    app.post("/api/register", urlencodedParser, <span class="fstat-no" title="function not covered" >as</span>ync (req, res) =&gt; {  //post-ot használunk, mivel szeretnénk adatot kérni a szervertől a /authorize aloldalon.
+    app.post('/api/register', urlencodedParser, <span class="fstat-no" title="function not covered" >as</span>ync (req, res) =&gt; {
         var userAccountUsername = <span class="cstat-no" title="statement not covered" >await prisma.users.findFirst({ where: { username: req.body.username } })</span>
         var userAccountEmail = <span class="cstat-no" title="statement not covered" >await prisma.users.findFirst({ where: { email: req.body.email } })</span>
 <span class="cstat-no" title="statement not covered" >        if (userAccountUsername == null &amp;&amp; userAccountEmail == null) {</span>
@@ -254,14 +241,14 @@ module.exports = app =&gt; {
                 username: req.body.username,
                 emailAddress: req.body.email
             }
-            const token = <span class="cstat-no" title="statement not covered" >jwt.sign(data, jwtKey);</span>
+            const token = <span class="cstat-no" title="statement not covered" >jwt.sign(data, jwtKey)</span>
 <span class="cstat-no" title="statement not covered" >            hash = await bcrypt.hash(req.body.password, saltRounds)</span>
             var newAccount = <span class="cstat-no" title="statement not covered" >await prisma.users.create({</span>
                 data: {
                     email: req.body.email,
                     username: req.body.username,
                     password: hash,
-                    registeredAt: "" + Date.now(),
+                    registeredAt: '' + Date.now(),
                     isOnline: true,
                     saves: {
                         create: {
@@ -295,26 +282,21 @@ module.exports = app =&gt; {
                     },
                     Achievements: {
                         create: {
-                            
+&nbsp;
                         }
                     }
                 }
             })
 <span class="cstat-no" title="statement not covered" >            await prisma.logs.create({</span>
                 data: {
-                    message: "A user was created, with the username of: " + newAccount.username,
-                    madeBy: "Server"
+                    message: 'A user was created, with the username of: ' + newAccount.username,
+                    madeBy: 'Server'
                 }
             })
-<span class="cstat-no" title="statement not covered" >            res.json({</span>
-                message: 'Account created!',
-                token: token
-            })
-<span class="cstat-no" title="statement not covered" >            return</span>
+<span class="cstat-no" title="statement not covered" >            return res.json({ message: 'Account created!', token: token }, 200)</span>
         }
         else {
-<span class="cstat-no" title="statement not covered" >            res.send('Error: There is an account with this username or email address!')</span>
-<span class="cstat-no" title="statement not covered" >            return</span>
+<span class="cstat-no" title="statement not covered" >            return res.status(401).send('Error: There is an account with this username or email address!')</span>
         }
     })
 &nbsp;
@@ -325,7 +307,7 @@ module.exports = app =&gt; {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-02-23T15:21:40.806Z
+                at 2023-03-03T16:58:04.634Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

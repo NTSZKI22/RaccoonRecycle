@@ -2,20 +2,20 @@ const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
 var nodemailer = require('nodemailer')
 var bodyParser = require('body-parser')
-var jsonParser = bodyParser.json()
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 const ShortUniqueId = require('short-unique-id')
 const uuidv4 = new ShortUniqueId({ length: 10 })
-//ez a sor felett csak importok és változók/konstansok találhatóak.
 
 module.exports = app => {
-    app.post("/api/mail", urlencodedParser, async (req, res) => {  //postot használunk mivel a kérés küldésekor a bodyban szeretnénk küldeni az adatokat.
-        var userAccount = await prisma.users.findFirst({ where: { email: req.body.email } })// keresünk egy accountot a bodyban kapott email cím alapján.
-        if (userAccount == null) { //megnézzük, hogy van e ilyen account.
-           return res.status(403).json({message: "Forbidden!"}) //amennyiben nincs akkor is elküldünk egy kérést, nem küldünk olyan válasuzt, hogy van ilyen email a rendszerben vagy nincs. 
+    app.post('/api/mail', urlencodedParser, async (req, res) => {
+        console.log(req.body.email)
+        var userAccount = await prisma.users.findFirst({ where: { email: req.body.email } })
+        console.log(userAccount)
+        if (!userAccount) {
+            return res.status(403).json({message: 'Forbidden!'})
         }
-        else {//ha van ilyen account akkor az ez alatti rész fog lefutni.
-            var uuid = await uuidv4() //generálunk egy uuid-t
+        else {
+            var uuid = await uuidv4()
             await prisma.users.update({
                 where:
                 {
@@ -24,22 +24,22 @@ module.exports = app => {
                 data: {
                     password: uuid
                 }
-            }) //beállítjuk a felhasználónak a jelszavát erre a generált kódot.
-            var email = nodemailer.createTransport({ //email küldés beállítása.
-                service: "Gmail", //gmail az email fiók domainje.
+            })
+            var email = nodemailer.createTransport({
+                service: 'Gmail',
                 auth: {
-                    user: process.env.EMAIL, //email cím ahonnan küldjük.
-                    pass: process.env.PASS // alkalmazás jelszó.
+                    user: process.env.EMAIL,
+                    pass: process.env.PASS
                 }
-            });
-            email.sendMail({ //email elküldése 
-                from: "RaccoonRecycleInfo <kornelhajto2004@gmail.com>", //honnan küldjük az emailt.
-                to: req.body.email, //a cím email cím az ami a kérés bodyjában érkezik, tehát beállítjuk annak.
-                subject: "Forgotten password!", //email tárgya.
-                text: "Your code: " + uuid, //email tartalma.
-                html: '<p>In order change your password we sent you a code. If you want to change your password just press uuid in the game and type in your code we sent there. After that you just need to type in a new password and again your new passowrd. Thats it!<p><b>' + uuid + '</b>' //htm-ben küldöm az email tartalmát, mert könnyen formázható.
-            });
-            return res.status(200).json("If there was an account with this address in our system we sent an email to the address.") //elküldjük a kérőnek, hogy 'If there was an account with this address in our system we sent an email to the address.'.
+            })
+            email.sendMail({ 
+                from: 'RaccoonRecycleInfo <kornelhajto2004@gmail.com>',
+                to: req.body.email,
+                subject: 'Forgotten password!',
+                text: 'Your code: ' + uuid,
+                html: '<p>In order change your password we sent you a code. If you want to change your password just press uuid in the game and type in your code we sent there. After that you just need to type in a new password and again your new passowrd. Thats it!<p><b>' + uuid + '</b>'
+            })
+            return res.status(200).json('If there was an account with this address in our system we sent an email to the address.') 
 
         }
     })

@@ -1,48 +1,35 @@
-const { PrismaClient } = require("@prisma/client");
-const prisma = new PrismaClient();
-const jwt = require("jsonwebtoken");
-const jwtKey = process.env.JWTKEY;
-var bodyParser = require("body-parser");
-var jsonParser = bodyParser.json();
-var urlencodedParser = bodyParser.urlencoded({ extended: false });
-//ez a sor felett csak importok találhatóak.
+const { PrismaClient } = require('@prisma/client')
+const prisma = new PrismaClient()
+const jwt = require('jsonwebtoken')
+const jwtKey = process.env.JWTKEY
+var bodyParser = require('body-parser')
+var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 module.exports = (app) => {
-  app.get(
-    "/api/admin/listOnlinePlayers",
-    urlencodedParser,
-    async (req, res) => {
-        if (req.headers["authorization"]) {
-            const bearerHeader = req.headers["authorization"];
-            const bearerToken = bearerHeader.split(" ")[1];
-            const verified = jwt.verify(
-              bearerToken,
-              jwtKey,
-              async (err, decoded) => {
+    app.get('/api/admin/listOnlinePlayers', urlencodedParser, async (req, res) => {
+        if (req.headers['authorization']) {
+            const bearerHeader = req.headers['authorization']
+            const bearerToken = bearerHeader.split(' ')[1]
+            jwt.verify(bearerToken, jwtKey, async (err, decoded) => {
                 if (err) {
-                  return res.status(401).json({});
+                    return res.status(401).json({ message: 'Unauthorized!' })
                 } else {
-                  const onlinePlayers = await prisma.users.findMany({
-                    where: {
-                      isOnline: true,
-                    },
-                    select: {
-                      username: true,
-                      saves: false,
-                    },
-                  });
-    
-                  //when someone register, we create a save data, so there is no need to check if there is a save with this username or not.
-                  //ha valaki regisztrál akkor csinálunk egy alap mentést, így nincs értelme ellenőrizni, hogy van e mentése az adott illetőnek.
-                  //plusz ez a kérés akkor történik, ha valaki sikeresen bejelentkezik, így a felhasználónlv is valós, emiatt azt sem kell ellenőrizni.
-                  return res.status(200).json(onlinePlayers); //elküldjük a játékosokat.
+                    const onlinePlayers = await prisma.users.findMany({
+                        where: {
+                            isOnline: true,
+                        },
+                        select: {
+                            username: true,
+                            saves: false,
+                        },
+                    })
+                    return res.status(200).json({ onlinePlayers })
                 }
-              }
-            );
-          }
-          else{
-            return res.status(401).json({})
-          }
+            })
+        }
+        else {
+            return res.status(401).json({ message: 'Unauthorized!' })
+        }
     }
-  );
-};
+    )
+}

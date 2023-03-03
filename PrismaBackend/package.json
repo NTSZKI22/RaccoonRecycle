@@ -23,5 +23,8 @@
     "prisma": "^4.6.1",
     "short-unique-id": "^4.4.4",
     "supertest": "^6.3.3"
+  },
+  "devDependencies": {
+    "eslint": "^8.35.0"
   }
 }

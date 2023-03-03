@@ -1,16 +1,15 @@
 const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
 const bcrypt = require('bcrypt')
-const saltRounds = 8;
-var bodyParser = require('body-parser');
-const jwt = require('jsonwebtoken');
-const jwtKey = process.env.JWTKEY;
-var jsonParser = bodyParser.json()
+const saltRounds = 8
+var bodyParser = require('body-parser')
+const jwt = require('jsonwebtoken')
+const jwtKey = process.env.JWTKEY
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
-let hash;
+var hash
 
 module.exports = app => {
-    app.post("/api/register", urlencodedParser, async (req, res) => {  //post-ot használunk, mivel szeretnénk adatot kérni a szervertől a /authorize aloldalon.
+    app.post('/api/register', urlencodedParser, async (req, res) => {
         var userAccountUsername = await prisma.users.findFirst({ where: { username: req.body.username } })
         var userAccountEmail = await prisma.users.findFirst({ where: { email: req.body.email } })
         if (userAccountUsername == null && userAccountEmail == null) {
@@ -19,14 +18,14 @@ module.exports = app => {
                 username: req.body.username,
                 emailAddress: req.body.email
             }
-            const token = jwt.sign(data, jwtKey);
+            const token = jwt.sign(data, jwtKey)
             hash = await bcrypt.hash(req.body.password, saltRounds)
             var newAccount = await prisma.users.create({
                 data: {
                     email: req.body.email,
                     username: req.body.username,
                     password: hash,
-                    registeredAt: "" + Date.now(),
+                    registeredAt: '' + Date.now(),
                     isOnline: true,
                     saves: {
                         create: {
@@ -60,26 +59,21 @@ module.exports = app => {
                     },
                     Achievements: {
                         create: {
-                            
+
                         }
                     }
                 }
             })
             await prisma.logs.create({
                 data: {
-                    message: "A user was created, with the username of: " + newAccount.username,
-                    madeBy: "Server"
+                    message: 'A user was created, with the username of: ' + newAccount.username,
+                    madeBy: 'Server'
                 }
             })
-            res.json({
-                message: 'Account created!',
-                token: token
-            })
-            return
+            return res.json({ message: 'Account created!', token: token }, 200)
         }
         else {
-            res.send('Error: There is an account with this username or email address!')
-            return
+            return res.status(401).send('Error: There is an account with this username or email address!')
         }
     })
 
