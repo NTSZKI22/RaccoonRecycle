@@ -8,7 +8,7 @@ A 2D Idle game made with Unity, with a JavaScript Backend.
 
 #### Register endpoint
 
-```http
+```
   POST /api/register
 ```
 
@@ -20,7 +20,7 @@ A 2D Idle game made with Unity, with a JavaScript Backend.
 
 #### Login endpoint
 
-```http
+```
   POST /api/login
 ```
 
@@ -31,7 +31,7 @@ A 2D Idle game made with Unity, with a JavaScript Backend.
 
 #### Mail Sender endpoint
 
-```http
+```
   POST /api/mail
 ```
 
@@ -48,7 +48,7 @@ A 2D Idle game made with Unity, with a JavaScript Backend.
 
 #### Password change endpoint
 
-```http
+```
   POST /api/passwordchange
 ```
 | Header Type     | Description          |
@@ -64,7 +64,7 @@ A 2D Idle game made with Unity, with a JavaScript Backend.
 
 #### Achievement getter endpoint
 
-```http
+```
   POST /api/getAchievements
 ```
 | Header Type     | Description          |
