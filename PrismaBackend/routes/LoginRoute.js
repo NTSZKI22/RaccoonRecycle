@@ -35,7 +35,7 @@ module.exports = (app) => {
                             isOnline: true,
                         },
                     })
-                    return res.json({token}, 200)
+                    return res.status(200).json({ token })
                 }
             } else {
                 return res.status(401).send('Error: Invalid credentials!')
