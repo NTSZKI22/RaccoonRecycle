@@ -6,11 +6,6 @@ const dotenv = require('dotenv').config()
 const jwt = require('jsonwebtoken')
 const jwtKey = process.env.JWTKEY
 
-const startServer = require('../utils/startServer')
-
-beforeAll(() => {
-    //startServer(3332);
-})
 
 const data = {
     date: Date(),

@@ -28,16 +28,3 @@ describe('POST /api/passwordchange', () => {
 
     })
 })
-
-describe('POST /api/passwordchange', () => {
-    it('should return 200', async () => {
-        // create a JWT token for an authenticated user
-
-        // make a request to the endpoint with the token
-        const response = await request.post('/api/passwordchange')
-            .type('form')
-            .send(validData)
-            .expect(200)
-
-    })
-})

@@ -6,32 +6,36 @@ const jwtKey = process.env.JWTKEY
 
 
 const data = {
-    username: 'kortefa',
-    password: 'kortefacska',
+    username: '32131',
+    email: 'hello@fasfas.333333',
+    password: 'kortefacsk333333',
 }
 
 const validData = {
     username: 'hellokamanoka',
+    email: 'hello@fasfas.hg',
     password: 'hellokamanoka',
 }
 
 const invalidData = {
     username: 'alexanderhdsadsadsa',
+    email: 'hello@fasfas.hg',
     password: 'Braszerelmem18',
 }
 
 const inavlidCredentialsData = {
     username: 'alexanderh',
+    email: 'hello@fasfas.hg',
     password: 'Braszerelmem1833',
 }
 
-describe('POST /api/login', () => {
+describe('POST /api/register', () => {
     it('should return 200', async () => {
     // create a JWT token for an authenticated user
 
         // make a request to the endpoint with the token
         const response = await request
-            .post('/api/login')
+            .post('/api/register')
             .type('form')
             .send(data)
             .expect(200)

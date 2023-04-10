@@ -3,6 +3,9 @@
   "version": "0.0.2",
   "description": "",
   "main": "server.js",
+  "jest": {
+    "testPathDirs": ["/tests"]
+  },
   "scripts": {
     "test": "jest --coverage --forceExit",
     "dev": "nodemon server.js",

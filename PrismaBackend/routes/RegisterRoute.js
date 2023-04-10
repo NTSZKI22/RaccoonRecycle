@@ -10,7 +10,8 @@ var hash
 
 module.exports = app => {
     app.post('/api/register', urlencodedParser, async (req, res) => {
-        var userAccountUsername = await prisma.users.findFirst({ where: { username: req.body.username } })
+        try {
+            var userAccountUsername = await prisma.users.findFirst({ where: { username: req.body.username } })
         var userAccountEmail = await prisma.users.findFirst({ where: { email: req.body.email } })
         if (userAccountUsername == null && userAccountEmail == null) {
             var data = {
@@ -74,6 +75,10 @@ module.exports = app => {
         }
         else {
             return res.status(401).send('Error: There is an account with this username or email address!')
+        }
+        }
+        catch {
+            return res.status(401).send('Error: There was an error with the server!')
         }
     })
 

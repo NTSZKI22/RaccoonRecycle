@@ -7,9 +7,9 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 module.exports = app => {
     app.post('/api/save', urlencodedParser, async (req, res) => {
+       try {
         const bearerHeader = req.headers['authorization']
         const bearerToken = bearerHeader.split(' ')[1]
-        console.log(req.body.pbUnlocked,req.body.bxUnlocked,req.body.glUnlocked,req.body.byUnlocked)
         const verified = jwt.verify(bearerToken, jwtKey)
         if (verified) {
             var pbu, bxu, glu, byu
@@ -54,8 +54,11 @@ module.exports = app => {
             return res.json({message: 'Info: The saving was successful!'})
         }
         else {
-            return res.json({message: 'Bad Token!'},498)
+            return res.json({message: 'Unauthorized!'},401)
         }
+       } catch {
+        return res.json({message: 'Unauthorized!'},401)
+       }
 
     })
 

@@ -7,29 +7,33 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 module.exports = app => {
     app.post('/api/getsaveid', urlencodedParser, async (req, res) => {
-        if (req.headers['authorization']) {
-            const bearerHeader = req.headers['authorization']
-            const bearerToken = bearerHeader.split(' ')[1]
-            const verified = jwt.verify(bearerToken, jwtKey)
-            if (verified) {
-                const userSave = await prisma.saves.findFirst({
-                    where:
-                    {
-                        Users:
+        try {
+            if (req.headers['authorization']) {
+                const bearerHeader = req.headers['authorization']
+                const bearerToken = bearerHeader.split(' ')[1]
+                const verified = jwt.verify(bearerToken, jwtKey)
+                if (verified) {
+                    const userSave = await prisma.saves.findFirst({
+                        where:
                         {
-                            username: req.body.username
+                            Users:
+                            {
+                                username: req.body.username
+                            }
+                        },
+                        select: {
+                            id: true
                         }
-                    },
-                    select: {
-                        id: true
-                    }
-                }) 
-                return res.json({userSave}, 200)
-            }else{
+                    }) 
+                    return res.json({userSave}, 200)
+                }else{
+                    return res.json({ message: 'Unauthorized!' }, 401)
+                }
+            }
+            else {
                 return res.json({ message: 'Unauthorized!' }, 401)
             }
-        }
-        else {
+        } catch {
             return res.json({ message: 'Unauthorized!' }, 401)
         }
 

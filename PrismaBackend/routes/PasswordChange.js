@@ -7,7 +7,8 @@ const jwtKey = process.env.JWTKEY
 
 module.exports = app => {
     app.post('/api/passwordchange', urlencodedParser, async (req, res) => { 
-        const userAccount = await prisma.users.findFirst({ where: { password: req.body.generatedCode } })
+        try {
+            const userAccount = await prisma.users.findFirst({ where: { password: req.body.generatedCode } })
         if (!userAccount) {
             return res.status(401).json({})
         }
@@ -27,6 +28,9 @@ module.exports = app => {
             }
             const token = jwt.sign(data, jwtKey)
             return res.status(200).json(token)
+        }
+        } catch {
+            return res.status(401).json({})
         }
     })
 }

@@ -7,8 +7,8 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 module.exports = app => {
     app.post('/api/getsave', urlencodedParser, async (req, res) => {  
-        if(req.headers['authorization']){
-
+       try{
+         
             const bearerHeader = req.headers['authorization']
             const bearerToken = bearerHeader.split(' ')[1]
             const verified = jwt.verify(bearerToken, jwtKey)
@@ -23,12 +23,14 @@ module.exports = app => {
                     }
                 })
                 return res.json({userSave}, 200)
-            }
             return res.json({message: 'Unauthorized!'},401)
         }
         else{
             return res.json({message: 'Unauthorized!'},401)
         }
+       } catch {
+        return res.json({message: 'Unauthorized'},401)
+       }
         
     })
 
