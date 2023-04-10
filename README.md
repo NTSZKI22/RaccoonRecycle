@@ -3,14 +3,21 @@
 
 A 2D Idle game made with Unity, with a JavaScript Backend.
 
+Chapters: 
+ - [API Endpoints](#api)
 
-## API Endpoints
+## API
+## Endpoints
 
 #### Register endpoint
 
 ```
   POST /api/register
 ```
+| Header Type     | Description          |
+| :-------------- | :-------------------------       |
+| `Content-Type` |  application/x-www-form-urlencoded|
+| `Accept` |  application/x-www-form-urlencoded      |
 
 | Parameter | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
@@ -23,6 +30,10 @@ A 2D Idle game made with Unity, with a JavaScript Backend.
 ```
   POST /api/login
 ```
+| Header Type     | Description          |
+| :-------------- | :-------------------------       |
+| `Content-Type` |  application/x-www-form-urlencoded|
+| `Accept` |  application/x-www-form-urlencoded      |
 
 | Parameter | Type     | Description                |
 | :-------- | :------- | :------------------------- |
@@ -37,7 +48,6 @@ A 2D Idle game made with Unity, with a JavaScript Backend.
 
 | Header Type     | Description          |
 | :-------------- | :-------------------------       |
-| `Authorization` |  **Required** Bearer token (JWT) |
 | `Content-Type` |  application/x-www-form-urlencoded|
 | `Accept` |  application/x-www-form-urlencoded      |
 
@@ -53,7 +63,6 @@ A 2D Idle game made with Unity, with a JavaScript Backend.
 ```
 | Header Type     | Description          |
 | :-------------- | :-------------------------       |
-| `Authorization` |  **Required** Bearer token (JWT) |
 | `Content-Type` |  application/x-www-form-urlencoded|
 | `Accept` |  application/x-www-form-urlencoded      |
 
@@ -76,8 +85,30 @@ A 2D Idle game made with Unity, with a JavaScript Backend.
 
 | Parameter | Type     | Description                |
 | :-------- | :------- | :------------------------- |
-| `generatedCode`   | `string (uuid)` | **Required**. The code that you received in email |
-| `newPassword`     | `string`        | **Required**. Your new password |
+|There is no need for extra parameters, because we get what we need from JWT token.|
+
+#### Achievement setter endpoint
+
+```
+  POST /api/setAchievements
+```
+| Header Type     | Description          |
+| :-------------- | :-------------------------       |
+| `Authorization` |  **Required** Bearer token (JWT) |
+| `Content-Type` |  application/x-www-form-urlencoded|
+| `Accept` |         application/x-www-form-urlencoded      |
+
+
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+|gemCurrency| `string` | **Required**.  How many gem do the player have?|
+|itemLvl_1 | `string` | **Required**. Your firstItemLevel |
+|itemLvl_2 | `string` | **Required**. Your secondItemLevel |
+|itemLvl_3 | `string` | **Required**. Your thirdItemLevel |
+|normalCurrency_spent | `string` | **Required**. How much normal currency does the player spent |
+|prestigeCurrency_spent| `string` | **Required**. How much prestige currency does the player spent |
+|achievemetnProgress| `string[]` | **Required**. How the player is progressed, e.g: 0_0_0, 1_0_1 |
+
 
 
 
