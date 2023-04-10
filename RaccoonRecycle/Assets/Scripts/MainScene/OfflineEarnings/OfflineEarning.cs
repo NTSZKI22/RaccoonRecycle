@@ -43,9 +43,14 @@ public class OfflineEarning : MonoBehaviour
         now = now.AddHours(-1);
         TimeSpan? offlineHours = new TimeSpan();
         offlineHours = now.Subtract(lastSaveDate);
+        if (itemLvl_1 > 3)
+        {
+            itemLvl_1 = 3;
+        }
 
         switch (itemLvl_1)
         {
+            default:
             case 0:
                 if (offlineHours.Value.TotalHours > 0.25)
                 {
@@ -87,7 +92,6 @@ public class OfflineEarning : MonoBehaviour
                     return offlineSeconds;
                 }
         }
-        return 0f;
     }
 
     public void getData()
@@ -95,15 +99,15 @@ public class OfflineEarning : MonoBehaviour
         itemLvl_1 = dataScript.itemLvl_1;
         itemLvl_1 = dataScript.itemLvl_2;
 
-        values[1] = fixDataScript.PB_defValue * Mathf.Pow(multiplierPos, dataScript.PB_valueLvl) * fixDataScript.gemshopValueMultiplier(itemLvl_2);
-        values[2] = fixDataScript.BX_defValue * Mathf.Pow(multiplierPos, dataScript.BX_valueLvl) * fixDataScript.gemshopValueMultiplier(itemLvl_2);
-        values[3] = fixDataScript.GL_defValue * Mathf.Pow(multiplierPos, dataScript.GL_valueLvl) * fixDataScript.gemshopValueMultiplier(itemLvl_2);
-        values[4] = fixDataScript.BY_defValue * Mathf.Pow(multiplierPos, dataScript.BY_valueLvl) * fixDataScript.gemshopValueMultiplier(itemLvl_2);
+        values[1] = fixDataScript.giveTrashProperties("PetBottle", "Value") * Mathf.Pow(multiplierPos, dataScript.PB_valueLvl) * fixDataScript.gemshopValueMultiplier(itemLvl_2);
+        values[2] = fixDataScript.giveTrashProperties("Box", "Value") * Mathf.Pow(multiplierPos, dataScript.BX_valueLvl) * fixDataScript.gemshopValueMultiplier(itemLvl_2);
+        values[3] = fixDataScript.giveTrashProperties("Glass", "Value") * Mathf.Pow(multiplierPos, dataScript.GL_valueLvl) * fixDataScript.gemshopValueMultiplier(itemLvl_2);
+        values[4] = fixDataScript.giveTrashProperties("Battery", "Value") * Mathf.Pow(multiplierPos, dataScript.BY_valueLvl) * fixDataScript.gemshopValueMultiplier(itemLvl_2);
 
-        frequencies[1] = fixDataScript.PB_defFrequency * Mathf.Pow(multiplierPos, dataScript.PB_frequencyLvl);
-        frequencies[2] = fixDataScript.BX_defFrequency * Mathf.Pow(multiplierPos, dataScript.BX_frequencyLvl);
-        frequencies[3] = fixDataScript.GL_defFrequency * Mathf.Pow(multiplierPos, dataScript.GL_frequencyLvl);
-        frequencies[4] = fixDataScript.BY_defFrequency * Mathf.Pow(multiplierPos, dataScript.BY_frequencyLvl);
+        frequencies[1] = fixDataScript.giveTrashProperties("PetBottle", "Frequency") * Mathf.Pow(multiplierPos, dataScript.PB_frequencyLvl);
+        frequencies[2] = fixDataScript.giveTrashProperties("Box", "Frequency") * Mathf.Pow(multiplierPos, dataScript.BX_frequencyLvl);
+        frequencies[3] = fixDataScript.giveTrashProperties("Glass", "Frequency") * Mathf.Pow(multiplierPos, dataScript.GL_frequencyLvl);
+        frequencies[4] = fixDataScript.giveTrashProperties("Battery", "Frequency") * Mathf.Pow(multiplierPos, dataScript.BY_frequencyLvl);
 
         unlocks[1] = dataScript.giveTrashStatus("PetBottle");
         unlocks[2] = dataScript.giveTrashStatus("Box");

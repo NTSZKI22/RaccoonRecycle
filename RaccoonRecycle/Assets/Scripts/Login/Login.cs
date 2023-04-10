@@ -5,8 +5,10 @@ using TMPro;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using System;
-using Classes;
+using System.Net.Security;
+using System.Net;
+using System.Security.Cryptography;
+using Newtonsoft.Json;
 
 public class Login : MonoBehaviour
 {
@@ -21,6 +23,8 @@ public class Login : MonoBehaviour
     [SerializeField]
     private string sceneName; //egy karakterlánc dekralálása, hogy eltároljuk a MainScene nevét.
     public static string localUserName;
+
+    public LoginClass lgClass;
 
     public static string token;
 
@@ -43,8 +47,8 @@ public class Login : MonoBehaviour
         form.AddField("username", username); //hozzáadjuk a bodyhoz az aUsername mezőt és a username értéket hozzá rendeljük.
         form.AddField("password", password); //hozzáadjuk a bodyhoz az aPassowrd mezőt és a password értéket hozzá rendeljük.
 
-
-        var request = UnityWebRequest.Post("http://188.166.166.197:18102/api/login", form); // elküldjük a webrequestet a megadott címre, bodyban a formmal.
+        var request = UnityWebRequest.Post("http://188.166.166.197:18102/api/login", form);
+        // elküldjük a webrequestet a megadott címre, bodyban a formmal.
         var handler = request.SendWebRequest();
 
         float startTime = 0f;
@@ -60,12 +64,7 @@ public class Login : MonoBehaviour
         }
         if (request.result == UnityWebRequest.Result.Success)
         {
-            if(request.downloadHandler.text.Contains("Error:"))
-            {
-                warning_SL.SetActive(true);
-                warningText.text = request.downloadHandler.text;
-            }
-            else if (request.downloadHandler.text.Contains("Info:"))
+            if (request.downloadHandler.text.Contains("Info:"))
             {
                 warning_SL.SetActive(true);
                 warningText.text = request.downloadHandler.text;
@@ -80,8 +79,16 @@ public class Login : MonoBehaviour
         }
         else
         {
-            warning_SL.SetActive(true);
-            warningText.text = "The game was unable to connect to the server!";
+            if (request.downloadHandler.text.Contains("Invalid"))
+            {
+                warning_SL.SetActive(true);
+                warningText.text = "Invalid Credentials";
+            }
+            else
+            {
+                warning_SL.SetActive(true);
+                warningText.text = "The game was unable to connect to the server!";
+            }
         }
         yield return null;
     }

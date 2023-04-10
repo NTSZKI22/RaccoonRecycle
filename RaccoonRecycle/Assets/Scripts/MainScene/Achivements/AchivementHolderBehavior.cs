@@ -96,11 +96,17 @@ public class AchivementHolderBehavior : MonoBehaviour
                 case false: st[aa] = placeholders[b].ToString(); break;
             }
         }
+        if (b < rewards.Length)
+        {
+            text_Achiv_Reward.text = rewards[b].ToString();
+        }
         if (max)
         {
             text_Achiv_Reward.text = "";
         }
         text_Achiv_Text.text = kiir;
+        
+        
 
     }
 

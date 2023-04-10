@@ -2,8 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LoginClass : MonoBehaviour
+public class LoginClass
 {
-    string message { get; set; }
-    string token { get; set; }
+   public string message { get; set; }
+   public string token { get; set; }
 }

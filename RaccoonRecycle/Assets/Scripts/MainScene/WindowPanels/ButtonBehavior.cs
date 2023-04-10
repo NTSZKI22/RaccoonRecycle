@@ -50,6 +50,7 @@ public class ButtonBehavior : MonoBehaviour
         Button btn_UBY = button_UnlockBY.GetComponent<Button>();
         btn_UBY.onClick.AddListener(unlockBY);
 
+        sellingScript = GameObject.FindGameObjectWithTag("SellingScript").GetComponent<Selling>();
         text_UnlockPB.text = sellingScript.convertCurrencyToDisplay(cost_UnlockPB.ToString());
         text_UnlockBX.text = sellingScript.convertCurrencyToDisplay(cost_UnlockBX.ToString());
         text_UnlockGL.text = sellingScript.convertCurrencyToDisplay(cost_UnlockGL.ToString());

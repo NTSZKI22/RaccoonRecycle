@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+//using System.Diagnostics;
 using UnityEngine;
 
 public class FixData : MonoBehaviour
@@ -7,40 +8,40 @@ public class FixData : MonoBehaviour
     public float multiplierPos = 1.02f;
     public float multiplierNeg = 0.98f;
     public float multiplierOffline = 0.4f;
-    public float prestigeDivide = 100;
+    public float prestigeDivide = 100f;
 
-    public float defaultValue = 15;
+    public float defaultValue = 15f;
 
-    public float PB_defValue = 25;
-    public float BX_defValue = 50;
-    public float GL_defValue = 100;
-    public float BY_defValue = 200;
+    public float PB_defValue = 25f;
+    public float BX_defValue = 50f;
+    public float GL_defValue = 100f;
+    public float BY_defValue = 200f;
 
-    public float PB_defFrequency = 2;
-    public float BX_defFrequency = 3;
-    public float GL_defFrequency = 4;
-    public float BY_defFrequency = 6;
+    public float PB_defFrequency = 2f;
+    public float BX_defFrequency = 3f;
+    public float GL_defFrequency = 4f;
+    public float BY_defFrequency = 6f;
 
-    public float PB_defSpeed = 200;
-    public float BX_defSpeed = 100;
-    public float GL_defSpeed = 90;
-    public float BY_defSpeed = 80;
+    public float PB_defSpeed = 200f;
+    public float BX_defSpeed = 100f;
+    public float GL_defSpeed = 90f;
+    public float BY_defSpeed = 80f;
 
-    float PB_ValueDefCost = 50;
-    float PB_SpeedDefCost = 25;
-    float PB_FrequencyDefCost = 15;
+    public float PB_ValueDefCost = 50f;
+    public float PB_SpeedDefCost = 25f;
+    public float PB_FrequencyDefCost = 15f;
 
-    float BX_ValueDefCost = 100;
-    float BX_SpeedDefCost = 50;
-    float BX_FrequencyDefCost = 30;
+    public float BX_ValueDefCost = 100f;
+    public float BX_SpeedDefCost = 50f;
+    public float BX_FrequencyDefCost = 30f;
 
-    float GL_ValueDefCost = 200;
-    float GL_SpeedDefCost = 100;
-    float GL_FrequencyDefCost = 60;
+    public float GL_ValueDefCost = 200f;
+    public float GL_SpeedDefCost = 100f;
+    public float GL_FrequencyDefCost = 60f;
 
-    float BY_ValueDefCost = 400;
-    float BY_SpeedDefCost = 200;
-    float BY_FrequencyDefCost = 120;
+    public float BY_ValueDefCost = 400f;
+    public float BY_SpeedDefCost = 200f;
+    public float BY_FrequencyDefCost = 120f;
 
     public int maxLevel = 75;
 
@@ -89,6 +90,11 @@ public class FixData : MonoBehaviour
 
     public string[] achievementProgress = new string[] { "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0", "0_0" };
 
+    void Start()
+    {
+        Debug.Log($"speeds: {PB_defSpeed} {BX_defSpeed} {GL_defSpeed} {BY_defSpeed}");
+    }
+    
     public float gemshopValueMultiplier(int itemLvl)
     {
         switch (itemLvl)
@@ -119,44 +125,57 @@ public class FixData : MonoBehaviour
             case "PetBottle":
                 switch (Property)
                 {
-                    case "Speed": return PB_defSpeed;
-                    case "Value": return PB_defValue;
-                    case "Frequency": return PB_defFrequency;
+                    case "Speed": return 200f; //return PB_defSpeed;
+                    case "Value": return 25f;
+                    case "Frequency": return 2f;
+                    default: Debug.Log($"{Trash} {Property} default");  return 50f;
                 }
                 break;
             case "Box":
                 switch (Property)
                 {
-                    case "Speed": return BX_defSpeed;
-                    case "Value": return BX_defValue;
-                    case "Frequency": return BX_defFrequency;
+                    case "Speed": return 100f; //return BX_defSpeed;
+                    case "Value": return 50f;
+                    case "Frequency": return 3f;
+                    default: Debug.Log($"{Trash} {Property} default"); return 50f;
                 }
                 break;
             case "Glass":
                 switch (Property)
                 {
-                    case "Speed": return GL_defSpeed;
-                    case "Value": return GL_defValue;
-                    case "Frequency": return GL_defFrequency;
+                    case "Speed": return 90f; //return GL_defSpeed;
+                    case "Value": return 100f;
+                    case "Frequency": return 4f;
+                    default: Debug.Log($"{Trash} {Property} default");  return 50f;
                 }
                 break;
             case "Battery":
                 switch (Property)
                 {
-                    case "Speed": return BY_defSpeed;
-                    case "Value": return BY_defValue;
-                    case "Frequency": return BY_defFrequency;
+                    case "Speed": return 80f; //return BY_defSpeed;
+                    case "Value": return 200f;
+                    case "Frequency": return 6f;
+                    default: Debug.Log($"{Trash} {Property} default");  return 50f;
+                }
+                break;
+            default:
+                Debug.Log($"{Trash} default");
+                switch (Property)
+                {
+                    case "Speed": return 200f; 
+                    case "Value": return 25f;
+                    case "Frequency": return 2f;
+                    default: Debug.Log($"{Trash} {Property} default");  return 50f;
                 }
                 break;
         }
-        return 0f;
     }
 
     public float giveUpgradeProperties(string Trash, string Property)
     {
         switch (Trash)
         {
-            case "PetBottle":
+            case "PetBottleU":
                 switch (Property)
                 {
                     case "Speed": return PB_SpeedDefCost;
@@ -164,7 +183,7 @@ public class FixData : MonoBehaviour
                     case "Frequency": return PB_FrequencyDefCost;
                 }
                 break;
-            case "Box":
+            case "BoxU":
                 switch (Property)
                 {
                     case "Speed": return BX_SpeedDefCost;
@@ -172,7 +191,7 @@ public class FixData : MonoBehaviour
                     case "Frequency": return BX_FrequencyDefCost;
                 }
                 break;
-            case "Glass":
+            case "GlassU":
                 switch (Property)
                 {
                     case "Speed": return GL_SpeedDefCost;
@@ -180,7 +199,7 @@ public class FixData : MonoBehaviour
                     case "Frequency": return GL_FrequencyDefCost;
                 }
                 break;
-            case "Battery":
+            case "BatteryU":
                 switch (Property)
                 {
                     case "Speed": return BY_SpeedDefCost;

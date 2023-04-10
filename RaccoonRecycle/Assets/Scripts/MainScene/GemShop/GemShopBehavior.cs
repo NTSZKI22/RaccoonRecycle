@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+//using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -58,9 +59,6 @@ public class GemShopBehavior : MonoBehaviour
         Button btn_Buy_3 = button_Item_Buy_3.GetComponent<Button>();
         btn_Buy_3.onClick.AddListener(bought3);
 
-        itemLvl_1 = 0;
-        itemLvl_2 = 0;
-        itemLvl_3 = 0;
     }
 
     void Update()
@@ -74,6 +72,8 @@ public class GemShopBehavior : MonoBehaviour
         itemLvl_1 = dataScript.itemLvl_1;
         itemLvl_2 = dataScript.itemLvl_2;
         itemLvl_3 = dataScript.itemLvl_3;
+
+        Debug.Log($"{itemLvl_1} {itemLvl_2} {itemLvl_3}");
     }
 
     void showText()
@@ -91,8 +91,8 @@ public class GemShopBehavior : MonoBehaviour
         if (itemLvl_2 == cost_2.Length)
         {
             text_Item_Cost_2.text = "Maxed out";
-            string[] st = details_1[itemLvl_2 - 1].Split(" -> ");
-            text_Item_Details_1.text = $"{st[1]}";
+            string[] st = details_2[itemLvl_2 - 1].Split(" -> ");
+            text_Item_Details_2.text = $"{st[1]}";
         }
         else
         {
@@ -103,8 +103,8 @@ public class GemShopBehavior : MonoBehaviour
         if (itemLvl_3 == cost_3.Length)
         {
             text_Item_Cost_3.text = "Maxed out";
-            string[] st = details_1[itemLvl_3 - 1].Split(" -> ");
-            text_Item_Details_1.text = $"{st[1]}";
+            string[] st = details_3[itemLvl_3 - 1].Split(" -> ");
+            text_Item_Details_3.text = $"{st[1]}";
         }
         else
         {
@@ -123,6 +123,7 @@ public class GemShopBehavior : MonoBehaviour
         {
             button_Item_Buy_1.interactable = false;
         }
+
         if (itemLvl_2 < cost_2.Length)
         {
             button_Item_Buy_2.interactable = sellingScript.isEnoughGemCurrency(cost_2[itemLvl_2]);
@@ -131,6 +132,7 @@ public class GemShopBehavior : MonoBehaviour
         {
             button_Item_Buy_2.interactable = false;
         }
+
         if (itemLvl_3 < cost_3.Length)
         {
             button_Item_Buy_3.interactable = sellingScript.isEnoughGemCurrency(cost_3[itemLvl_3]);

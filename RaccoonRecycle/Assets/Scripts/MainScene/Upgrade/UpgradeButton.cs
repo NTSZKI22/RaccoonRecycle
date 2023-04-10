@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+//using System.Diagnostics;
+//using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -76,7 +78,7 @@ public class UpgradeButton : MonoBehaviour
     void defaultStart()
     {
         maxLevel = fixDataScript.maxLevel;
-        multiplier = fixDataScript.multiplierPos;
+        multiplier = fixDataScript.multiplierPos + 0.03f;
         ValueDefCost = fixDataScript.giveUpgradeProperties(gameObject.tag, "Value");
         SpeedDefCost = fixDataScript.giveUpgradeProperties(gameObject.tag, "Speed");
         FrequencyDefCost = fixDataScript.giveUpgradeProperties(gameObject.tag, "Frequency");
@@ -162,13 +164,13 @@ public class UpgradeButton : MonoBehaviour
         switch (SpeedCostLvl <= maxLevel)
         {
             case true: text_SpeedLvl.text = $"Lvl {SpeedCostLvl}"; break;
-            case false: text_ValueLvl.text = "Max level"; break;
+            case false: text_SpeedLvl.text = "Max level"; break;
         }
 
         switch (FrequencyCostLvl <= maxLevel)
         {
             case true: text_FrequencyLvl.text = $"Lvl {FrequencyCostLvl}"; break;
-            case false: text_ValueLvl.text = "Max level"; break;
+            case false: text_FrequencyLvl.text = "Max level"; break;
         }
     }
 

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+//using System.Diagnostics;
 using UnityEngine;
 
 public class Properties : MonoBehaviour
@@ -27,6 +28,7 @@ public class Properties : MonoBehaviour
         multiplierNeg = fixDataScript.multiplierNeg;
 
         defProperties();
+        
     }
 
     void Update()
@@ -36,6 +38,7 @@ public class Properties : MonoBehaviour
 
     public void defProperties()
     {
+        fixDataScript = GameObject.FindGameObjectWithTag("FixData").GetComponent<FixData>();
         defSpeed = fixDataScript.giveTrashProperties(gameObject.tag, "Speed");
         defValue = fixDataScript.giveTrashProperties(gameObject.tag, "Value");
         defFrequency = fixDataScript.giveTrashProperties(gameObject.tag, "Frequency");

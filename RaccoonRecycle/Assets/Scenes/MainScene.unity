@@ -984,7 +984,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7264284796810945058, guid: be9b06ce73634fd48a7c41baea062e0c, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 78.899994
+      value: 83.4
       objectReference: {fileID: 0}
     - target: {fileID: 7264284796810945058, guid: be9b06ce73634fd48a7c41baea062e0c, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -1233,7 +1233,7 @@ GameObject:
   - component: {fileID: 60849990}
   m_Layer: 0
   m_Name: Upgrades_PetBottle
-  m_TagString: Untagged
+  m_TagString: PetBottleU
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2933,8 +2933,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 225.51599, y: -34}
-  m_SizeDelta: {x: -555.0972, y: 27.179413}
+  m_AnchoredPosition: {x: 227.32831, y: -32.2}
+  m_SizeDelta: {x: -580.5613, y: 27.1794}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &169214238
 MonoBehaviour:
@@ -9459,7 +9459,7 @@ GameObject:
   - component: {fileID: 664785003}
   m_Layer: 0
   m_Name: Upgrades_Box
-  m_TagString: Untagged
+  m_TagString: BoxU
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -21662,7 +21662,7 @@ GameObject:
   - component: {fileID: 1309769692}
   m_Layer: 0
   m_Name: Upgrades_Bty
-  m_TagString: Untagged
+  m_TagString: BatteryU
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -30189,10 +30189,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'You will earn
-
-
-    RacconCash and your progress will be reset.'
+  m_Text: "You will earn\n\nRacoonium and \nyour progress will be reset."
 --- !u!222 &1873641282
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -30488,7 +30485,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7264284796810945058, guid: be9b06ce73634fd48a7c41baea062e0c, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 411.1
+      value: 407.5
       objectReference: {fileID: 0}
     - target: {fileID: 7264284796810945058, guid: be9b06ce73634fd48a7c41baea062e0c, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -31557,7 +31554,7 @@ GameObject:
   - component: {fileID: 1952429622}
   m_Layer: 0
   m_Name: Upgrades_Glass
-  m_TagString: Untagged
+  m_TagString: GlassU
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -31753,24 +31750,105 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59ab7ef416c4cbd4998ca85824f3e8c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  multiplierPos: 0
-  multiplierNeg: 0
-  multiplierOffline: 0
-  prestigeDivide: 0
-  defaultValue: 0
-  PB_defValue: 0
-  BX_defValue: 0
-  GL_defValue: 0
-  BY_defValue: 0
-  PB_defFrequency: 0
-  BX_defFrequency: 0
-  GL_defFrequency: 0
-  BY_defFrequency: 0
-  PB_defSpeed: 0
-  BX_defSpeed: 0
-  GL_defSpeed: 0
-  BY_defSpeed: 0
-  maxLevel: 0
+  multiplierPos: 1.02
+  multiplierNeg: 0.98
+  multiplierOffline: 0.4
+  prestigeDivide: 100
+  defaultValue: 15
+  PB_defValue: 25
+  BX_defValue: 50
+  GL_defValue: 100
+  BY_defValue: 200
+  PB_defFrequency: 2
+  BX_defFrequency: 3
+  GL_defFrequency: 4
+  BY_defFrequency: 6
+  PB_defSpeed: 200
+  BX_defSpeed: 100
+  GL_defSpeed: 90
+  BY_defSpeed: 80
+  PB_ValueDefCost: 50
+  PB_SpeedDefCost: 25
+  PB_FrequencyDefCost: 15
+  BX_ValueDefCost: 100
+  BX_SpeedDefCost: 50
+  BX_FrequencyDefCost: 30
+  GL_ValueDefCost: 200
+  GL_SpeedDefCost: 100
+  GL_FrequencyDefCost: 60
+  BY_ValueDefCost: 400
+  BY_SpeedDefCost: 200
+  BY_FrequencyDefCost: 120
+  maxLevel: 75
+  cost_UnlockPB: 50
+  cost_UnlockBX: 1000
+  cost_UnlockGL: 15000
+  cost_UnlockBY: 200000
+  cost_1: 64000000e100000045010000
+  details_1:
+  - 15 min -> 30 min
+  - 30 min -> 1 hr
+  - 1 hr -> 1,5 hr
+  cost_2: 55000000af000000e10000000401000054010000
+  details_2:
+  - 0 -> 25%
+  - 25% -> 50%
+  - 50% -> 75%
+  - 75% -> 100%
+  - 100% -> 125%
+  cost_3: 9b00000013010000
+  details_3:
+  - 0 -> 50%
+  - 50% -> 100%
+  requirements7: 64000000e803000010270000a086010040420f008096980000e1f505
+  achievementTexts:
+  - 2 Earn x Raccoins in total
+  - 2 Have c Racoonium
+  - 2 Spend x Raccoins
+  - 2 Spend x Racoonium
+  - 3 Reach level y with any upgrades
+  - 5 Reach a total of z level with upgrades
+  - 0 Max out any upgrade
+  - 0 Max out the Petbottle refinery
+  - 0 Max out the Box refinery
+  - 0 Max out the Glass refinery
+  - 0 Max out the Battery refinery
+  - 0 Unlock Petbottle refinery
+  - 0 Unlock Box refinery
+  - 0 Unlock Glass refinery
+  - 0 Unlock Battery refinery
+  - 2 Earn x Raccoins in total with PetBottles
+  - 2 Earn x Raccoins in total with Boxes
+  - 2 Earn x Raccoins in total with Glasses
+  - 2 Earn x Raccoins in total with Batteries
+  - 6 Upgrade the Petbottles value to n Raccoins
+  - 6 Upgrade the Boxes value to n Raccoins
+  - 6 Upgrade the Glasses value to n Raccoins
+  - 6 Upgrade the Battery value to n Raccoins
+  achievementProgress:
+  - 0_0
+  - 0_0
+  - 0_0
+  - 0_0
+  - 0_0
+  - 0_0
+  - 0_0
+  - 0_0
+  - 0_0
+  - 0_0
+  - 0_0
+  - 0_0
+  - 0_0
+  - 0_0
+  - 0_0
+  - 0_0
+  - 0_0
+  - 0_0
+  - 0_0
+  - 0_0
+  - 0_0
+  - 0_0
+  - 0_0
 --- !u!1001 &1993986182
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -35816,11 +35894,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4235543085465827643, guid: 941c596e5416f5848a3d4082cc05aad2, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -24.5
+      value: -28.900024
       objectReference: {fileID: 0}
     - target: {fileID: 4235543085465827643, guid: 941c596e5416f5848a3d4082cc05aad2, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -24.099976
+      value: -29.399994
       objectReference: {fileID: 0}
     - target: {fileID: 4235543085465827643, guid: 941c596e5416f5848a3d4082cc05aad2, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

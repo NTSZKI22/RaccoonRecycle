@@ -164,6 +164,7 @@ public class AchivementController : MonoBehaviour
         window.transform.SetParent(parent.transform);
         window.SetActive(true);
         window.transform.position = notificationWindow.transform.position;
+        Destroy(window, 1);
     }
 
     public string[] placeholderStrings(int index)

@@ -8,7 +8,6 @@ using System.Security.Cryptography.X509Certificates;
 using Newtonsoft.Json.Bson;
 using System;
 using Newtonsoft.Json;
-using System.Diagnostics;
 
     public class DatabaseCommunication : MonoBehaviour
     {
@@ -153,6 +152,7 @@ using System.Diagnostics;
                     if (request.result == UnityWebRequest.Result.Success)
                     {
                         json = request.downloadHandler.text;
+                    Debug.Log(json);
                         saveClass = JsonUtility.FromJson<SaveClass>(json);
                         StartCoroutine(getAchievements());
                         yield return null;
@@ -197,10 +197,10 @@ using System.Diagnostics;
                 /*
                     Debug.Log("savedata get");
                     Debug.Log(saveClass.pbUnlocked);
-                    Debug.Log(json);
+                    
                 */
-
-                    break;
+                Debug.Log(json);
+                break;
 
                 case -1:
 
@@ -401,17 +401,36 @@ using System.Diagnostics;
 
         public void giveData() //játék indításakor kiosztja a kapott adatokat
         {
+            sellingScript = GameObject.FindGameObjectWithTag("SellingScript").GetComponent<Selling>(); //a scriptet kiveszi az adott objektumb�l mint komponense
+            pbUpgradeScripts = GameObject.FindGameObjectWithTag("PetBottleU").GetComponent<UpgradeButton>(); //a scriptet kiveszi az adott objektumb�l mint komponense
+            bxUpgradeScripts = GameObject.FindGameObjectWithTag("BoxU").GetComponent<UpgradeButton>(); //a scriptet kiveszi az adott objektumb�l mint komponense
+            glUpgradeScripts = GameObject.FindGameObjectWithTag("GlassU").GetComponent<UpgradeButton>(); //a scriptet kiveszi az adott objektumb�l mint komponense
+            byUpgradeScripts = GameObject.FindGameObjectWithTag("BatteryU").GetComponent<UpgradeButton>(); //a scriptet kiveszi az adott objektumb�l mint komponense
+            holderScript = GameObject.FindGameObjectWithTag("WindowBehavior").GetComponent<HolderBehavior>(); //a scriptet kiveszi az adott objektumb�l mint komponense
+            oEarningScript = GameObject.FindGameObjectWithTag("OfflineEarningsScript").GetComponent<OfflineEarning>(); //a scriptet kiveszi az adott objektumb�l mint komponense
+            achivementScript = GameObject.FindGameObjectWithTag("AchivementScript").GetComponent<AchivementController>(); //a scriptet kiveszi az adott objektumb�l mint komponense
+            gemshopScript = GameObject.FindGameObjectWithTag("GemshopScript").GetComponent<GemShopBehavior>(); //a scriptet kiveszi az adott objektumb�l mint komponense
+            Debug.Log("dbcomm given currencyvalues");
             sellingScript.getCurrencieValues();
             sellingScript.gotData = true;
+            Debug.Log("dbcomm given holderscript data");
             holderScript.getData();
+            Debug.Log("dbcomm holderscript loadedstart");
             holderScript.loadedStart();
+            Debug.Log("dbcomm pb upgrades getlevels");
             pbUpgradeScripts.getLevels();
+            Debug.Log("dbcomm bx upgrades getlevels");
             bxUpgradeScripts.getLevels();
+            Debug.Log("dbcomm gl upgrades getlevels");
             glUpgradeScripts.getLevels();
+            Debug.Log("dbcomm by upgrades getlevels");
             byUpgradeScripts.getLevels();
+            Debug.Log("dbcomm achievement given data");
             achivementScript.getData();
             achivementScript.gotData = true;
+            Debug.Log("dbcomm given gemshop data");
             gemshopScript.getData();
+            Debug.Log("dbcomm proceed with offline earning");
             oEarningScript.proceedWithTasks();
         }
 
@@ -575,7 +594,7 @@ using System.Diagnostics;
             if (request.result == UnityWebRequest.Result.Success)
             {
                 json = request.downloadHandler.text;
-                //Debug.Log(json);
+                Debug.Log(json);
                 yield return null;
             }
             else

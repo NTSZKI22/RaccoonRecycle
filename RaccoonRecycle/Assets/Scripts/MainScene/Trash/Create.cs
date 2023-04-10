@@ -17,7 +17,7 @@ public class Create : MonoBehaviour
 
     void Start()
     {
-        propertiesScript = trashPrefab.GetComponent<Properties>();
+        
         
         Spawn();
         StartCoroutine(Flow());
@@ -25,6 +25,7 @@ public class Create : MonoBehaviour
 
     private void Spawn()
     {
+        propertiesScript = trashPrefab.GetComponent<Properties>();
         location = GameObject.Find("Generator").transform.position;
         Rigidbody2D rb = Instantiate(trashPrefab) as Rigidbody2D;
         propertiesScript.defProperties();
