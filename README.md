@@ -15,6 +15,7 @@ The game's experience is enhanced by its immersive and interactive sound and gra
 
 In addition to the core gameplay, the game also features various elements like achievements, prestige functions, and a gem shop. These features provide players with a sense of accomplishment and satisfaction as they strive towards greater efficiency and profit. The game's new approach to waste management, combined with its engaging gameplay and interactive elements, make it a unique and enjoyable experience for all players.
 
+
 Chapters: 
  - [Tech Stack](#tech)
  - [Features](#features)
