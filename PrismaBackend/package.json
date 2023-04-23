@@ -4,7 +4,9 @@
   "description": "",
   "main": "server.js",
   "jest": {
-    "testPathDirs": ["/tests"]
+    "testPathDirs": [
+      "/tests"
+    ]
   },
   "scripts": {
     "test": "jest --coverage --forceExit",
@@ -28,6 +30,8 @@
     "supertest": "^6.3.3"
   },
   "devDependencies": {
-    "eslint": "^8.35.0"
+    "@mermaid-js/mermaid-cli": "^10.1.0",
+    "eslint": "^8.35.0",
+    "prisma-erd-generator": "^1.5.4"
   }
 }
