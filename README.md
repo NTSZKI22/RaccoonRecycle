@@ -35,7 +35,6 @@ Chapters:
 **Server:** Node, Express, Prisma, MongoDB
 
  
- 
 ## Features
 ### Screenshots
 
